@@ -1,0 +1,27 @@
+[
+  {
+    "family": "MaterialIcons",
+    "fonts": [
+      {
+        "asset": "fonts/icons/Iconos.woff2"
+      }
+    ]
+  },
+  {
+    "family": "PoppinsRegular",
+    "fonts": [
+      {
+        "asset": "fonts/poppins/Poppins-Regular.ttf"
+      }
+    ]
+  },
+  {
+    "family": "PoppinsBold",
+    "fonts": [
+      {
+        "asset": "fonts/poppins/Poppins-Bold.ttf"
+      }
+    ]
+  }
+
+]
