@@ -387,7 +387,8 @@ class AppVariables {
       fontWeight: FontWeight.bold,
     );
 
-
+    // Esta función (stática) debe llamarse simpre de último en el Cálculo de AppRes.variables.calcular()
+    AppVar.init();
   }
 }
 
