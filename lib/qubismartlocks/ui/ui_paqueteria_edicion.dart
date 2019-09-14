@@ -84,7 +84,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
 
   @override
   Widget build(BuildContext context) {
-    var anchoC = MediaQuery.of(context).size.width * .8;
+    var anchoColumna = MediaQuery.of(context).size.width * .8;
 //    CD.iniciar(context);
 //    App.variables.calcular(context);
 //    DEM.iniciar();
@@ -109,7 +109,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
     });
 
     return Scaffold(
-      appBar: MediaQuery.of(context).size.width <
+      appBar: CD.ancho <
               AppRes.appResMap[Co.WEB_BREAK_POINT_4]
           ? AppBar(
               title: Text('Paqueteria'),
@@ -133,15 +133,15 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                 UILaterales(),
                 Container(
 //                  color: Colors.white,
-                  height: MediaQuery.of(context).size.height * .9,
-                  width: MediaQuery.of(context).size.width * .9,
+                  height: CD.alto * .9, // TODO: VARIBLE
+                  width: CD.ancho * .9, // TODO: VARIBLE
                   child: Stack(
                     children: <Widget>[
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
-                          height: 400,
-                          width: MediaQuery.of(context).size.width * .9,
+                          height: 400, // TODO: VARIABLE
+                          width: CD.ancho * .9, // TODO: VARIABLE
                           child: Image.asset(
                             AppRes.appResMap[Co.BACKGROUND_SCREEN],
                             fit: BoxFit.cover,
@@ -151,10 +151,10 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                       Center(
                         child: Card(
                           color: AppRes.appResMap[Co.FONDO_1],
-                          elevation: 3,
+                          elevation: 3, // TODO: VARIABLE
                           child: Container(
-                            width: anchoC,
-                            height:  MediaQuery.of(context).size.height *.9,
+                            width: anchoColumna,
+                            height:  CD.alto *.9, // TODO: VARIABLE
                             decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(18)),
@@ -162,17 +162,15 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                             child: Container(
                               child: Column(
                                 children: <Widget>[
-                                  CD.alto < 500
+                                  CD.alto < 500  // TODO: VARIABLE
                                       ? Container()
                                       : Container(
                                           margin: EdgeInsets.only(
-                                              top: 15, bottom: 5),
-                                          width: 80,
-                                          height: 80,
+                                              top: 15, bottom: 5), // TODO: VARIABLE
+                                          width: 80, // TODO: VARIABLE
+                                          height: 80, // TODO: VARIABLE
                                           child: Container(
-                                            child: MediaQuery.of(context)
-                                                        .size
-                                                        .width <
+                                            child: CD.ancho <
                                                     AppRes.appResMap[
                                                         Co.WEB_BREAK_POINT_4]
                                                 ? Container()
@@ -184,8 +182,8 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
 
                                   Container(
                                     alignment: Alignment.center,
-                                    height: 45,
-                                    child: MediaQuery.of(context).size.width <
+                                    height: 45, // TODO: VARIABLE
+                                    child: CD.ancho <
                                             AppRes
                                                 .appResMap[Co.WEB_BREAK_POINT_4]
                                         ? Container()
@@ -198,13 +196,13 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                   //--
                                   Container(
                                     margin: EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),
+                                        top: 10, left: 10, right: 10), // TODO: VARIABLE
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
                                           child: UICampoSeleccionSencillo<
                                               OrigenPaquete>(
-                                            ancho: 300,
+                                            ancho: 300, // TODO: VARIABLE
                                             alto: AppRes
                                                 .appResMap[Co.ALTO_EDICION],
                                             lista: DEM.listaOrigenesPaquetes,
@@ -220,7 +218,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                             },
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        SizedBox(width: 10), // TODO: VARIABLE
                                         Expanded(
                                           child: UICampo(
                                             datos: DEM.mapaPaquete,
@@ -230,9 +228,9 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                                 .ETIQUETA_NUMERORASTREO,
                                             etiqueta: PAQUETERIA
                                                 .ETIQUETA_NUMERORASTREO,
-                                            componente: 'BDEdicion',
-                                            longitud: 20,
-                                            decimales: 0,
+                                            componente: 'BDEdicion',  // TODO: VARIABLE
+                                            longitud: 20,  // TODO: VARIABLE
+                                            decimales: 0,  // TODO: VARIABLE
                                           ),
                                         ),
                                         SizedBox(width: 10),
@@ -255,7 +253,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),
+                                        top: 10, left: 10, right: 10),  // TODO: VARIABLE
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
@@ -272,7 +270,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                             decimales: 0,
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        SizedBox(width: 10),   // TODO: VARIABLE
                                         Expanded(
                                           child: UICampo(
                                             datos: DEM.mapaPaquete,
@@ -288,7 +286,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                             decimales: 0,
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        SizedBox(width: 10),   // TODO: VARIABLE
                                         Expanded(
                                           child: UICampoSeleccion(
                                             data: DEM.mapaPaquete,
@@ -299,17 +297,17 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                                 .DENOMORIGENPAQUETE,
                                             selecto: DEM.mapaPaquete[
                                                 PAQUETERIA.ORIGENPAQUETE],
-                                            ancho: 300,
+                                            ancho: 300,   // TODO: VARIABLE
                                             alto: AppRes
                                                 .appResMap[Co.ALTO_EDICION],
                                             altoLista: MediaQuery.of(context)
                                                     .size
                                                     .height /
-                                                2,
+                                                2,   // TODO: VARIABLE
                                             anchoLista: MediaQuery.of(context)
                                                     .size
                                                     .width /
-                                                2,
+                                                2,   // TODO: VARIABLE
                                             etiqueta: PAQUETERIA
                                                 .ETIQUETA_ORIGENPAQUETE,
                                             titulo: ORIGENESPAQUETES
@@ -328,7 +326,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),
+                                        top: 10, left: 10, right: 10),   // TODO: VARIABLE
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
@@ -345,7 +343,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                             decimales: 0,
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        SizedBox(width: 10),   // TODO: VARIABLE
                                         Expanded(
                                           child: UICampo(
                                             datos: DEM.mapaPaquete,
@@ -363,7 +361,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
 // validatorTexto: _validarFechaHoraEntregado,
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        SizedBox(width: 10),   // TODO: VARIABLE
                                         Expanded(
                                           child: UICampo(
                                             datos: DEM.mapaPaquete,
@@ -383,7 +381,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),
+                                        top: 10, left: 10, right: 10),   // TODO: VARIABLE
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
@@ -402,7 +400,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                             firstDate: DateTime.now(),
                                           ),
                                         ),
-                                        SizedBox(width: 2),
+                                        SizedBox(width: 2),   // TODO: VARIABLE
                                         Expanded(
                                           child: UICampo(
                                             datos: DEM.mapaPaquete,
@@ -412,19 +410,19 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
                                                 .ETIQUETA_MENSAJEENVIADO,
                                             etiqueta: PAQUETERIA
                                                 .ETIQUETA_MENSAJEENVIADO,
-                                            componente: 'BDChequeo',
-                                            longitud: 1,
-                                            decimales: 0,
+                                            componente: 'BDChequeo',   // TODO: VARIABLE
+                                            longitud: 1,  // TODO: VARIABLE
+                                            decimales: 0,  // TODO: VARIABLE
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  MediaQuery.of(context).size.width <
+                                  CD.ancho <
                                           AppRes.appResMap[Co.WEB_BREAK_POINT_4]
                                       ? Container()
                                       : Container(
-                                          width: anchoC - 50,
+                                          width: anchoColumna - 50,    // TODO: VARIABLE
                                           child: UIBGB(
                                               guardar: _guardar,
                                               borrar: widget.registro.id == 0

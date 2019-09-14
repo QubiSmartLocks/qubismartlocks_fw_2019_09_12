@@ -75,13 +75,13 @@ class _UIPaqueteriaListaState extends State<UIPaqueteriaLista> {
               Container(
                 width: anchoTotal,
                 height: altoTotal,
-                padding: EdgeInsets.all(5),
+                padding: EdgeInsets.all(5),  //   // TODO: VARIABLE
                 child: PaginatedDataTable(
                     header: Container(),
                     columnSpacing: columnSpacing,
                     dataRowHeight: dataRowHeight,
                     headingRowHeight: headingRowHeight,
-                    horizontalMargin: 24.0,
+                    horizontalMargin: 24.0, //   // TODO: VARIABLE
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (int value) {
                       setState(() {
