@@ -37,7 +37,7 @@ class _EstadoUI_Base extends State<UI_Base> {
     var altoContenedor = CD.alto * widget.factorAlto;
 
     return Scaffold(
-      appBar: CD.ancho < 800
+      appBar: CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4]
           ? AppBar(
               title: Text(widget.titulo, style: AppRes.appResMap[Co.ESTILO_TITULO]),
               actions: <Widget>[
@@ -50,17 +50,17 @@ class _EstadoUI_Base extends State<UI_Base> {
           : null,
       body: Row(
         children: <Widget>[
-          CD.ancho < 800 ? Container() : UILaterales(),
+          CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4] ? Container() : UILaterales(),   /// cambiar el brakepoint
           Container(
             color: Colors.white,
             height: CD.alto,
-            width: CD.ancho < 800 ? CD.ancho : CD.ancho * .9,
+            width: CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4] ? CD.ancho : CD.ancho * .9, // TODO: *.9
             child: Stack(
               children: <Widget>[
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    width: CD.ancho < 800 ? CD.ancho : CD.ancho * .9,
+                    width: CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4] ? CD.ancho : CD.ancho * .9, // TODO: *.9
                     child: Image.asset(
                       AppRes.appResMap[Co.BACKGROUND_SCREEN],
                       fit: BoxFit.cover,
@@ -69,51 +69,41 @@ class _EstadoUI_Base extends State<UI_Base> {
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      top: ((CD.alto - altoContenedor) / 2) / 2,
+                      top: ((CD.alto - altoContenedor) / 2) / 2, // TODO:  / 2
                       left: (CD.ancho - anchoContenedor) / 2,
                       right: (CD.ancho - anchoContenedor) / 2
                   ),
                   child: Card(
                     color: Colors.transparent, //AppRes.appResMap[Co.FONDO_1],
                     elevation: 3,
-                    child:
-//                    Container(
-//                      width: anchoContenedor,
-//                      height: altoContenedor,
-//                      decoration: BoxDecoration(
-//                        borderRadius: BorderRadius.all(Radius.circular(18)),
-//                      ),
-//                      child:
-                      Column(
+                    child: Column(
                         children: <Widget>[
-                          CD.ancho < 800 || CD.alto < 600
+                          CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4] || CD.alto < AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_1]
                               ? Container()
                               : Container(
-                                  margin: EdgeInsets.only(top: 20, bottom: 5),
-                                  width: 80,
+                                  margin: EdgeInsets.only(top: 20, bottom: 5), // TODO: margin
+                                  width: 80, // TODO: Tamaño del contenedor de la imagen
                                   height: 80,
                                   child: Image.asset(widget.icono),
                                 ),
-                          CD.ancho < 800 || CD.alto < 340
+                          CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4] || CD.alto < AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_2]
                               ? Container()
                               : Container(
                                   alignment: Alignment.center,
-                                  height: 45,
                                   child: Text(
                                     widget.titulo,
                                     style: AppRes.appResMap[Co.ESTILO_TITULO],
                                   ),
                                 ),
-                          CD.alto < 260 ? Container() : widget.child,
+                          CD.alto < AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_3] ? Container() : widget.child,
                         ],
                       ),
                     ),
-                  //), ----------------------------------------------------------------------------------------------------
                 )
               ],
             ),
           ),
-          CD.ancho < 800 ? Container() : UILaterales(),
+          CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4] ? Container() : UILaterales(),
         ],
       ),
     );

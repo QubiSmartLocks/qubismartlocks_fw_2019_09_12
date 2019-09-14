@@ -298,10 +298,10 @@ class AppVariables {
     AppRes.appResMap[Co.WEB_BREAK_POINT_4] = 800;
 
     // Horizontal break point according the height of the screen
-    AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_1] = 100000;
-    AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_2] = 800;
-    AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_3] = 600;
-    AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_4] = 500;
+    AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_1] = 600;
+    AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_2] = 340;
+    AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_3] = 260;
+    AppRes.appResMap[Co.WEB_VERTICAL_BREAK_POINT_4] = 200;
 
 
     // Mensajes de campos nulos

@@ -10,7 +10,7 @@ import 'package:qubismartlocks_fw/qubismartlocks.dart';
 Widget FondoGaveta(BuildContext context) {
   return Container(
     height: MediaQuery.of(context).size.height,
-    child: UIBackground(),
+    child: UIBackgroundDrawer(),
   );
 }
 

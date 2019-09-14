@@ -6,15 +6,13 @@
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
 
-
 class UIPaqueteEdicion extends StatefulWidget {
   UIPaqueteEdicion({Key key, this.registro}) : super(key: key);
 
   final Paquete registro;
 
   @override
-  _EstadoPaqueteEdicion createState() =>
-      _EstadoPaqueteEdicion();
+  _EstadoPaqueteEdicion createState() => _EstadoPaqueteEdicion();
 }
 
 class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
@@ -37,16 +35,14 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
       widget.registro.fromMap(DEM.mapaPaquete);
 
       // Guardar Paqueteria
-      Resultado _resultado =
-          await Paqueteria.guardar(widget.registro);
+      Resultado _resultado = await Paqueteria.guardar(widget.registro);
       Navigator.of(_scaffoldKey.currentContext).pop(_resultado);
     }
   }
 
   void _borrar() async {
     // Borrar Paqueteria
-      Resultado _resultado =
-          await Paqueteria.borrar(widget.registro);
+    Resultado _resultado = await Paqueteria.borrar(widget.registro);
     Navigator.of(_scaffoldKey.currentContext).pop(_resultado);
   }
 
@@ -84,25 +80,23 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
     return null;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     DEM.mapaPaquete = widget.registro.toMap();
 
     return Container(
-    width: CD.ancho *.5,
-        height: CD.alto * .5,
-        child: Form(
-          key: _forma,
-          autovalidate: _autovalidar,
-          onWillPop: () async {
-            return await advertirDatosInvalidos(
-                context, _forma.currentState, _formaEditada);
-          },
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            children: <Widget>[
+      width: CD.ancho * .5,
+      height: CD.alto * .5,
+      child: Form(
+        key: _forma,
+        autovalidate: _autovalidar,
+        onWillPop: () async {
+          return await advertirDatosInvalidos(
+              context, _forma.currentState, _formaEditada);
+        },
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          children: <Widget>[
 // Campo: Origen del Paquete. Tipo de Componente: BDBusquedaCombo
             UICampo(
               datos: DEM.mapaPaquete,
@@ -113,8 +107,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDBusquedaCombo',
               longitud: 0,
               decimales: 0,
-
-
             ),
 // Campo: Número de Rastreo. Tipo de Componente: BDEdicion
             UICampo(
@@ -126,8 +118,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDEdicion',
               longitud: 20,
               decimales: 0,
-
-
             ),
 // Campo: Destinatario. Tipo de Componente: BDEdicion
             UICampo(
@@ -139,8 +129,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDEdicion',
               longitud: 20,
               decimales: 0,
-
-
             ),
 // Campo: Fecha y Hora de Recepción. Tipo de Componente: BDEdicion
             UICampo(
@@ -152,8 +140,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDEdicion',
               longitud: 20,
               decimales: 0,
-
-
             ),
 // Campo: Nota de Recepción. Tipo de Componente: BDEdicion
             UICampo(
@@ -165,8 +151,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDEdicion',
               longitud: 200,
               decimales: 0,
-
-
             ),
 // Campo: Nota del Destinatario. Tipo de Componente: BDEdicion
             UICampo(
@@ -178,8 +162,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDEdicion',
               longitud: 200,
               decimales: 0,
-
-
             ),
 // Campo: Fecha y Hora Entregado. Tipo de Componente: BDEdicion
             UICampo(
@@ -191,9 +173,7 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDEdicion',
               longitud: 20,
               decimales: 0,
-
               validatorTexto: _validarFechaHoraEntregado,
-
             ),
 // Campo: Pasajero. Tipo de Componente: BDBusquedaCombo
             UICampo(
@@ -205,8 +185,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDBusquedaCombo',
               longitud: 0,
               decimales: 0,
-
-
             ),
 // Campo: Recibido por Pasajero. Tipo de Componente: BDEdicion
             UICampo(
@@ -218,8 +196,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDEdicion',
               longitud: 20,
               decimales: 0,
-
-
             ),
 // Campo: Recepcionista. Tipo de Componente: BDBusquedaCombo
             UICampo(
@@ -231,8 +207,6 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDBusquedaCombo',
               longitud: 0,
               decimales: 0,
-
-
             ),
 // Campo: Mensaje enviado. Tipo de Componente: BDChequeo
             UICampo(
@@ -244,14 +218,14 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
               componente: 'BDChequeo',
               longitud: 1,
               decimales: 0,
-
-
             ),
-              // UICamposObligatorios(),
-              UIBotonesGuardarBorrar(guardar: _guardar, borrar: widget.registro.id == 0 ? null : _borrar ),
-            ],
-          ),
+            // UICamposObligatorios(),
+            UIBotonesGuardarBorrar(
+                guardar: _guardar,
+                borrar: widget.registro.id == 0 ? null : _borrar),
+          ],
         ),
+      ),
     );
   }
 }
