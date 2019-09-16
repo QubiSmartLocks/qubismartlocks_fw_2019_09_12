@@ -42,7 +42,7 @@ class _UIMensajesState extends State<UIMensajes> {
                       children: <Widget>[
                         GestureDetector(
                           child: Image.asset(
-                            'images/web_qubi_arrow-back.png',
+                            'images/arrow-back.png',
                             width: altoEncabezado * .7,
                             height: altoEncabezado * .7,
                           ),
@@ -106,7 +106,7 @@ class _UIMensajesState extends State<UIMensajes> {
 //                    decoration:
 //                        BoxDecoration(border: Border.all(color: Colors.grey)),
                     child: Image.asset(
-                      'images/web_qubi-12.png',
+                      'images/fondos/background-buildings.png',
                       fit: BoxFit.cover,
                     ),
                   ),
