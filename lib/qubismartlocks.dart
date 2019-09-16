@@ -39,6 +39,7 @@ export 'package:qubismartlocks_fw/qubismartlocks/dem.dart';
 export 'package:qubismartlocks_fw/qubismartlocks/iniciar-sesion.dart';
 export 'package:qubismartlocks_fw/qubismartlocks/inicio.dart';
 export 'package:qubismartlocks_fw/qubismartlocks/menu-admin.dart';
+export 'package:qubismartlocks_fw/qubismartlocks/init_data/_init_data.dart';
 export 'package:qubismartlocks_fw/qubismartlocks/modelos/_modelos.dart';
 export 'package:qubismartlocks_fw/qubismartlocks/ui/_ui.dart';
 export 'package:qubismartlocks_fw/qubismartlocks/vistas/_vistas.dart';
