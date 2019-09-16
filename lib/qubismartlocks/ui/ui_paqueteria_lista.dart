@@ -10,6 +10,7 @@ import 'package:qubismartlocks_fw/qubismartlocks.dart';
 
 
 class UIPaqueteriaLista extends StatefulWidget {
+  // TODO: resolver si va o no la linea de ruta aquí abajo
   static const String ruta = '/ui-clientes/lista';
 
   @override
@@ -75,13 +76,13 @@ class _UIPaqueteriaListaState extends State<UIPaqueteriaLista> {
               Container(
                 width: anchoTotal,
                 height: altoTotal,
-                padding: EdgeInsets.all(5),  //   // TODO: VARIABLE
+                padding: EdgeInsets.all(5), // TODO: Los paddings también?
                 child: PaginatedDataTable(
                     header: Container(),
                     columnSpacing: columnSpacing,
                     dataRowHeight: dataRowHeight,
                     headingRowHeight: headingRowHeight,
-                    horizontalMargin: 24.0, //   // TODO: VARIABLE
+                    horizontalMargin: 24.0,   // TODO: Margenes del Paginated???
                     rowsPerPage: _rowsPerPage,
                     onRowsPerPageChanged: (int value) {
                       setState(() {
@@ -246,4 +247,3 @@ class _PaqueteriaDataSource extends DataTableSource {
   void _selectAll(bool checked) {
   }
 }
-
