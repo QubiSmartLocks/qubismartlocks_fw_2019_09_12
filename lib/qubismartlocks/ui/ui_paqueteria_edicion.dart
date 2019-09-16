@@ -84,12 +84,7 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
 
   @override
   Widget build(BuildContext context) {
-    var anchoColumna = MediaQuery.of(context).size.width * .8;
-//    CD.iniciar(context);
-//    App.variables.calcular(context);
-//    DEM.iniciar();
     if (widget.registro == null) {
-//      widget.registro = Paquete(origenPaquete: DEM.origenPaquete);
       widget.registro = DEM.paquete;
     }
 
@@ -108,341 +103,213 @@ class _EstadoPaqueteriaEdicion extends State<UIPaqueteriaEdicion> {
       print('Encontrado ${o.denomOrigenPaquete}');
     });
 
-    return Scaffold(
-      appBar: CD.ancho <
-              AppRes.appResMap[Co.WEB_BREAK_POINT_4]
-          ? AppBar(
-              title: Text('Paqueteria'),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.save),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(Icons.clear),
-                  onPressed: () {},
-                ),
-              ],
-            )
-          : null,
-      body: Form(
-        child: Column(
-          children: <Widget>[
-            Row(
+//      appBar: UI__AppBar(CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4],'Paqueteria',null,null,) as AppBar,
+    return Form(
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin:
+                EdgeInsets.only(top: 10, left: 10, right: 10), // TODO: VARIABLE
+            child: Row(
               children: <Widget>[
-                UILaterales(),
-                Container(
-//                  color: Colors.white,
-                  height: CD.alto * .9, // TODO: VARIBLE
-                  width: CD.ancho * .9, // TODO: VARIBLE
-                  child: Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          height: 400, // TODO: VARIABLE
-                          width: CD.ancho * .9, // TODO: VARIABLE
-                          child: Image.asset(
-                            AppRes.appResMap[Co.BACKGROUND_SCREEN],
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Card(
-                          color: AppRes.appResMap[Co.FONDO_1],
-                          elevation: 3, // TODO: VARIABLE
-                          child: Container(
-                            width: anchoColumna,
-                            height:  CD.alto *.9, // TODO: VARIABLE
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(18)),
-                            ),
-                            child: Container(
-                              child: Column(
-                                children: <Widget>[
-                                  CD.alto < 500  // TODO: VARIABLE
-                                      ? Container()
-                                      : Container(
-                                          margin: EdgeInsets.only(
-                                              top: 15, bottom: 5), // TODO: VARIABLE
-                                          width: 80, // TODO: VARIABLE
-                                          height: 80, // TODO: VARIABLE
-                                          child: Container(
-                                            child: CD.ancho <
-                                                    AppRes.appResMap[
-                                                        Co.WEB_BREAK_POINT_4]
-                                                ? Container()
-                                                : Image.asset(
-                                                    'images/web_qubi_paqueteria.png',
-                                                    fit: BoxFit.cover),
-                                          ),
-                                        ),
-
-                                  Container(
-                                    alignment: Alignment.center,
-                                    height: 45, // TODO: VARIABLE
-                                    child: CD.ancho <
-                                            AppRes
-                                                .appResMap[Co.WEB_BREAK_POINT_4]
-                                        ? Container()
-                                        : Text(
-                                            'Paquetería',
-                                            style: AppRes
-                                                .appResMap[Co.ESTILO_TITULO],
-                                          ),
-                                  ),
-                                  //--
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        top: 10, left: 10, right: 10), // TODO: VARIABLE
-                                    child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: UICampoSeleccionSencillo<
-                                              OrigenPaquete>(
-                                            ancho: 300, // TODO: VARIABLE
-                                            alto: AppRes
-                                                .appResMap[Co.ALTO_EDICION],
-                                            lista: DEM.listaOrigenesPaquetes,
-                                            opcion:
-                                                widget.registro.origenPaquete,
-                                            mostrar: ORIGENESPAQUETES
-                                                .DENOMORIGENPAQUETE,
-                                            campoSegunModelo: campoSegunModelo,
-                                            assign: (OrigenPaquete origen) {
-                                              widget.registro.origenPaquete
-                                                  .assign(origen);
-                                              setState(() {});
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(width: 10), // TODO: VARIABLE
-                                        Expanded(
-                                          child: UICampo(
-                                            datos: DEM.mapaPaquete,
-                                            tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
-                                            campo: PAQUETERIA.NUMERORASTREO,
-                                            denominacion: PAQUETERIA
-                                                .ETIQUETA_NUMERORASTREO,
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_NUMERORASTREO,
-                                            componente: 'BDEdicion',  // TODO: VARIABLE
-                                            longitud: 20,  // TODO: VARIABLE
-                                            decimales: 0,  // TODO: VARIABLE
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Expanded(
-                                          child: UICampo(
-                                            datos: DEM.mapaPaquete,
-                                            tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
-                                            campo: PAQUETERIA.NOTARECEPCION,
-                                            denominacion: PAQUETERIA
-                                                .ETIQUETA_NOTARECEPCION,
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_NOTARECEPCION,
-                                            componente: 'BDEdicion',
-                                            longitud: 200,
-                                            decimales: 0,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),  // TODO: VARIABLE
-                                    child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: UICampo(
-                                            datos: DEM.mapaPaquete,
-                                            tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
-                                            campo: PAQUETERIA.DESTINATARIO,
-                                            denominacion: PAQUETERIA
-                                                .ETIQUETA_DESTINATARIO,
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_DESTINATARIO,
-                                            componente: 'BDEdicion',
-                                            longitud: 20,
-                                            decimales: 0,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),   // TODO: VARIABLE
-                                        Expanded(
-                                          child: UICampo(
-                                            datos: DEM.mapaPaquete,
-                                            tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
-                                            campo:
-                                                PAQUETERIA.FECHAHORARECEPCION,
-                                            denominacion: PAQUETERIA
-                                                .ETIQUETA_FECHAHORARECEPCION,
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_FECHAHORARECEPCION,
-                                            componente: 'BDEdicion',
-                                            longitud: 20,
-                                            decimales: 0,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),   // TODO: VARIABLE
-                                        Expanded(
-                                          child: UICampoSeleccion(
-                                            data: DEM.mapaPaquete,
-                                            campo: PAQUETERIA.ORIGENPAQUETE,
-                                            lista: OrigenesPaquetes.toMapList(
-                                                DEM.listaOrigenesPaquetes),
-                                            mostrar: ORIGENESPAQUETES
-                                                .DENOMORIGENPAQUETE,
-                                            selecto: DEM.mapaPaquete[
-                                                PAQUETERIA.ORIGENPAQUETE],
-                                            ancho: 300,   // TODO: VARIABLE
-                                            alto: AppRes
-                                                .appResMap[Co.ALTO_EDICION],
-                                            altoLista: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                2,   // TODO: VARIABLE
-                                            anchoLista: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2,   // TODO: VARIABLE
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_ORIGENPAQUETE,
-                                            titulo: ORIGENESPAQUETES
-                                                .ETIQUETA_ENTIDAD,
-                                            callback: () {
-                                              widget.registro.origenPaquete
-                                                  .fromMap(DEM.mapaPaquete[
-                                                      PAQUETERIA
-                                                          .ORIGENPAQUETE]);
-                                              setState(() {});
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),   // TODO: VARIABLE
-                                    child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: UICampo(
-                                            datos: DEM.mapaPaquete,
-                                            tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
-                                            campo: PAQUETERIA.NOTADESTINATARIO,
-                                            denominacion: PAQUETERIA
-                                                .ETIQUETA_NOTADESTINATARIO,
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_NOTADESTINATARIO,
-                                            componente: 'BDEdicion',
-                                            longitud: 200,
-                                            decimales: 0,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),   // TODO: VARIABLE
-                                        Expanded(
-                                          child: UICampo(
-                                            datos: DEM.mapaPaquete,
-                                            tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
-                                            campo:
-                                                PAQUETERIA.FECHAHORAENTREGADO,
-                                            denominacion: PAQUETERIA
-                                                .ETIQUETA_FECHAHORAENTREGADO,
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_FECHAHORAENTREGADO,
-                                            componente: 'BDEdicion',
-                                            longitud: 20,
-                                            decimales: 0,
-
-// validatorTexto: _validarFechaHoraEntregado,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),   // TODO: VARIABLE
-                                        Expanded(
-                                          child: UICampo(
-                                            datos: DEM.mapaPaquete,
-                                            tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
-                                            campo: PAQUETERIA.RECIBIDOPASAJERO,
-                                            denominacion: PAQUETERIA
-                                                .ETIQUETA_RECIBIDOPASAJERO,
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_RECIBIDOPASAJERO,
-                                            componente: 'BDEdicion',
-                                            longitud: 20,
-                                            decimales: 0,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        top: 10, left: 10, right: 10),   // TODO: VARIABLE
-                                    child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child:
-// Campo: Tipo de Usuario. Tipo de Componente: BDBusquedaCombo
-                                              UICampoFechaHora(
-                                            labelText: 'Label Text',
-                                            selectDate: null,
-                                            selectTime: null,
-                                            selectedTime:
-                                                TimeOfDay(minute: 00, hour: 12),
-                                            soloLectura: false,
-                                            locale: 'en_US',
-                                            lastDate: DateTime.now()
-                                                .add(Duration(days: 30)),
-                                            firstDate: DateTime.now(),
-                                          ),
-                                        ),
-                                        SizedBox(width: 2),   // TODO: VARIABLE
-                                        Expanded(
-                                          child: UICampo(
-                                            datos: DEM.mapaPaquete,
-                                            tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
-                                            campo: PAQUETERIA.MENSAJEENVIADO,
-                                            denominacion: PAQUETERIA
-                                                .ETIQUETA_MENSAJEENVIADO,
-                                            etiqueta: PAQUETERIA
-                                                .ETIQUETA_MENSAJEENVIADO,
-                                            componente: 'BDChequeo',   // TODO: VARIABLE
-                                            longitud: 1,  // TODO: VARIABLE
-                                            decimales: 0,  // TODO: VARIABLE
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  CD.ancho <
-                                          AppRes.appResMap[Co.WEB_BREAK_POINT_4]
-                                      ? Container()
-                                      : Container(
-                                          width: anchoColumna - 50,    // TODO: VARIABLE
-                                          child: UIBGB(
-                                              guardar: _guardar,
-                                              borrar: widget.registro.id == 0
-                                                  ? null
-                                                  : _borrar),
-                                        ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                Expanded(
+                  child: UICampoSeleccionSencillo<OrigenPaquete>(
+                    ancho: 300,
+                    // TODO: VARIABLE
+                    alto: AppRes.appResMap[Co.ALTO_EDICION],
+                    lista: DEM.listaOrigenesPaquetes,
+                    opcion: widget.registro.origenPaquete,
+                    mostrar: ORIGENESPAQUETES.DENOMORIGENPAQUETE,
+                    campoSegunModelo: campoSegunModelo,
+                    assign: (OrigenPaquete origen) {
+                      widget.registro.origenPaquete.assign(origen);
+                      setState(() {});
+                    },
                   ),
                 ),
-                UILaterales(),
+                SizedBox(width: 10), // TODO: VARIABLE
+                Expanded(
+                  child: UICampo(
+                    datos: DEM.mapaPaquete,
+                    tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
+                    campo: PAQUETERIA.NUMERORASTREO,
+                    denominacion: PAQUETERIA.ETIQUETA_NUMERORASTREO,
+                    etiqueta: PAQUETERIA.ETIQUETA_NUMERORASTREO,
+                    componente: 'BDEdicion',
+                    // TODO: VARIABLE
+                    longitud: 20,
+                    // TODO: VARIABLE
+                    decimales: 0, // TODO: VARIABLE
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: UICampo(
+                    datos: DEM.mapaPaquete,
+                    tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
+                    campo: PAQUETERIA.NOTARECEPCION,
+                    denominacion: PAQUETERIA.ETIQUETA_NOTARECEPCION,
+                    etiqueta: PAQUETERIA.ETIQUETA_NOTARECEPCION,
+                    componente: 'BDEdicion',
+                    longitud: 200,
+                    decimales: 0,
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+          Container(
+            margin:
+                EdgeInsets.only(top: 10, left: 10, right: 10), // TODO: VARIABLE
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: UICampo(
+                    datos: DEM.mapaPaquete,
+                    tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
+                    campo: PAQUETERIA.DESTINATARIO,
+                    denominacion: PAQUETERIA.ETIQUETA_DESTINATARIO,
+                    etiqueta: PAQUETERIA.ETIQUETA_DESTINATARIO,
+                    componente: 'BDEdicion',
+                    longitud: 20,
+                    decimales: 0,
+                  ),
+                ),
+                SizedBox(width: 10), // TODO: VARIABLE
+                Expanded(
+                  child: UICampo(
+                    datos: DEM.mapaPaquete,
+                    tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
+                    campo: PAQUETERIA.FECHAHORARECEPCION,
+                    denominacion: PAQUETERIA.ETIQUETA_FECHAHORARECEPCION,
+                    etiqueta: PAQUETERIA.ETIQUETA_FECHAHORARECEPCION,
+                    componente: 'BDEdicion',
+                    longitud: 20,
+                    decimales: 0,
+                  ),
+                ),
+                SizedBox(width: 10), // TODO: VARIABLE
+                Expanded(
+                  child: UICampoSeleccion(
+                    data: DEM.mapaPaquete,
+                    campo: PAQUETERIA.ORIGENPAQUETE,
+                    lista:
+                        OrigenesPaquetes.toMapList(DEM.listaOrigenesPaquetes),
+                    mostrar: ORIGENESPAQUETES.DENOMORIGENPAQUETE,
+                    selecto: DEM.mapaPaquete[PAQUETERIA.ORIGENPAQUETE],
+                    ancho: 300,
+                    // TODO: VARIABLE
+                    alto: AppRes.appResMap[Co.ALTO_EDICION],
+                    altoLista: MediaQuery.of(context).size.height / 2,
+                    // TODO: VARIABLE
+                    anchoLista: MediaQuery.of(context).size.width / 2,
+                    // TODO: VARIABLE
+                    etiqueta: PAQUETERIA.ETIQUETA_ORIGENPAQUETE,
+                    titulo: ORIGENESPAQUETES.ETIQUETA_ENTIDAD,
+                    callback: () {
+                      widget.registro.origenPaquete
+                          .fromMap(DEM.mapaPaquete[PAQUETERIA.ORIGENPAQUETE]);
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin:
+                EdgeInsets.only(top: 10, left: 10, right: 10), // TODO: VARIABLE
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: UICampo(
+                    datos: DEM.mapaPaquete,
+                    tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
+                    campo: PAQUETERIA.NOTADESTINATARIO,
+                    denominacion: PAQUETERIA.ETIQUETA_NOTADESTINATARIO,
+                    etiqueta: PAQUETERIA.ETIQUETA_NOTADESTINATARIO,
+                    componente: 'BDEdicion',
+                    longitud: 200,
+                    decimales: 0,
+                  ),
+                ),
+                SizedBox(width: 10), // TODO: VARIABLE
+                Expanded(
+                  child: UICampo(
+                    datos: DEM.mapaPaquete,
+                    tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
+                    campo: PAQUETERIA.FECHAHORAENTREGADO,
+                    denominacion: PAQUETERIA.ETIQUETA_FECHAHORAENTREGADO,
+                    etiqueta: PAQUETERIA.ETIQUETA_FECHAHORAENTREGADO,
+                    componente: 'BDEdicion',
+                    longitud: 20,
+                    decimales: 0,
+
+// validatorTexto: _validarFechaHoraEntregado,
+                  ),
+                ),
+                SizedBox(width: 10), // TODO: VARIABLE
+                Expanded(
+                  child: UICampo(
+                    datos: DEM.mapaPaquete,
+                    tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
+                    campo: PAQUETERIA.RECIBIDOPASAJERO,
+                    denominacion: PAQUETERIA.ETIQUETA_RECIBIDOPASAJERO,
+                    etiqueta: PAQUETERIA.ETIQUETA_RECIBIDOPASAJERO,
+                    componente: 'BDEdicion',
+                    longitud: 20,
+                    decimales: 0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin:
+                EdgeInsets.only(top: 10, left: 10, right: 10), // TODO: VARIABLE
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child:
+// Campo: Tipo de Usuario. Tipo de Componente: BDBusquedaCombo
+                      UICampoFechaHora(
+                    labelText: 'Label Text',
+                    selectDate: null,
+                    selectTime: null,
+                    selectedTime: TimeOfDay(minute: 00, hour: 12),
+                    soloLectura: false,
+                    locale: 'en_US',
+                    lastDate: DateTime.now().add(Duration(days: 30)),
+                    firstDate: DateTime.now(),
+                  ),
+                ),
+                SizedBox(width: 2), // TODO: VARIABLE
+                Expanded(
+                  child: UICampo(
+                    datos: DEM.mapaPaquete,
+                    tabla: PAQUETERIA.ETIQUETA_ENTIDAD,
+                    campo: PAQUETERIA.MENSAJEENVIADO,
+                    denominacion: PAQUETERIA.ETIQUETA_MENSAJEENVIADO,
+                    etiqueta: PAQUETERIA.ETIQUETA_MENSAJEENVIADO,
+                    componente: 'BDChequeo',
+                    // TODO: VARIABLE
+                    longitud: 1,
+                    // TODO: VARIABLE
+                    decimales: 0, // TODO: VARIABLE
+                  ),
+                ),
+              ],
+            ),
+          ),
+          CD.ancho < AppRes.appResMap[Co.WEB_BREAK_POINT_4]
+              ? Container()
+              : Container(
+//                  width: anchoColumna - 50, // TODO: VARIABLE
+                  child: UIBGB(
+                      guardar: _guardar,
+                      borrar: widget.registro.id == 0 ? null : _borrar),
+                ),
+        ],
       ),
     );
   }

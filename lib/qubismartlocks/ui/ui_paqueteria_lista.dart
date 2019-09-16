@@ -155,7 +155,7 @@ class _PaqueteriaDataSource extends DataTableSource {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) =>
-          UIPaqueteEdicion(registro: registro)),
+          UIPaqueteriaForma(edicion: true, registro: registro,)),
     );
   }
 

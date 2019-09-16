@@ -10,7 +10,11 @@ import 'package:qubismartlocks_fw/qubismartlocks.dart';
 
 
 class UIPaqueteriaForma extends StatefulWidget {
+  UIPaqueteriaForma({this.edicion = false, this.registro});
   static const String ruta = '/ui-paqueteria/forma';
+
+  final bool edicion;
+  Paquete registro;
 
   @override
   _UIPaqueteriaFormaState createState() => _UIPaqueteriaFormaState();
@@ -22,7 +26,7 @@ class _UIPaqueteriaFormaState extends State<UIPaqueteriaForma> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) =>
-          UIPaqueteEdicion(registro: Paquete())),
+          UIPaqueteriaForma(edicion: true, registro: Paquete(origenPaquete: DEM.origenPaquete),)),
     );
   }
 
@@ -32,15 +36,18 @@ class _UIPaqueteriaFormaState extends State<UIPaqueteriaForma> {
       factorAlto: AppRes.appResMap[AppCo.FORMA_PAQUETERIA_FACTOR_ALTO],
       factorAncho: AppRes.appResMap[AppCo.FORMA_PAQUETERIA_FACTOR_ANCHO],
       icono: AppRes.appResMap[AppCo.FORMA_PAQUETERIA_IMAGEN_ICONO],
-      titulo: AppRes.appResMap[AppCo.FORMA_PAQUETERIA_TITULO],
+      titulo: widget.edicion ? (widget.registro.id == null ? 'Nuevo Paquete' : widget.registro.destinatario ) : AppRes.appResMap[AppCo.FORMA_PAQUETERIA_TITULO],
       onTapAdd: _nuevopaquete,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           // TODO: Aquí el Widget de Filtrar/Buscar/Releer/Agregar/etc
-          // Lista
-          UIPaqueteriaLista(),
+          widget.edicion
+              // Edicion
+              ? UIPaqueteEdicion(registro: widget.registro)
+              // Lista
+              : UIPaqueteriaLista(),
           // Botones
           UIFormaButtons(onTapAdd: _nuevopaquete),
         ],
