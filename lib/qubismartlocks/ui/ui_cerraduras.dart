@@ -114,6 +114,7 @@ class _EstadoCerraduras extends State<UICerraduras> {
                                               height: 80,
                                               child:
                                                 Container(
+                                                  color: Colors.yellow,
                                                   child:
                                                   Image.asset('web_qubi_icon_cerraduras.png'),
                                                 ),
