@@ -49,7 +49,7 @@ class UIMenuGaveta extends StatelessWidget {
       listaOpciones.clear();
     }
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Cerraduras',
         onTap: () {
@@ -58,10 +58,10 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.lock, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Estado de Cerraduras',
         onTap: () {
@@ -70,9 +70,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.lock_open, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Histórico de Cerraduras',
         onTap: () {
@@ -81,9 +81,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.lock_outline, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Log de Cerraduras',
         onTap: () {
@@ -93,19 +93,19 @@ class UIMenuGaveta extends StatelessWidget {
         widget: Icon(Icons.phonelink_lock, color: AppRes.appResMap[Co.COLOR_1],),
       ),
     );
-
-    listaOpciones.add(
+*/
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Marcas de Cerraduras',
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => UIMarcasCerraduras()));
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => UIMarcasCerradurasForma()));
 
         },
         widget: Icon(Icons.phonelink_lock, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Modelos de Cerraduras',
         onTap: () {
@@ -114,9 +114,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.screen_lock_landscape, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Usuarios',
         onTap: () {
@@ -125,9 +125,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.supervised_user_circle, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+   /* listaOpciones.add(
       OpcionGaveta(
         opcion: 'Niveles de Usuarios',
         onTap: () {
@@ -136,9 +136,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.people_outline, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Habitaciones',
         onTap: () {
@@ -147,9 +147,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.business, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Tipo de Habitaciones',
         onTap: () {
@@ -158,9 +158,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.view_quilt, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Pasajeros',
         onTap: () {
@@ -169,9 +169,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.people, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Clientes',
         onTap: () {
@@ -180,9 +180,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.streetview, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Reservaciones',
         onTap: () {
@@ -191,9 +191,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.featured_play_list, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Estado de Reservaciones',
         onTap: () {
@@ -202,7 +202,7 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.spellcheck, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
     listaOpciones.add(
       OpcionGaveta(
@@ -215,7 +215,7 @@ class UIMenuGaveta extends StatelessWidget {
       ),
     );
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Origenes de Paquetes',
         onTap: () {
@@ -224,9 +224,9 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.group_work, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
-    listaOpciones.add(
+    /*listaOpciones.add(
       OpcionGaveta(
         opcion: 'Chat',
         onTap: () {
@@ -235,7 +235,7 @@ class UIMenuGaveta extends StatelessWidget {
         },
         widget: Icon(Icons.message, color: AppRes.appResMap[Co.COLOR_1],),
       ),
-    );
+    );*/
 
     listaOpciones.add(
       OpcionGaveta(

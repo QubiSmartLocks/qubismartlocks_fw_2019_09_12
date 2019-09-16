@@ -64,11 +64,11 @@ class AppVariables {
 //    AppRes.appResMap[Co.BACKGROUND_GRAPH] = 'imagenes/GRAFICOS.png';
 
 
-    AppRes.appResMap[Co.BACKGROUND_LATERAL] = 'images/web_qubi-28.png';
+    AppRes.appResMap[Co.BACKGROUND_LATERAL] = 'images/fondos/lateral.png';
     AppRes.appResMap[Co.BACKGROUND_CLIENTES] = 'images/web_qubi-17.png';
 
 
-    AppRes.appResMap[Co.BACKGROUND_SCREEN] = 'images/web_qubi-12.png';
+    AppRes.appResMap[Co.BACKGROUND_SCREEN] = 'images/fondos/background-buildings.png';
 
 
     AppRes.appResMap[Co.FONT_1L] = 'QuicksandLight';
