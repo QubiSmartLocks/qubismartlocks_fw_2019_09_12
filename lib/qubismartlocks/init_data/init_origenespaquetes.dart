@@ -16,12 +16,48 @@ class InicializarOrigenesPaquetes {
 
     _origenPaquete = new OrigenPaquete();
     _origenPaquete.id = i++;
-    _origenPaquete.denomOrigenPaquete = '';
+    _origenPaquete.denomOrigenPaquete = 'Ups';
     // Guarda usando el API
 //    await OrigenesPaquetes.guardar(_origenPaquete);
     // Guarda usando Firebase Realtime Database
 //    await OrigenesPaquetesFB.guardarOrigenPaquete(origenPaquete: _origenPaquete);
     DEM.listaOrigenesPaquetes.add(_origenPaquete);
 
+    _origenPaquete = new OrigenPaquete();
+    _origenPaquete.id = i++;
+    _origenPaquete.denomOrigenPaquete = 'DHL';
+    // Guarda usando el API
+//    await OrigenesPaquetes.guardar(_origenPaquete);
+    // Guarda usando Firebase Realtime Database
+//    await OrigenesPaquetesFB.guardarOrigenPaquete(origenPaquete: _origenPaquete);
+    DEM.listaOrigenesPaquetes.add(_origenPaquete);
+
+    _origenPaquete = new OrigenPaquete();
+    _origenPaquete.id = i++;
+    _origenPaquete.denomOrigenPaquete = 'FedEx';
+    // Guarda usando el API
+//    await OrigenesPaquetes.guardar(_origenPaquete);
+    // Guarda usando Firebase Realtime Database
+//    await OrigenesPaquetesFB.guardarOrigenPaquete(origenPaquete: _origenPaquete);
+    DEM.listaOrigenesPaquetes.add(_origenPaquete);
+
+    _origenPaquete = new OrigenPaquete();
+    _origenPaquete.id = i++;
+    _origenPaquete.denomOrigenPaquete = 'US Post Office';
+    // Guarda usando el API
+//    await OrigenesPaquetes.guardar(_origenPaquete);
+    // Guarda usando Firebase Realtime Database
+//    await OrigenesPaquetesFB.guardarOrigenPaquete(origenPaquete: _origenPaquete);
+    DEM.listaOrigenesPaquetes.add(_origenPaquete);
+
+
+    _origenPaquete = new OrigenPaquete();
+    _origenPaquete.id = i++;
+    _origenPaquete.denomOrigenPaquete = 'MRW';
+    // Guarda usando el API
+//    await OrigenesPaquetes.guardar(_origenPaquete);
+    // Guarda usando Firebase Realtime Database
+//    await OrigenesPaquetesFB.guardarOrigenPaquete(origenPaquete: _origenPaquete);
+    DEM.listaOrigenesPaquetes.add(_origenPaquete);
   }
 }

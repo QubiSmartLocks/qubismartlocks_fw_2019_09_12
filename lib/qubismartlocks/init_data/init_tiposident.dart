@@ -16,7 +16,25 @@ class InicializarTiposIdent {
 
     _tipoIdent = new TipoIdent();
     _tipoIdent.id = i++;
-    _tipoIdent.denomTipoIdent = '';
+    _tipoIdent.denomTipoIdent = 'Cédula de Ciudadanía';
+    // Guarda usando el API
+//    await TiposIdent.guardar(_tipoIdent);
+    // Guarda usando Firebase Realtime Database
+//    await TiposIdentFB.guardarTipoIdent(tipoIdent: _tipoIdent);
+    DEM.listaTiposIdent.add(_tipoIdent);
+
+    _tipoIdent = new TipoIdent();
+    _tipoIdent.id = i++;
+    _tipoIdent.denomTipoIdent = 'Pasaporte';
+    // Guarda usando el API
+//    await TiposIdent.guardar(_tipoIdent);
+    // Guarda usando Firebase Realtime Database
+//    await TiposIdentFB.guardarTipoIdent(tipoIdent: _tipoIdent);
+    DEM.listaTiposIdent.add(_tipoIdent);
+
+    _tipoIdent = new TipoIdent();
+    _tipoIdent.id = i++;
+    _tipoIdent.denomTipoIdent = 'Cédula de Extranjería';
     // Guarda usando el API
 //    await TiposIdent.guardar(_tipoIdent);
     // Guarda usando Firebase Realtime Database
