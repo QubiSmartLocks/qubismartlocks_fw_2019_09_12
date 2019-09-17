@@ -313,9 +313,9 @@ class AppVariables {
     AppRes.appResMap[Co.LISTA_ESPACIO_ENTRE_COLUMNAS] = 5.0;
     AppRes.appResMap[Co.LISTA_ALTO_FILA] = 25.0;
     AppRes.appResMap[Co.LISTA_ALTO_TITULOS] = 25.0;
-    AppRes.appResMap[Co.LISTA_FACTOR_ALTO_TOTAL] = .65;
-    AppRes.appResMap[Co.LISTA_FACTOR_ANCHO_TOTAL] = .65;
-    AppRes.appResMap[Co.LISTA_ALTO_PIE_PAGINACION] = 56;
+    AppRes.appResMap[Co.LISTA_FACTOR_ALTO_TOTAL] = .75;
+    AppRes.appResMap[Co.LISTA_FACTOR_ANCHO_TOTAL] = .9;
+    AppRes.appResMap[Co.LISTA_ALTO_PIE_PAGINACION] = 40;
 
 
 

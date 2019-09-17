@@ -60,7 +60,7 @@ class _InicioState extends State<Inicio> {
 //          ),
 //        ],
         title: Text(
-          AppRes.appResMap['AppDenom'],
+          AppRes.appResMap[Co.APP_DENOM],
           style: estiloTituloPantalla,
         ),
 //        titleSpacing: 50.0,
@@ -74,7 +74,7 @@ class _InicioState extends State<Inicio> {
             expandedHeight: _kFlexibleSpaceMaxHeight,
             flexibleSpace: new FlexibleSpaceBar(
               centerTitle: true,
-              title: new Text(AppRes.appResMap['AppDenom'],
+              title: new Text(AppRes.appResMap[Co.APP_DENOM],
                 style: estiloTituloPantalla.copyWith(
                     color: AppRes.appResMap[Co.COLOR_2], height: 32),),
               // TODO(abarth): Wire up to the parallax in a way that doesn't pop during hero transition.

@@ -75,7 +75,7 @@ class _UIPaqueteriaListaState extends State<UIPaqueteriaLista> {
       children: <Widget>[
               Container(
                 width: anchoTotal,
-                height: altoTotal,
+                height: CD.ancho < 800 ? CD.alto * .8 : altoTotal,
                 padding: EdgeInsets.all(5), // TODO: Los paddings también?
                 child: PaginatedDataTable(
                     header: Container(),

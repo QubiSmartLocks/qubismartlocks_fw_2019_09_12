@@ -384,25 +384,26 @@ class PaginatedDataTableState extends State<PaginatedDataTable> {
         );
       })
           .toList();
-      footerWidgets.addAll(<Widget>[
-        Container(width: 14.0), // to match trailing padding in case we overflow and end up scrolling
-        Text(localizations.rowsPerPageTitle),
-        ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: 64.0), // 40.0 for the text, 24.0 for the icon
-          child: Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<int>(
-                items: availableRowsPerPage,
-                value: widget.rowsPerPage,
-                onChanged: widget.onRowsPerPageChanged,
-                style: footerTextStyle,
-                iconSize: 24.0,
-              ),
-            ),
-          ),
-        ),
-      ]);
+//      footerWidgets.addAll(<Widget>[
+//        Container(width: 14.0), // to match trailing padding in case we overflow and end up scrolling
+////        Text(localizations.rowsPerPageTitle),
+//// Texto eliminado del listado....
+//        ConstrainedBox(
+//          constraints: const BoxConstraints(minWidth: 64.0), // 40.0 for the text, 24.0 for the icon
+//          child: Align(
+//            alignment: AlignmentDirectional.centerEnd,
+//            child: DropdownButtonHideUnderline(
+//              child: DropdownButton<int>(
+//                items: availableRowsPerPage,
+//                value: widget.rowsPerPage,
+//                onChanged: widget.onRowsPerPageChanged,
+//                style: footerTextStyle,
+//                iconSize: 24.0,
+//              ),
+//            ),
+//          ),
+//        ),
+//      ]);
     }
     footerWidgets.addAll(<Widget>[
       Container(width: 32.0),
@@ -412,20 +413,26 @@ class PaginatedDataTableState extends State<PaginatedDataTable> {
             _firstRowIndex + widget.rowsPerPage,
             _rowCount,
             _rowCountApproximate,
-          )
+
+          ),
+        style: TextStyle(color: AppRes.appResMap[Co.COLOR_6]),
       ),
       Container(width: 32.0),
       IconButton(
         icon: const Icon(Icons.chevron_left),
+        color: AppRes.appResMap[Co.COLOR_6],
         padding: EdgeInsets.zero,
-        tooltip: localizations.previousPageTooltip,
+        //tooltip: localizations.previousPageTooltip,
+        tooltip: 'Página previa',
         onPressed: _firstRowIndex <= 0 ? null : _handlePrevious,
       ),
       Container(width: 24.0),
       IconButton(
         icon: const Icon(Icons.chevron_right),
+        color: AppRes.appResMap[Co.COLOR_6],
         padding: EdgeInsets.zero,
-        tooltip: localizations.nextPageTooltip,
+        //tooltip: localizations.nextPageTooltip,
+        tooltip: 'Próxima página',
         onPressed: (!_rowCountApproximate && (_firstRowIndex + widget.rowsPerPage >= _rowCount)) ? null : _handleNext,
       ),
       Container(width: 14.0),

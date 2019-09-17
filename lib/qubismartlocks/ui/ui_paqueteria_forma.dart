@@ -49,7 +49,8 @@ class _UIPaqueteriaFormaState extends State<UIPaqueteriaForma> {
               // Lista
               : UIPaqueteriaLista(),
           // Botones
-          UIFormaButtons(onTapAdd: _nuevopaquete),
+          // TODO: Mover los botones a los lados del título
+      //    UIFormaButtons(onTapAdd: _nuevopaquete),
         ],
       ),
     );

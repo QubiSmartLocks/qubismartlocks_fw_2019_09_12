@@ -30,5 +30,4 @@ class UI__AppBar extends StatelessWidget {
           )
         : null;
   }
-
 }

@@ -298,8 +298,8 @@ class AppVar {
     // Paquetería - Formas
     AppRes.appResMap[AppCo.FORMA_PAQUETERIA_TITULO] = PAQUETERIA.ETIQUETA_ENTIDAD;
     AppRes.appResMap[AppCo.FORMA_PAQUETERIA_IMAGEN_ICONO] = '${AppRes.appResMap[AppCo.UBICACION_IMAGENES]}${PAQUETERIA.ENTIDAD.toLowerCase()}.png';
-    AppRes.appResMap[AppCo.FORMA_PAQUETERIA_FACTOR_ALTO] = 0.7;
-    AppRes.appResMap[AppCo.FORMA_PAQUETERIA_FACTOR_ANCHO] = 0.7;
+    AppRes.appResMap[AppCo.FORMA_PAQUETERIA_FACTOR_ALTO] = 0.9;
+    AppRes.appResMap[AppCo.FORMA_PAQUETERIA_FACTOR_ANCHO] = 0.9;
 
     // Pasajeros - Formas
     AppRes.appResMap[AppCo.FORMA_PASAJEROS_TITULO] = PASAJEROS.ETIQUETA_ENTIDAD;

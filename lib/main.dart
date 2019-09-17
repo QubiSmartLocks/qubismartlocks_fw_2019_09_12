@@ -100,10 +100,13 @@ Widget _seleccionPantallaInicial() {
                 Sesion.usuarioFire.autorizado
             // && Sesion.lConexionAutorizada
             ) {
-          return Inicio(
-            tipo: DEM.tipoUsr,
-          );
+//          return Inicio(
+//            tipo: DEM.tipoUsr,
+//          );
         }
+        return Inicio(
+          tipo: DEM.tipoUsr,
+        );
         return IniciarSesion();
       }
     },
