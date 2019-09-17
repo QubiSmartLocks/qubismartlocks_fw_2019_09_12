@@ -9,8 +9,6 @@ import 'package:qubismartlocks_fw/qubismartlocks.dart';
 
 class App {
   static final AppVariables variables = AppVariables();
-  static final String ESTILO_ITEM_TITULO = 'estiloItemTitulo';
-  static final String ESTILO_ITEM_DATO = 'estiloItemTitulo';
 }
 
 
