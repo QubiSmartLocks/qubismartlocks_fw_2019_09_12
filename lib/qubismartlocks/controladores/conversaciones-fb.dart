@@ -3,37 +3,32 @@
  Version: 2019.09.12
  Autor: Abner Hernández
  Unidad: Modelo (MVC) de Entidad Conversaciones -> Conversación
-   [Qubi Smart Locks/Mensajería (Chats)] para Firebase Realtime Database
-
+   [Qubi Smart Locks/Mensajería (Chats)]
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
-import 'package:firebase/firebase.dart' as firebase;
+import 'package:firebase/firebase.dart' as fb;
 
 
 class ConversacionesFB {
 
-  static firebase.DatabaseReference drConversaciones = DEM.db.ref( CONVERSACIONES.ENTIDAD );
+  static fb.DatabaseReference drConversaciones = DEM.db.ref( CONVERSACIONES.ENTIDAD );
 
   static Future guardarConversacion({Conversacion conversacion}) async {
-//    final _analytics = firebase.FirebaseAnalytics();
 
     if (conversacion.key == '') {
       conversacion.key = drConversaciones.push().key;
     }
     await drConversaciones.child(conversacion.key).update(conversacion.toJson());
-//    _analytics.logEvent(name:  CONVERSACIONES.ENTIDAD , parameters: conversacion.toJson());
   }
 
   static Future borrarConversacion({Conversacion conversacion}) async {
-//    final _analytics = firebase.FirebaseAnalytics();
     await drConversaciones.child(conversacion.key).remove();
-//    _analytics.logEvent(name:  CONVERSACIONES.ENTIDAD + '_Borrado', parameters: conversacion.toJson());
   }
 
   static init() async {
     await drConversaciones.remove();
-//    await InicializarConversaciones.init();
+    await InicializarConversaciones.init();
   }
 
   static todos(List<Conversacion> lista) async {
@@ -52,4 +47,3 @@ class ConversacionesFB {
     });
   }
 }
-

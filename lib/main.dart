@@ -1,35 +1,26 @@
-// Proyecto: Qubi Smart Locks
-// Version: 2019.09.12
-// Autor: Abner Hernández
-// Unidad: main.dart
-// Inicio de la aplicacion
-
-import 'package:flutter_web/material.dart';
-// AppPacks
-import 'package:appadminweb/appadminweb.dart';
-import 'package:appresweb/appresweb.dart';
-// Aplicacion Qubi Smart Locks
-import 'package:qubismartlocks_fw/qubismartlocks/dem.dart';
-import 'package:qubismartlocks_fw/qubismartlocks/iniciar-sesion.dart';
-import 'package:qubismartlocks_fw/qubismartlocks/inicio.dart';
-import 'package:qubismartlocks_fw/qubismartlocks/menu-admin.dart';
-//import 'package:qubismartlocks_fw/qubismartlocks/ui/_ui.dart';
-
+/*
+ Proyecto: Qubi Smart Locks
+ Version: 2019.09.12
+ Autor: Abner Hernández
+ Unidad: main.dart
+ Inicio de la aplicacion
+*/
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase/firebase.dart' as firebase;
+import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:qubismartlocks_fw/splash.dart';
 
-
-bool lInicio = true;
 
 void main() {
   if (listaItemsMenuAdmin.length == 0) {
     OpcionesMenuAdmin.buildMenuItems();
   }
-
   runApp(MainApp());
 }
 
+
 final Map<String, WidgetBuilder> _kRoutes =
-new Map<String, WidgetBuilder>.fromIterable(
+Map<String, WidgetBuilder>.fromIterable(
   listaItemsMenuAdmin,
   key: (item) => item.ruta,
   value: (item) => item.constructor,
@@ -42,38 +33,79 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
 
+  _refrescar() {
+    setState(() {});
+  }
+
   Future<Null> inicio() async {
     initializeDateFormatting();
-//    BaseDatos basedatos = new BaseDatos();
-//    basedatos.inicializar();
-//    localPath();
-//    DataModule dm = new DataModule();
-//    dm.iniciar();
-//    Sesion.iniciar();  // Se ha comentado porque sólo se puede iniciar si se ha Iniciado Sesión
+    await DEM.iniciar();
+    //firebase.auth().signOut();
+    DEM.refrescarMain = _refrescar;
+  }
+
+  @override
+  void initState() {
+    // Initialize Firebase
+    DEM.app = firebase.initializeApp(
+//      name: 'prueba',
+      apiKey: "AIzaSyBUaOzLJ7gusvGzkIo8UXoTCq5gaVGYSDs",
+      authDomain: "qubilocks-f36b6.firebaseapp.com",
+      databaseURL: "https://qubilocks-f36b6.firebaseio.com",
+      projectId: "qubilocks-f36b6",
+      storageBucket: "qubilocks-f36b6.appspot.com",
+      messagingSenderId: "716278979135",
+//        appId: "1:716278979135:web:74a43796b01ed47f1c768a"
+    );
+
+    inicio();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (lInicio) {
-      lInicio = false;
-      inicio();
-    }
 
-    Map<String, WidgetBuilder> rutas = new Map<String, WidgetBuilder>();
+    Map<String, WidgetBuilder> rutas = Map<String, WidgetBuilder>();
 
     rutas.addAll(_kRoutes);
 
-    return new MaterialApp(
+    return MaterialApp(
       title: 'Qubi Smart Locks',
-//      theme: iPhone,
+      // theme: iPhone,
       debugShowCheckedModeBanner: false,
-      home: new Material(
+      home: Material(
         type: MaterialType.transparency,
-//          DEM.iniciar();
-        child: Inicio(tipo: DEM.tipoUsr,),
+        child: _seleccionPantallaInicial(),
       ),
       routes: rutas,
     );
   }
 }
 
+Widget _seleccionPantallaInicial() {
+  return StreamBuilder<firebase.User>(
+    stream: firebase.auth().onAuthStateChanged,
+    builder: (BuildContext context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return SplashPage();
+      } else {
+        if (snapshot.hasData &&
+            snapshot.data.uid != '' &&
+            Sesion.usuarioFb == null
+            ) {
+          Sesion.usuarioFb = snapshot.data;
+        }
+        if (Sesion.usuarioFb != null &&
+                Sesion.usuarioFb.emailVerified &&
+                Sesion.usuarioFire.autorizado
+            // && Sesion.lConexionAutorizada
+            ) {
+          return Inicio(
+            tipo: DEM.tipoUsr,
+          );
+        }
+        return IniciarSesion();
+      }
+    },
+  );
+}

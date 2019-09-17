@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Booking {
   Booking({
+    this.key = '',
     this.pkid,
     this.id,
     this.number,
@@ -79,85 +81,91 @@ class Booking {
     this.ota,
   });
 
-  int pkid;
-  int id;
-  String number;
-  DateTime arrival;
-  DateTime departure;
-  int arrival_room_type_id;
-  int arrival_room_id;
-  int adults;
-  int children;
-  String reference_number;
-  DateTime reference_date;
-  bool is_guaranteed;
-  int rate_id;
-  int source_of_business_company_id;
-  int event_id;
-  int block_id;
-  DateTime status_changed_at;
-  int user_created_id;
-  int user_updated_id;
-  String status;
-  DateTime created_at;
-  DateTime updated_at;
-  String marketing_source;
-  String marketing_channel;
-  bool accept_charge_transfers;
-  int guarantee_policy_id;
-  String arrival_time;
-  String transfer_arrival;
-  String transfer_departure;
-  String departure_time;
-  int first_meal_id;
-  int eating_object_id;
-  int registration_cards_count;
-  int confirmation_logs_count;
-  String self_service_key;
-  String self_service_pin;
-  int source_id;
-  int cancel_source_id;
-  String links;
-  String housekeeping_note;
-  int commission_value_cents;
-  String commission_currency;
-  DateTime commission_payment_date;
-  bool commission_checked;
-  String commission_notes;
-  String city_tax_mode;
-  int citytax_adults;
-  int citytax_children;
-  bool disable_room_change;
-  String guest_first_name;
-  String guest_middle_name;
-  String guest_last_name;
-  String guest_country;
-  String guest_city;
-  String guest_address;
-  String guest_zip_code;
-  String guest_phone_number;
-  String guest_e_mail;
-  String guest_fax_number;
-  String guest_language;
-  String guest_state;
-  String active_notes;
-  String active_housekeeping_notes;
-  String active_meals_notes;
-  String active_client_requests;
-  bool ota;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int pkid;  // Id [Búsqueda: int]
+  int id;  // Id [Búsqueda: int]
+  String number;  // Clock PMS STRING [Texto Variable: String]
+  DateTime arrival;  // Clock PMS DATE [Fecha: DateTime]
+  DateTime departure;  // Clock PMS DATE [Fecha: DateTime]
+  int arrival_room_type_id;  // Clock PMS INTEGER [Entero: int]
+  int arrival_room_id;  // Clock PMS INTEGER [Entero: int]
+  int adults;  // Clock PMS INTEGER [Entero: int]
+  int children;  // Clock PMS INTEGER [Entero: int]
+  String reference_number;  // Clock PMS STRING [Texto Variable: String]
+  DateTime reference_date;  // Clock PMS DATE [Fecha: DateTime]
+  bool is_guaranteed;  // Clock PMS BOOLEAN [Booleano: bool]
+  int rate_id;  // Clock PMS INTEGER [Entero: int]
+  int source_of_business_company_id;  // Clock PMS INTEGER [Entero: int]
+  int event_id;  // Clock PMS INTEGER [Entero: int]
+  int block_id;  // Clock PMS INTEGER [Entero: int]
+  DateTime status_changed_at;  // Clock PMS DATE TIME [Momento: DateTime]
+  int user_created_id;  // Clock PMS INTEGER [Entero: int]
+  int user_updated_id;  // Clock PMS INTEGER [Entero: int]
+  String status;  // Clock PMS STRING [Texto Variable: String]
+  DateTime created_at;  // Clock PMS DATETIME [Momento: DateTime]
+  DateTime updated_at;  // Clock PMS DATETIME [Momento: DateTime]
+  String marketing_source;  // Clock PMS STRING [Texto Variable: String]
+  String marketing_channel;  // Clock PMS STRING [Texto Variable: String]
+  bool accept_charge_transfers;  // Clock PMS BOOLEAN [Booleano: bool]
+  int guarantee_policy_id;  // Clock PMS INTEGER [Entero: int]
+  String arrival_time;  // Clock PMS STRING [Texto Variable: String]
+  String transfer_arrival;  // Clock PMS STRING [Texto Variable: String]
+  String transfer_departure;  // Clock PMS STRING [Texto Variable: String]
+  String departure_time;  // Clock PMS STRING [Texto Variable: String]
+  int first_meal_id;  // Clock PMS INTEGER [Entero: int]
+  int eating_object_id;  // Clock PMS INTEGER [Entero: int]
+  int registration_cards_count;  // Clock PMS INTEGER [Entero: int]
+  int confirmation_logs_count;  // Clock PMS INTEGER [Entero: int]
+  String self_service_key;  // Clock PMS STRING [Texto Variable: String]
+  String self_service_pin;  // Clock PMS STRING [Texto Variable: String]
+  int source_id;  // Clock PMS INTEGER [Entero: int]
+  int cancel_source_id;  // Clock PMS INTEGER [Entero: int]
+  String links;  // Clock PMS TEXT [Texto Variable: String]
+  String housekeeping_note;  // Clock PMS TEXT [Texto Variable: String]
+  int commission_value_cents;  // Clock PMS INTEGER [Entero: int]
+  String commission_currency;  // Clock PMS STRING [Texto Variable: String]
+  DateTime commission_payment_date;  // Clock PMS DATE [Fecha: DateTime]
+  bool commission_checked;  // Clock PMS BOOLEAN [Booleano: bool]
+  String commission_notes;  // Clock PMS TEXT [Texto Variable: String]
+  String city_tax_mode;  // Clock PMS STRING [Texto Variable: String]
+  int citytax_adults;  // Clock PMS INTEGER [Entero: int]
+  int citytax_children;  // Clock PMS INTEGER [Entero: int]
+  bool disable_room_change;  // Clock PMS BOOLEAN [Booleano: bool]
+  String guest_first_name;  // Clock PMS STRING [Texto Variable: String]
+  String guest_middle_name;  // Clock PMS STRING [Texto Variable: String]
+  String guest_last_name;  // Clock PMS STRING [Texto Variable: String]
+  String guest_country;  // Clock PMS STRING [Texto Variable: String]
+  String guest_city;  // Clock PMS STRING [Texto Variable: String]
+  String guest_address;  // Clock PMS STRING [Texto Variable: String]
+  String guest_zip_code;  // Clock PMS STRING [Texto Variable: String]
+  String guest_phone_number;  // Clock PMS STRING [Texto Variable: String]
+  String guest_e_mail;  // Clock PMS STRING [Texto Variable: String]
+  String guest_fax_number;  // Clock PMS STRING [Texto Variable: String]
+  String guest_language;  // Clock PMS STRING [Texto Variable: String]
+  String guest_state;  // Clock PMS STRING [Texto Variable: String]
+  String active_notes;  // Clock PMS STRING [Texto Variable: String]
+  String active_housekeeping_notes;  // Clock PMS STRING [Texto Variable: String]
+  String active_meals_notes;  // Clock PMS STRING [Texto Variable: String]
+  String active_client_requests;  // Clock PMS STRING [Texto Variable: String]
+  bool ota;  // Clock PMS BOOLEAN [Booleano: bool]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.pkid = value[BOOKINGS.PKID];
     this.id = value[BOOKINGS.ID];
     this.number = value[BOOKINGS.NUMBER];
-    this.arrival = new DateTime.fromMillisecondsSinceEpoch(value[BOOKINGS.ARRIVAL]);
-    this.departure = new DateTime.fromMillisecondsSinceEpoch(value[BOOKINGS.DEPARTURE]);
+    this.arrival = LeerFecha(value[BOOKINGS.ARRIVAL]);
+    this.departure = LeerFecha(value[BOOKINGS.DEPARTURE]);
     this.arrival_room_type_id = value[BOOKINGS.ARRIVAL_ROOM_TYPE_ID];
     this.arrival_room_id = value[BOOKINGS.ARRIVAL_ROOM_ID];
     this.adults = value[BOOKINGS.ADULTS];
     this.children = value[BOOKINGS.CHILDREN];
     this.reference_number = value[BOOKINGS.REFERENCE_NUMBER];
-    this.reference_date = new DateTime.fromMillisecondsSinceEpoch(value[BOOKINGS.REFERENCE_DATE]);
+    this.reference_date = LeerFecha(value[BOOKINGS.REFERENCE_DATE]);
     this.is_guaranteed = value[BOOKINGS.IS_GUARANTEED];
     this.rate_id = value[BOOKINGS.RATE_ID];
     this.source_of_business_company_id = value[BOOKINGS.SOURCE_OF_BUSINESS_COMPANY_ID];
@@ -189,7 +197,7 @@ class Booking {
     this.housekeeping_note = value[BOOKINGS.HOUSEKEEPING_NOTE];
     this.commission_value_cents = value[BOOKINGS.COMMISSION_VALUE_CENTS];
     this.commission_currency = value[BOOKINGS.COMMISSION_CURRENCY];
-    this.commission_payment_date = new DateTime.fromMillisecondsSinceEpoch(value[BOOKINGS.COMMISSION_PAYMENT_DATE]);
+    this.commission_payment_date = LeerFecha(value[BOOKINGS.COMMISSION_PAYMENT_DATE]);
     this.commission_checked = value[BOOKINGS.COMMISSION_CHECKED];
     this.commission_notes = value[BOOKINGS.COMMISSION_NOTES];
     this.city_tax_mode = value[BOOKINGS.CITY_TAX_MODE];
@@ -217,31 +225,29 @@ class Booking {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       BOOKINGS.PKID: this.pkid,
       BOOKINGS.ID: this.id,
       BOOKINGS.NUMBER: this.number,
-      BOOKINGS.ARRIVAL: this.arrival == null ? null : this.arrival.millisecondsSinceEpoch,
-      BOOKINGS.DEPARTURE: this.departure == null ? null : this.departure.millisecondsSinceEpoch,
+      BOOKINGS.ARRIVAL: this.arrival == null ? null : GuardarFecha(this.arrival),
+      BOOKINGS.DEPARTURE: this.departure == null ? null : GuardarFecha(this.departure),
       BOOKINGS.ARRIVAL_ROOM_TYPE_ID: this.arrival_room_type_id,
       BOOKINGS.ARRIVAL_ROOM_ID: this.arrival_room_id,
       BOOKINGS.ADULTS: this.adults,
       BOOKINGS.CHILDREN: this.children,
       BOOKINGS.REFERENCE_NUMBER: this.reference_number,
-      BOOKINGS.REFERENCE_DATE: this.reference_date == null ? null : this.reference_date.millisecondsSinceEpoch,
+      BOOKINGS.REFERENCE_DATE: this.reference_date == null ? null : GuardarFecha(this.reference_date),
       BOOKINGS.IS_GUARANTEED: this.is_guaranteed,
       BOOKINGS.RATE_ID: this.rate_id,
       BOOKINGS.SOURCE_OF_BUSINESS_COMPANY_ID: this.source_of_business_company_id,
       BOOKINGS.EVENT_ID: this.event_id,
       BOOKINGS.BLOCK_ID: this.block_id,
-      BOOKINGS.STATUS_CHANGED_AT: this.status_changed_at == null ? null : (this.status_changed_at.hour * 60 * 60 * 1000) +
-          (this.status_changed_at.minute * 60 * 1000) ,
+      BOOKINGS.STATUS_CHANGED_AT: this.status_changed_at == null ? null : GuardarFechaHora(this.status_changed_at),
       BOOKINGS.USER_CREATED_ID: this.user_created_id,
       BOOKINGS.USER_UPDATED_ID: this.user_updated_id,
       BOOKINGS.STATUS: this.status,
-      BOOKINGS.CREATED_AT: this.created_at == null ? null : (this.created_at.hour * 60 * 60 * 1000) +
-          (this.created_at.minute * 60 * 1000) ,
-      BOOKINGS.UPDATED_AT: this.updated_at == null ? null : (this.updated_at.hour * 60 * 60 * 1000) +
-          (this.updated_at.minute * 60 * 1000) ,
+      BOOKINGS.CREATED_AT: this.created_at == null ? null : GuardarFechaHora(this.created_at),
+      BOOKINGS.UPDATED_AT: this.updated_at == null ? null : GuardarFechaHora(this.updated_at),
       BOOKINGS.MARKETING_SOURCE: this.marketing_source,
       BOOKINGS.MARKETING_CHANNEL: this.marketing_channel,
       BOOKINGS.ACCEPT_CHARGE_TRANSFERS: this.accept_charge_transfers,
@@ -262,7 +268,7 @@ class Booking {
       BOOKINGS.HOUSEKEEPING_NOTE: this.housekeeping_note,
       BOOKINGS.COMMISSION_VALUE_CENTS: this.commission_value_cents,
       BOOKINGS.COMMISSION_CURRENCY: this.commission_currency,
-      BOOKINGS.COMMISSION_PAYMENT_DATE: this.commission_payment_date == null ? null : this.commission_payment_date.millisecondsSinceEpoch,
+      BOOKINGS.COMMISSION_PAYMENT_DATE: this.commission_payment_date == null ? null : GuardarFecha(this.commission_payment_date),
       BOOKINGS.COMMISSION_CHECKED: this.commission_checked,
       BOOKINGS.COMMISSION_NOTES: this.commission_notes,
       BOOKINGS.CITY_TAX_MODE: this.city_tax_mode,
@@ -292,6 +298,7 @@ class Booking {
   assign(Booking booking) {
 
     if (booking == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.pkid = null; //0;
       this.id = null; //0;
       this.number = null; //'';
@@ -359,6 +366,7 @@ class Booking {
       this.active_client_requests = null; //'';
       this.ota = null; //false;
     } else {
+      this.key = booking.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.pkid = booking.pkid;
       this.id = booking.id;
       this.number = booking.number;
@@ -430,31 +438,29 @@ class Booking {
 
   Map toMap() {
     Map map = {
+      BOOKINGS.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       BOOKINGS.PKID: this.pkid,
       BOOKINGS.ID: this.id,
       BOOKINGS.NUMBER: this.number,
-      BOOKINGS.ARRIVAL: this.arrival == null ? null : this.arrival.millisecondsSinceEpoch,
-      BOOKINGS.DEPARTURE: this.departure == null ? null : this.departure.millisecondsSinceEpoch,
+      BOOKINGS.ARRIVAL: this.arrival == null ? null : GuardarFecha(this.arrival),
+      BOOKINGS.DEPARTURE: this.departure == null ? null : GuardarFecha(this.departure),
       BOOKINGS.ARRIVAL_ROOM_TYPE_ID: this.arrival_room_type_id,
       BOOKINGS.ARRIVAL_ROOM_ID: this.arrival_room_id,
       BOOKINGS.ADULTS: this.adults,
       BOOKINGS.CHILDREN: this.children,
       BOOKINGS.REFERENCE_NUMBER: this.reference_number,
-      BOOKINGS.REFERENCE_DATE: this.reference_date == null ? null : this.reference_date.millisecondsSinceEpoch,
+      BOOKINGS.REFERENCE_DATE: this.reference_date == null ? null : GuardarFecha(this.reference_date),
       BOOKINGS.IS_GUARANTEED: this.is_guaranteed,
       BOOKINGS.RATE_ID: this.rate_id,
       BOOKINGS.SOURCE_OF_BUSINESS_COMPANY_ID: this.source_of_business_company_id,
       BOOKINGS.EVENT_ID: this.event_id,
       BOOKINGS.BLOCK_ID: this.block_id,
-      BOOKINGS.STATUS_CHANGED_AT: this.status_changed_at == null ? null : (this.status_changed_at.hour * 60 * 60 * 1000) +
-          (this.status_changed_at.minute * 60 * 1000) ,
+      BOOKINGS.STATUS_CHANGED_AT: this.status_changed_at == null ? null : GuardarFecha(this.status_changed_at),
       BOOKINGS.USER_CREATED_ID: this.user_created_id,
       BOOKINGS.USER_UPDATED_ID: this.user_updated_id,
       BOOKINGS.STATUS: this.status,
-      BOOKINGS.CREATED_AT: this.created_at == null ? null : (this.created_at.hour * 60 * 60 * 1000) +
-          (this.created_at.minute * 60 * 1000) ,
-      BOOKINGS.UPDATED_AT: this.updated_at == null ? null : (this.updated_at.hour * 60 * 60 * 1000) +
-          (this.updated_at.minute * 60 * 1000) ,
+      BOOKINGS.CREATED_AT: this.created_at == null ? null : GuardarFecha(this.created_at),
+      BOOKINGS.UPDATED_AT: this.updated_at == null ? null : GuardarFecha(this.updated_at),
       BOOKINGS.MARKETING_SOURCE: this.marketing_source,
       BOOKINGS.MARKETING_CHANNEL: this.marketing_channel,
       BOOKINGS.ACCEPT_CHARGE_TRANSFERS: this.accept_charge_transfers,
@@ -475,7 +481,7 @@ class Booking {
       BOOKINGS.HOUSEKEEPING_NOTE: this.housekeeping_note,
       BOOKINGS.COMMISSION_VALUE_CENTS: this.commission_value_cents,
       BOOKINGS.COMMISSION_CURRENCY: this.commission_currency,
-      BOOKINGS.COMMISSION_PAYMENT_DATE: this.commission_payment_date == null ? null : this.commission_payment_date.millisecondsSinceEpoch,
+      BOOKINGS.COMMISSION_PAYMENT_DATE: this.commission_payment_date == null ? null : GuardarFecha(this.commission_payment_date),
       BOOKINGS.COMMISSION_CHECKED: this.commission_checked,
       BOOKINGS.COMMISSION_NOTES: this.commission_notes,
       BOOKINGS.CITY_TAX_MODE: this.city_tax_mode,
@@ -508,28 +514,29 @@ class Booking {
       this.assign(null);
       return;
     }
+    this.key = map[BOOKINGS.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.pkid = map[BOOKINGS.PKID];
     this.id = map[BOOKINGS.ID];
     this.number = map[BOOKINGS.NUMBER];
-    this.arrival = map[BOOKINGS.ARRIVAL];
-    this.departure = map[BOOKINGS.DEPARTURE];
+    this.arrival = map[BOOKINGS.ARRIVAL] == null ? null : LeerFecha(map[BOOKINGS.ARRIVAL]);
+    this.departure = map[BOOKINGS.DEPARTURE] == null ? null : LeerFecha(map[BOOKINGS.DEPARTURE]);
     this.arrival_room_type_id = map[BOOKINGS.ARRIVAL_ROOM_TYPE_ID];
     this.arrival_room_id = map[BOOKINGS.ARRIVAL_ROOM_ID];
     this.adults = map[BOOKINGS.ADULTS];
     this.children = map[BOOKINGS.CHILDREN];
     this.reference_number = map[BOOKINGS.REFERENCE_NUMBER];
-    this.reference_date = map[BOOKINGS.REFERENCE_DATE];
+    this.reference_date = map[BOOKINGS.REFERENCE_DATE] == null ? null : LeerFecha(map[BOOKINGS.REFERENCE_DATE]);
     this.is_guaranteed = map[BOOKINGS.IS_GUARANTEED];
     this.rate_id = map[BOOKINGS.RATE_ID];
     this.source_of_business_company_id = map[BOOKINGS.SOURCE_OF_BUSINESS_COMPANY_ID];
     this.event_id = map[BOOKINGS.EVENT_ID];
     this.block_id = map[BOOKINGS.BLOCK_ID];
-    this.status_changed_at = map[BOOKINGS.STATUS_CHANGED_AT];
+    this.status_changed_at = map[BOOKINGS.STATUS_CHANGED_AT] == null ? null : LeerFecha(map[BOOKINGS.STATUS_CHANGED_AT]);
     this.user_created_id = map[BOOKINGS.USER_CREATED_ID];
     this.user_updated_id = map[BOOKINGS.USER_UPDATED_ID];
     this.status = map[BOOKINGS.STATUS];
-    this.created_at = map[BOOKINGS.CREATED_AT];
-    this.updated_at = map[BOOKINGS.UPDATED_AT];
+    this.created_at = map[BOOKINGS.CREATED_AT] == null ? null : LeerFecha(map[BOOKINGS.CREATED_AT]);
+    this.updated_at = map[BOOKINGS.UPDATED_AT] == null ? null : LeerFecha(map[BOOKINGS.UPDATED_AT]);
     this.marketing_source = map[BOOKINGS.MARKETING_SOURCE];
     this.marketing_channel = map[BOOKINGS.MARKETING_CHANNEL];
     this.accept_charge_transfers = map[BOOKINGS.ACCEPT_CHARGE_TRANSFERS];
@@ -550,7 +557,7 @@ class Booking {
     this.housekeeping_note = map[BOOKINGS.HOUSEKEEPING_NOTE];
     this.commission_value_cents = map[BOOKINGS.COMMISSION_VALUE_CENTS];
     this.commission_currency = map[BOOKINGS.COMMISSION_CURRENCY];
-    this.commission_payment_date = map[BOOKINGS.COMMISSION_PAYMENT_DATE];
+    this.commission_payment_date = map[BOOKINGS.COMMISSION_PAYMENT_DATE] == null ? null : LeerFecha(map[BOOKINGS.COMMISSION_PAYMENT_DATE]);
     this.commission_checked = map[BOOKINGS.COMMISSION_CHECKED];
     this.commission_notes = map[BOOKINGS.COMMISSION_NOTES];
     this.city_tax_mode = map[BOOKINGS.CITY_TAX_MODE];
@@ -651,7 +658,6 @@ class Booking {
         ota == typedOther.ota;
   }
 
-
   @override
   int get hashCode => hashObjects([
       pkid.hashCode,
@@ -719,7 +725,7 @@ class Booking {
       active_housekeeping_notes.hashCode,
       active_meals_notes.hashCode,
       active_client_requests.hashCode,
-      ota.hashCode 
+      ota.hashCode,
   ]);
 
 }
@@ -733,6 +739,8 @@ class BOOKINGS {
   static const String ETIQUETA_REGISTRO = 'Booking';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_PKID = 'pkid';
   static const String ETIQUETA_ID = 'id';
   static const String ETIQUETA_NUMBER = 'Número';
@@ -806,6 +814,7 @@ class BOOKINGS {
   static const String REGISTRO = 'Booking';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String PKID = 'pkid';
   static const String ID = 'id';
   static const String NUMBER = 'number';
@@ -879,7 +888,9 @@ class BOOKINGS {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [PKID,ID,NUMBER,ARRIVAL,DEPARTURE,ARRIVAL_ROOM_TYPE_ID,ARRIVAL_ROOM_ID,ADULTS,CHILDREN,REFERENCE_NUMBER,REFERENCE_DATE,IS_GUARANTEED,RATE_ID,SOURCE_OF_BUSINESS_COMPANY_ID,EVENT_ID,BLOCK_ID,STATUS_CHANGED_AT,USER_CREATED_ID,USER_UPDATED_ID,STATUS,CREATED_AT,UPDATED_AT,MARKETING_SOURCE,MARKETING_CHANNEL,ACCEPT_CHARGE_TRANSFERS,GUARANTEE_POLICY_ID,ARRIVAL_TIME,TRANSFER_ARRIVAL,TRANSFER_DEPARTURE,DEPARTURE_TIME,FIRST_MEAL_ID,EATING_OBJECT_ID,REGISTRATION_CARDS_COUNT,CONFIRMATION_LOGS_COUNT,SELF_SERVICE_KEY,SELF_SERVICE_PIN,SOURCE_ID,CANCEL_SOURCE_ID,LINKS,HOUSEKEEPING_NOTE,COMMISSION_VALUE_CENTS,COMMISSION_CURRENCY,COMMISSION_PAYMENT_DATE,COMMISSION_CHECKED,COMMISSION_NOTES,CITY_TAX_MODE,CITYTAX_ADULTS,CITYTAX_CHILDREN,DISABLE_ROOM_CHANGE,GUEST_FIRST_NAME,GUEST_MIDDLE_NAME,GUEST_LAST_NAME,GUEST_COUNTRY,GUEST_CITY,GUEST_ADDRESS,GUEST_ZIP_CODE,GUEST_PHONE_NUMBER,GUEST_E_MAIL,GUEST_FAX_NUMBER,GUEST_LANGUAGE,GUEST_STATE,ACTIVE_NOTES,ACTIVE_HOUSEKEEPING_NOTES,ACTIVE_MEALS_NOTES,ACTIVE_CLIENT_REQUESTS,OTA,];
-  static const List CAMPOS_DETALLE = [PKID,ID,NUMBER,ARRIVAL,DEPARTURE,ARRIVAL_ROOM_TYPE_ID,ARRIVAL_ROOM_ID,ADULTS,CHILDREN,REFERENCE_NUMBER,REFERENCE_DATE,IS_GUARANTEED,RATE_ID,SOURCE_OF_BUSINESS_COMPANY_ID,EVENT_ID,BLOCK_ID,STATUS_CHANGED_AT,USER_CREATED_ID,USER_UPDATED_ID,STATUS,CREATED_AT,UPDATED_AT,MARKETING_SOURCE,MARKETING_CHANNEL,ACCEPT_CHARGE_TRANSFERS,GUARANTEE_POLICY_ID,ARRIVAL_TIME,TRANSFER_ARRIVAL,TRANSFER_DEPARTURE,DEPARTURE_TIME,FIRST_MEAL_ID,EATING_OBJECT_ID,REGISTRATION_CARDS_COUNT,CONFIRMATION_LOGS_COUNT,SELF_SERVICE_KEY,SELF_SERVICE_PIN,SOURCE_ID,CANCEL_SOURCE_ID,LINKS,HOUSEKEEPING_NOTE,COMMISSION_VALUE_CENTS,COMMISSION_CURRENCY,COMMISSION_PAYMENT_DATE,COMMISSION_CHECKED,COMMISSION_NOTES,CITY_TAX_MODE,CITYTAX_ADULTS,CITYTAX_CHILDREN,DISABLE_ROOM_CHANGE,GUEST_FIRST_NAME,GUEST_MIDDLE_NAME,GUEST_LAST_NAME,GUEST_COUNTRY,GUEST_CITY,GUEST_ADDRESS,GUEST_ZIP_CODE,GUEST_PHONE_NUMBER,GUEST_E_MAIL,GUEST_FAX_NUMBER,GUEST_LANGUAGE,GUEST_STATE,ACTIVE_NOTES,ACTIVE_HOUSEKEEPING_NOTES,ACTIVE_MEALS_NOTES,ACTIVE_CLIENT_REQUESTS,OTA,];
+  static const List CAMPOS_LISTADO = [
+ KEY, PKID, ID, NUMBER, ARRIVAL, DEPARTURE, ARRIVAL_ROOM_TYPE_ID, ARRIVAL_ROOM_ID, ADULTS, CHILDREN, REFERENCE_NUMBER, REFERENCE_DATE, IS_GUARANTEED, RATE_ID, SOURCE_OF_BUSINESS_COMPANY_ID, EVENT_ID, BLOCK_ID, STATUS_CHANGED_AT, USER_CREATED_ID, USER_UPDATED_ID, STATUS, CREATED_AT, UPDATED_AT, MARKETING_SOURCE, MARKETING_CHANNEL, ACCEPT_CHARGE_TRANSFERS, GUARANTEE_POLICY_ID, ARRIVAL_TIME, TRANSFER_ARRIVAL, TRANSFER_DEPARTURE, DEPARTURE_TIME, FIRST_MEAL_ID, EATING_OBJECT_ID, REGISTRATION_CARDS_COUNT, CONFIRMATION_LOGS_COUNT, SELF_SERVICE_KEY, SELF_SERVICE_PIN, SOURCE_ID, CANCEL_SOURCE_ID, LINKS, HOUSEKEEPING_NOTE, COMMISSION_VALUE_CENTS, COMMISSION_CURRENCY, COMMISSION_PAYMENT_DATE, COMMISSION_CHECKED, COMMISSION_NOTES, CITY_TAX_MODE, CITYTAX_ADULTS, CITYTAX_CHILDREN, DISABLE_ROOM_CHANGE, GUEST_FIRST_NAME, GUEST_MIDDLE_NAME, GUEST_LAST_NAME, GUEST_COUNTRY, GUEST_CITY, GUEST_ADDRESS, GUEST_ZIP_CODE, GUEST_PHONE_NUMBER, GUEST_E_MAIL, GUEST_FAX_NUMBER, GUEST_LANGUAGE, GUEST_STATE, ACTIVE_NOTES, ACTIVE_HOUSEKEEPING_NOTES, ACTIVE_MEALS_NOTES, ACTIVE_CLIENT_REQUESTS, OTA,];
+  static const List CAMPOS_DETALLE = [
+ KEY, PKID, ID, NUMBER, ARRIVAL, DEPARTURE, ARRIVAL_ROOM_TYPE_ID, ARRIVAL_ROOM_ID, ADULTS, CHILDREN, REFERENCE_NUMBER, REFERENCE_DATE, IS_GUARANTEED, RATE_ID, SOURCE_OF_BUSINESS_COMPANY_ID, EVENT_ID, BLOCK_ID, STATUS_CHANGED_AT, USER_CREATED_ID, USER_UPDATED_ID, STATUS, CREATED_AT, UPDATED_AT, MARKETING_SOURCE, MARKETING_CHANNEL, ACCEPT_CHARGE_TRANSFERS, GUARANTEE_POLICY_ID, ARRIVAL_TIME, TRANSFER_ARRIVAL, TRANSFER_DEPARTURE, DEPARTURE_TIME, FIRST_MEAL_ID, EATING_OBJECT_ID, REGISTRATION_CARDS_COUNT, CONFIRMATION_LOGS_COUNT, SELF_SERVICE_KEY, SELF_SERVICE_PIN, SOURCE_ID, CANCEL_SOURCE_ID, LINKS, HOUSEKEEPING_NOTE, COMMISSION_VALUE_CENTS, COMMISSION_CURRENCY, COMMISSION_PAYMENT_DATE, COMMISSION_CHECKED, COMMISSION_NOTES, CITY_TAX_MODE, CITYTAX_ADULTS, CITYTAX_CHILDREN, DISABLE_ROOM_CHANGE, GUEST_FIRST_NAME, GUEST_MIDDLE_NAME, GUEST_LAST_NAME, GUEST_COUNTRY, GUEST_CITY, GUEST_ADDRESS, GUEST_ZIP_CODE, GUEST_PHONE_NUMBER, GUEST_E_MAIL, GUEST_FAX_NUMBER, GUEST_LANGUAGE, GUEST_STATE, ACTIVE_NOTES, ACTIVE_HOUSEKEEPING_NOTES, ACTIVE_MEALS_NOTES, ACTIVE_CLIENT_REQUESTS, OTA,];
 
 }

@@ -30,7 +30,7 @@ class InicializarReservaciones {
     _reservacion.fechaReferencia = DateTime.now();
     _reservacion.garantizada = false;
     _reservacion.estadoReservacion = DEM.listaEstadosReservaciones[0];
-    _reservacion.estadoactualizado = '';
+    _reservacion.estadoactualizado = new DateTime.now();
     _reservacion.notasHuesped = '';
     _reservacion.notasReservacion = '';
     _reservacion.notasPersonal = '';

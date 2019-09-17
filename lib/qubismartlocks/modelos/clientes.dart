@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Cliente {
   Cliente({
+    this.key = '',
     this.id,
     this.nombres,
     this.apellidos,
@@ -20,19 +22,35 @@ class Cliente {
     this.correoElectronico,
   });
 
-  int id;
-  String nombres;
-  String apellidos;
-  TipoIdent tipoIdent;
-  String docIdent;
-  String telefono;
-  String correoElectronico;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String nombres;  // Nombre [Texto Variable: String]
+  String apellidos;  // Nombre [Texto Variable: String]
+  TipoIdent tipoIdent;  // Id [Búsqueda: int]
+  String docIdent;  // Identificación Personal [Texto Variable: String]
+  String telefono;  // Teléfono [Texto Variable: String]
+  String correoElectronico;  // Correo Electrónico [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[CLIENTES.ID];
     this.nombres = value[CLIENTES.NOMBRES];
     this.apellidos = value[CLIENTES.APELLIDOS];
-    this.tipoIdent.fromKeyValue(key, value[CLIENTES.TIPOIDENT]);
+
+    // Tipos de Identificación
+    if (value[CLIENTES.TIPOIDENT] != null) {
+      if (this.tipoIdent == null) {
+        this.tipoIdent = TipoIdent();
+      }
+      this.tipoIdent.fromKeyValue(key, value[CLIENTES.TIPOIDENT]);
+    } else {
+      this.tipoIdent = null;
+    }
+
     this.docIdent = value[CLIENTES.DOCIDENT];
     this.telefono = value[CLIENTES.TELEFONO];
     this.correoElectronico = value[CLIENTES.CORREOELECTRONICO];
@@ -40,10 +58,11 @@ class Cliente {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       CLIENTES.ID: this.id,
       CLIENTES.NOMBRES: this.nombres,
       CLIENTES.APELLIDOS: this.apellidos,
-      CLIENTES.TIPOIDENT: this.tipoIdent.toJson(),
+      CLIENTES.TIPOIDENT: this.tipoIdent == null ? null : this.tipoIdent.toJson(),
       CLIENTES.DOCIDENT: this.docIdent,
       CLIENTES.TELEFONO: this.telefono,
       CLIENTES.CORREOELECTRONICO: this.correoElectronico,
@@ -53,18 +72,21 @@ class Cliente {
   assign(Cliente cliente) {
 
     if (cliente == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.nombres = null; //'';
       this.apellidos = null; //'';
-      this.tipoIdent = null; //new TipoIdent();
+      this.tipoIdent = null; //TipoIdent();
       this.docIdent = null; //'';
       this.telefono = null; //'';
       this.correoElectronico = null; //'';
     } else {
+      this.key = cliente.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = cliente.id;
       this.nombres = cliente.nombres;
       this.apellidos = cliente.apellidos;
 
+      // Tipos de Identificación
       if (cliente.tipoIdent != null) {
         if (this.tipoIdent == null) {
           this.tipoIdent = TipoIdent();
@@ -82,6 +104,7 @@ class Cliente {
 
   Map toMap() {
     Map map = {
+      CLIENTES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       CLIENTES.ID: this.id,
       CLIENTES.NOMBRES: this.nombres,
       CLIENTES.APELLIDOS: this.apellidos,
@@ -98,9 +121,12 @@ class Cliente {
       this.assign(null);
       return;
     }
+    this.key = map[CLIENTES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[CLIENTES.ID];
     this.nombres = map[CLIENTES.NOMBRES];
     this.apellidos = map[CLIENTES.APELLIDOS];
+
+    // Tipos de Identificación
     if (map[CLIENTES.TIPOIDENT] != null) {
       if (this.tipoIdent == null) {
         this.tipoIdent = TipoIdent();
@@ -109,6 +135,7 @@ class Cliente {
     } else {
       this.tipoIdent = null;
     }
+
     this.docIdent = map[CLIENTES.DOCIDENT];
     this.telefono = map[CLIENTES.TELEFONO];
     this.correoElectronico = map[CLIENTES.CORREOELECTRONICO];
@@ -130,7 +157,6 @@ class Cliente {
         correoElectronico == typedOther.correoElectronico;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -139,7 +165,7 @@ class Cliente {
       tipoIdent.hashCode,
       docIdent.hashCode,
       telefono.hashCode,
-      correoElectronico.hashCode 
+      correoElectronico.hashCode,
   ]);
 
 }
@@ -153,6 +179,8 @@ class CLIENTES {
   static const String ETIQUETA_REGISTRO = 'Cliente';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_NOMBRES = 'Nombres';
   static const String ETIQUETA_APELLIDOS = 'Apellidos';
@@ -167,6 +195,7 @@ class CLIENTES {
   static const String REGISTRO = 'Cliente';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String NOMBRES = 'nombres';
   static const String APELLIDOS = 'apellidos';
@@ -181,7 +210,9 @@ class CLIENTES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,NOMBRES,APELLIDOS,TIPOIDENT,DOCIDENT,TELEFONO,CORREOELECTRONICO,];
-  static const List CAMPOS_DETALLE = [ID,NOMBRES,APELLIDOS,TIPOIDENT,DOCIDENT,TELEFONO,CORREOELECTRONICO,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, NOMBRES, APELLIDOS, TIPOIDENT, DOCIDENT, TELEFONO, CORREOELECTRONICO,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, NOMBRES, APELLIDOS, TIPOIDENT, DOCIDENT, TELEFONO, CORREOELECTRONICO,];
 
 }

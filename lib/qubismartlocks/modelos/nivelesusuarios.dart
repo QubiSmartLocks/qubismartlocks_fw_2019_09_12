@@ -7,20 +7,28 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class NivelUsuario {
   NivelUsuario({
+    this.key = '',
     this.id,
     this.denomNivelUsuario,
     this.detNiveles,
   });
 
-  int id;
-  String denomNivelUsuario;
-  String detNiveles;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String denomNivelUsuario;  // Denominación 200 No Nulo [Texto Variable: String]
+  String detNiveles;  // Descripción 4096 [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[NIVELESUSUARIOS.ID];
     this.denomNivelUsuario = value[NIVELESUSUARIOS.DENOMNIVELUSUARIO];
     this.detNiveles = value[NIVELESUSUARIOS.DETNIVELES];
@@ -28,6 +36,7 @@ class NivelUsuario {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       NIVELESUSUARIOS.ID: this.id,
       NIVELESUSUARIOS.DENOMNIVELUSUARIO: this.denomNivelUsuario,
       NIVELESUSUARIOS.DETNIVELES: this.detNiveles,
@@ -37,10 +46,12 @@ class NivelUsuario {
   assign(NivelUsuario nivelUsuario) {
 
     if (nivelUsuario == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.denomNivelUsuario = null; //'';
       this.detNiveles = null; //'';
     } else {
+      this.key = nivelUsuario.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = nivelUsuario.id;
       this.denomNivelUsuario = nivelUsuario.denomNivelUsuario;
       this.detNiveles = nivelUsuario.detNiveles;
@@ -49,6 +60,7 @@ class NivelUsuario {
 
   Map toMap() {
     Map map = {
+      NIVELESUSUARIOS.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       NIVELESUSUARIOS.ID: this.id,
       NIVELESUSUARIOS.DENOMNIVELUSUARIO: this.denomNivelUsuario,
       NIVELESUSUARIOS.DETNIVELES: this.detNiveles,
@@ -61,6 +73,7 @@ class NivelUsuario {
       this.assign(null);
       return;
     }
+    this.key = map[NIVELESUSUARIOS.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[NIVELESUSUARIOS.ID];
     this.denomNivelUsuario = map[NIVELESUSUARIOS.DENOMNIVELUSUARIO];
     this.detNiveles = map[NIVELESUSUARIOS.DETNIVELES];
@@ -78,12 +91,11 @@ class NivelUsuario {
         detNiveles == typedOther.detNiveles;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
       denomNivelUsuario.hashCode,
-      detNiveles.hashCode 
+      detNiveles.hashCode,
   ]);
 
 }
@@ -97,6 +109,8 @@ class NIVELESUSUARIOS {
   static const String ETIQUETA_REGISTRO = 'Nivel de Usuario';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMNIVELUSUARIO = 'Denominación del Nivel de Usuario';
   static const String ETIQUETA_DETNIVELES = 'Detalle de Niveles';
@@ -107,6 +121,7 @@ class NIVELESUSUARIOS {
   static const String REGISTRO = 'NivelUsuario';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String DENOMNIVELUSUARIO = 'denomNivelUsuario';
   static const String DETNIVELES = 'detNiveles';
@@ -117,7 +132,9 @@ class NIVELESUSUARIOS {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMNIVELUSUARIO,];
-  static const List CAMPOS_DETALLE = [ID,DENOMNIVELUSUARIO,DETNIVELES,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, DENOMNIVELUSUARIO,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, DENOMNIVELUSUARIO, DETNIVELES,];
 
 }

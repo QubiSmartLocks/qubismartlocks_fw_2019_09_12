@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class RoomRate {
   RoomRate({
+    this.key = '',
     this.pkid,
     this.id,
     this.name,
@@ -22,17 +24,23 @@ class RoomRate {
     this.location_id,
   });
 
-  int pkid;
-  int id;
-  String name;
-  int room_type_id;
-  String housekeeping_warning;
-  String housekeeping_status;
-  String description;
-  int sort_order;
-  int location_id;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int pkid;  // Id [Búsqueda: int]
+  int id;  // Id [Búsqueda: int]
+  String name;  // Clock PMS STRING [Texto Variable: String]
+  int room_type_id;  // Clock PMS INTEGER [Entero: int]
+  String housekeeping_warning;  // Clock PMS TEXT [Texto Variable: String]
+  String housekeeping_status;  // Clock PMS STRING [Texto Variable: String]
+  String description;  // Clock PMS TEXT [Texto Variable: String]
+  int sort_order;  // Clock PMS INTEGER [Entero: int]
+  int location_id;  // Clock PMS INTEGER [Entero: int]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.pkid = value[ROOMRATES.PKID];
     this.id = value[ROOMRATES.ID];
     this.name = value[ROOMRATES.NAME];
@@ -46,6 +54,7 @@ class RoomRate {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       ROOMRATES.PKID: this.pkid,
       ROOMRATES.ID: this.id,
       ROOMRATES.NAME: this.name,
@@ -61,6 +70,7 @@ class RoomRate {
   assign(RoomRate roomRate) {
 
     if (roomRate == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.pkid = null; //0;
       this.id = null; //0;
       this.name = null; //'';
@@ -71,6 +81,7 @@ class RoomRate {
       this.sort_order = null; //0;
       this.location_id = null; //0;
     } else {
+      this.key = roomRate.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.pkid = roomRate.pkid;
       this.id = roomRate.id;
       this.name = roomRate.name;
@@ -85,6 +96,7 @@ class RoomRate {
 
   Map toMap() {
     Map map = {
+      ROOMRATES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       ROOMRATES.PKID: this.pkid,
       ROOMRATES.ID: this.id,
       ROOMRATES.NAME: this.name,
@@ -103,6 +115,7 @@ class RoomRate {
       this.assign(null);
       return;
     }
+    this.key = map[ROOMRATES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.pkid = map[ROOMRATES.PKID];
     this.id = map[ROOMRATES.ID];
     this.name = map[ROOMRATES.NAME];
@@ -132,7 +145,6 @@ class RoomRate {
         location_id == typedOther.location_id;
   }
 
-
   @override
   int get hashCode => hashObjects([
       pkid.hashCode,
@@ -143,7 +155,7 @@ class RoomRate {
       housekeeping_status.hashCode,
       description.hashCode,
       sort_order.hashCode,
-      location_id.hashCode 
+      location_id.hashCode,
   ]);
 
 }
@@ -157,6 +169,8 @@ class ROOMRATES {
   static const String ETIQUETA_REGISTRO = 'Room Rate';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_PKID = 'pkid';
   static const String ETIQUETA_ID = 'id';
   static const String ETIQUETA_NAME = 'Nombre o Número';
@@ -173,6 +187,7 @@ class ROOMRATES {
   static const String REGISTRO = 'RoomRate';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String PKID = 'pkid';
   static const String ID = 'id';
   static const String NAME = 'name';
@@ -189,7 +204,9 @@ class ROOMRATES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [PKID,ID,NAME,ROOM_TYPE_ID,HOUSEKEEPING_WARNING,HOUSEKEEPING_STATUS,DESCRIPTION,SORT_ORDER,LOCATION_ID,];
-  static const List CAMPOS_DETALLE = [PKID,ID,NAME,ROOM_TYPE_ID,HOUSEKEEPING_WARNING,HOUSEKEEPING_STATUS,DESCRIPTION,SORT_ORDER,LOCATION_ID,];
+  static const List CAMPOS_LISTADO = [
+ KEY, PKID, ID, NAME, ROOM_TYPE_ID, HOUSEKEEPING_WARNING, HOUSEKEEPING_STATUS, DESCRIPTION, SORT_ORDER, LOCATION_ID,];
+  static const List CAMPOS_DETALLE = [
+ KEY, PKID, ID, NAME, ROOM_TYPE_ID, HOUSEKEEPING_WARNING, HOUSEKEEPING_STATUS, DESCRIPTION, SORT_ORDER, LOCATION_ID,];
 
 }

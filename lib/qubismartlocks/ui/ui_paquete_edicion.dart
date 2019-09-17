@@ -57,7 +57,7 @@ class _EstadoPaqueteEdicion extends State<UIPaqueteEdicion> {
     _formaEditada = true;
     if (value.isEmpty)
       return campoObligatorio(PAQUETERIA.ETIQUETA_FECHAHORAENTREGADO);
-    widget.registro.fechaHoraEntregado = value;
+//    widget.registro.fechaHoraEntregado = value;
     return null;
   }
 

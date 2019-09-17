@@ -113,12 +113,12 @@ class _UIPaqueteriaListaState extends State<UIPaqueteriaLista> {
                       DataColumn(
                           label: UI__EtiquetaColumna(PAQUETERIA.ETIQUETA_FECHAHORARECEPCION),
                           onSort: (int columnIndex, bool ascending) =>
-                              _sort<String>((Paquete d) => d.fechaHoraRecepcion,
+                              _sort<String>((Paquete d) => GuardarFechaHora(d.fechaHoraRecepcion),
                             columnIndex, ascending,),),
                       DataColumn(
                           label: UI__EtiquetaColumna(PAQUETERIA.ETIQUETA_FECHAHORAENTREGADO),
                           onSort: (int columnIndex, bool ascending) =>
-                              _sort<String>((Paquete d) => d.fechaHoraEntregado,
+                              _sort<String>((Paquete d) => GuardarFechaHora(d.fechaHoraEntregado),
                             columnIndex, ascending,),),
                       DataColumn(
                           label: UI__EtiquetaColumna(PAQUETERIA.ETIQUETA_PASAJERO),
@@ -128,7 +128,7 @@ class _UIPaqueteriaListaState extends State<UIPaqueteriaLista> {
                       DataColumn(
                           label: UI__EtiquetaColumna(PAQUETERIA.ETIQUETA_RECIBIDOPASAJERO),
                           onSort: (int columnIndex, bool ascending) =>
-                              _sort<String>((Paquete d) => d.recibidoPasajero,
+                              _sort<String>((Paquete d) => GuardarFechaHora(d.recibidoPasajero),
                             columnIndex, ascending,),),
                       DataColumn(
                           label: UI__EtiquetaColumna(PAQUETERIA.ETIQUETA_MENSAJEENVIADO),),

@@ -19,12 +19,12 @@ class InicializarPaqueteria {
     _paquete.origenPaquete = DEM.listaOrigenesPaquetes[0];
     _paquete.numeroRastreo = '';
     _paquete.destinatario = '';
-    _paquete.fechaHoraRecepcion = '';
+    _paquete.fechaHoraRecepcion = new DateTime.now();
     _paquete.notaRecepcion = '';
     _paquete.notaDestinatario = '';
-    _paquete.fechaHoraEntregado = '';
+    _paquete.fechaHoraEntregado = new DateTime.now();
     _paquete.pasajero = DEM.listaPasajeros[0];
-    _paquete.recibidoPasajero = '';
+    _paquete.recibidoPasajero = new DateTime.now();
     _paquete.recepcionista = 0;
     _paquete.mensajeenviado = false;
     // Guarda usando el API

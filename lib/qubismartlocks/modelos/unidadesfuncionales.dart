@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class UnidadFuncional {
   UnidadFuncional({
+    this.key = '',
     this.id,
     this.edificacion,
     this.zona,
@@ -18,26 +20,63 @@ class UnidadFuncional {
     this.denomUnidadFuncional,
   });
 
-  int id;
-  Edificacion edificacion;
-  ZonaEdificacion zona;
-  TipoUnidadFuncional tipoUnidadFuncional;
-  String denomUnidadFuncional;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  Edificacion edificacion;  // Id [Búsqueda: int]
+  ZonaEdificacion zona;  // Id [Búsqueda: int]
+  TipoUnidadFuncional tipoUnidadFuncional;  // Id [Búsqueda: int]
+  String denomUnidadFuncional;  // Denominación 200 No Nulo [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[UNIDADESFUNCIONALES.ID];
-    this.edificacion.fromKeyValue(key, value[UNIDADESFUNCIONALES.EDIFICACION]);
-    this.zona.fromKeyValue(key, value[UNIDADESFUNCIONALES.ZONA]);
-    this.tipoUnidadFuncional.fromKeyValue(key, value[UNIDADESFUNCIONALES.TIPOUNIDADFUNCIONAL]);
+
+    // Edificaciones
+    if (value[UNIDADESFUNCIONALES.EDIFICACION] != null) {
+      if (this.edificacion == null) {
+        this.edificacion = Edificacion();
+      }
+      this.edificacion.fromKeyValue(key, value[UNIDADESFUNCIONALES.EDIFICACION]);
+    } else {
+      this.edificacion = null;
+    }
+
+
+    // Zonas en Edificaciones
+    if (value[UNIDADESFUNCIONALES.ZONA] != null) {
+      if (this.zona == null) {
+        this.zona = ZonaEdificacion();
+      }
+      this.zona.fromKeyValue(key, value[UNIDADESFUNCIONALES.ZONA]);
+    } else {
+      this.zona = null;
+    }
+
+
+    // Tipos de Unidades Funcionales
+    if (value[UNIDADESFUNCIONALES.TIPOUNIDADFUNCIONAL] != null) {
+      if (this.tipoUnidadFuncional == null) {
+        this.tipoUnidadFuncional = TipoUnidadFuncional();
+      }
+      this.tipoUnidadFuncional.fromKeyValue(key, value[UNIDADESFUNCIONALES.TIPOUNIDADFUNCIONAL]);
+    } else {
+      this.tipoUnidadFuncional = null;
+    }
+
     this.denomUnidadFuncional = value[UNIDADESFUNCIONALES.DENOMUNIDADFUNCIONAL];
   }
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       UNIDADESFUNCIONALES.ID: this.id,
-      UNIDADESFUNCIONALES.EDIFICACION: this.edificacion.toJson(),
-      UNIDADESFUNCIONALES.ZONA: this.zona.toJson(),
-      UNIDADESFUNCIONALES.TIPOUNIDADFUNCIONAL: this.tipoUnidadFuncional.toJson(),
+      UNIDADESFUNCIONALES.EDIFICACION: this.edificacion == null ? null : this.edificacion.toJson(),
+      UNIDADESFUNCIONALES.ZONA: this.zona == null ? null : this.zona.toJson(),
+      UNIDADESFUNCIONALES.TIPOUNIDADFUNCIONAL: this.tipoUnidadFuncional == null ? null : this.tipoUnidadFuncional.toJson(),
       UNIDADESFUNCIONALES.DENOMUNIDADFUNCIONAL: this.denomUnidadFuncional,
     };
   }
@@ -45,14 +84,17 @@ class UnidadFuncional {
   assign(UnidadFuncional unidadFuncional) {
 
     if (unidadFuncional == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
-      this.edificacion = null; //new TipoUnidadFuncional();
-      this.zona = null; //new TipoUnidadFuncional();
-      this.tipoUnidadFuncional = null; //new TipoUnidadFuncional();
+      this.edificacion = null; //TipoUnidadFuncional();
+      this.zona = null; //TipoUnidadFuncional();
+      this.tipoUnidadFuncional = null; //TipoUnidadFuncional();
       this.denomUnidadFuncional = null; //'';
     } else {
+      this.key = unidadFuncional.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = unidadFuncional.id;
 
+      // Edificaciones
       if (unidadFuncional.edificacion != null) {
         if (this.edificacion == null) {
           this.edificacion = Edificacion();
@@ -63,6 +105,7 @@ class UnidadFuncional {
       }
 
 
+      // Zonas en Edificaciones
       if (unidadFuncional.zona != null) {
         if (this.zona == null) {
           this.zona = ZonaEdificacion();
@@ -73,6 +116,7 @@ class UnidadFuncional {
       }
 
 
+      // Tipos de Unidades Funcionales
       if (unidadFuncional.tipoUnidadFuncional != null) {
         if (this.tipoUnidadFuncional == null) {
           this.tipoUnidadFuncional = TipoUnidadFuncional();
@@ -88,6 +132,7 @@ class UnidadFuncional {
 
   Map toMap() {
     Map map = {
+      UNIDADESFUNCIONALES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       UNIDADESFUNCIONALES.ID: this.id,
       UNIDADESFUNCIONALES.EDIFICACION: this.edificacion == null ? null : this.edificacion.toMap(),
       UNIDADESFUNCIONALES.ZONA: this.zona == null ? null : this.zona.toMap(),
@@ -102,7 +147,10 @@ class UnidadFuncional {
       this.assign(null);
       return;
     }
+    this.key = map[UNIDADESFUNCIONALES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[UNIDADESFUNCIONALES.ID];
+
+    // Edificaciones
     if (map[UNIDADESFUNCIONALES.EDIFICACION] != null) {
       if (this.edificacion == null) {
         this.edificacion = Edificacion();
@@ -111,6 +159,9 @@ class UnidadFuncional {
     } else {
       this.edificacion = null;
     }
+
+
+    // Zonas en Edificaciones
     if (map[UNIDADESFUNCIONALES.ZONA] != null) {
       if (this.zona == null) {
         this.zona = ZonaEdificacion();
@@ -119,6 +170,9 @@ class UnidadFuncional {
     } else {
       this.zona = null;
     }
+
+
+    // Tipos de Unidades Funcionales
     if (map[UNIDADESFUNCIONALES.TIPOUNIDADFUNCIONAL] != null) {
       if (this.tipoUnidadFuncional == null) {
         this.tipoUnidadFuncional = TipoUnidadFuncional();
@@ -127,6 +181,7 @@ class UnidadFuncional {
     } else {
       this.tipoUnidadFuncional = null;
     }
+
     this.denomUnidadFuncional = map[UNIDADESFUNCIONALES.DENOMUNIDADFUNCIONAL];
   }
 
@@ -144,14 +199,13 @@ class UnidadFuncional {
         denomUnidadFuncional == typedOther.denomUnidadFuncional;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
       edificacion.hashCode,
       zona.hashCode,
       tipoUnidadFuncional.hashCode,
-      denomUnidadFuncional.hashCode 
+      denomUnidadFuncional.hashCode,
   ]);
 
 }
@@ -165,6 +219,8 @@ class UNIDADESFUNCIONALES {
   static const String ETIQUETA_REGISTRO = 'Unidad Funcional';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_EDIFICACION = 'Edificación';
   static const String ETIQUETA_ZONA = 'Zona';
@@ -177,6 +233,7 @@ class UNIDADESFUNCIONALES {
   static const String REGISTRO = 'UnidadFuncional';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String EDIFICACION = 'edificacion';
   static const String ZONA = 'zona';
@@ -189,7 +246,9 @@ class UNIDADESFUNCIONALES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,TIPOUNIDADFUNCIONAL,DENOMUNIDADFUNCIONAL,];
-  static const List CAMPOS_DETALLE = [ID,EDIFICACION,ZONA,TIPOUNIDADFUNCIONAL,DENOMUNIDADFUNCIONAL,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, TIPOUNIDADFUNCIONAL, DENOMUNIDADFUNCIONAL,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, EDIFICACION, ZONA, TIPOUNIDADFUNCIONAL, DENOMUNIDADFUNCIONAL,];
 
 }

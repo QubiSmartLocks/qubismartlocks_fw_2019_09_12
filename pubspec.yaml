@@ -15,17 +15,19 @@ dependencies:
   appresweb: any
   appadminweb: any
   appdartapiweb: any
+  appiniciarsesionweb: any
+  appsesionfbweb: any
 
   firebase: ^5.0.0
+
   quiver: '>=2.0.0 <3.0.0'
+
 
 dev_dependencies:
   build_runner: ^1.4.0
   build_web_compilers: ^2.0.0
   pedantic: ^1.0.0
 
-# flutter_web packages are not published to pub.dartlang.org
-# These overrides tell the package tools to get them from GitHub
 dependency_overrides:
   flutter_web:
     path: ../../../flutter_web/packages/flutter_web
@@ -50,9 +52,12 @@ dependency_overrides:
     path: ../../../apppacksWeb/appadminweb/
   appdartapiweb:
     path: ../../../apppacksWeb/appdartapiweb/
-
+  appiniciarsesionweb:
+    path: ../../../apppacksWeb/appiniciarsesionweb/
+  appsesionfbweb:
+    path: ../../../apppacksWeb/appsesionfbweb/
 
 flutter:
 
-  uses-material-design: true
+  uses-material-design: truex
 

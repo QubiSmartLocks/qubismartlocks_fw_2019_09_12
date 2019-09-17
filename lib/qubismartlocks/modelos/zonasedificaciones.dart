@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class ZonaEdificacion {
   ZonaEdificacion({
+    this.key = '',
     this.id,
     this.edificacion,
     this.denomZona,
@@ -18,15 +20,31 @@ class ZonaEdificacion {
     this.personaAdministradora,
   });
 
-  int id;
-  Edificacion edificacion;
-  String denomZona;
-  String identZona;
-  int personaAdministradora;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  Edificacion edificacion;  // Id [Búsqueda: int]
+  String denomZona;  // Denominación 200 No Nulo [Texto Variable: String]
+  String identZona;  // Descripción 4096 [Texto Variable: String]
+  int personaAdministradora;  // Id [Búsqueda: int]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[ZONASEDIFICACIONES.ID];
-    this.edificacion.fromKeyValue(key, value[ZONASEDIFICACIONES.EDIFICACION]);
+
+    // Edificaciones
+    if (value[ZONASEDIFICACIONES.EDIFICACION] != null) {
+      if (this.edificacion == null) {
+        this.edificacion = Edificacion();
+      }
+      this.edificacion.fromKeyValue(key, value[ZONASEDIFICACIONES.EDIFICACION]);
+    } else {
+      this.edificacion = null;
+    }
+
     this.denomZona = value[ZONASEDIFICACIONES.DENOMZONA];
     this.identZona = value[ZONASEDIFICACIONES.IDENTZONA];
     this.personaAdministradora = value[ZONASEDIFICACIONES.PERSONAADMINISTRADORA];
@@ -34,8 +52,9 @@ class ZonaEdificacion {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       ZONASEDIFICACIONES.ID: this.id,
-      ZONASEDIFICACIONES.EDIFICACION: this.edificacion.toJson(),
+      ZONASEDIFICACIONES.EDIFICACION: this.edificacion == null ? null : this.edificacion.toJson(),
       ZONASEDIFICACIONES.DENOMZONA: this.denomZona,
       ZONASEDIFICACIONES.IDENTZONA: this.identZona,
       ZONASEDIFICACIONES.PERSONAADMINISTRADORA: this.personaAdministradora,
@@ -45,14 +64,17 @@ class ZonaEdificacion {
   assign(ZonaEdificacion zonaEdificacion) {
 
     if (zonaEdificacion == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
-      this.edificacion = null; //new Edificacion();
+      this.edificacion = null; //Edificacion();
       this.denomZona = null; //'';
       this.identZona = null; //'';
       this.personaAdministradora = null; //0;
     } else {
+      this.key = zonaEdificacion.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = zonaEdificacion.id;
 
+      // Edificaciones
       if (zonaEdificacion.edificacion != null) {
         if (this.edificacion == null) {
           this.edificacion = Edificacion();
@@ -70,6 +92,7 @@ class ZonaEdificacion {
 
   Map toMap() {
     Map map = {
+      ZONASEDIFICACIONES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       ZONASEDIFICACIONES.ID: this.id,
       ZONASEDIFICACIONES.EDIFICACION: this.edificacion == null ? null : this.edificacion.toMap(),
       ZONASEDIFICACIONES.DENOMZONA: this.denomZona,
@@ -84,7 +107,10 @@ class ZonaEdificacion {
       this.assign(null);
       return;
     }
+    this.key = map[ZONASEDIFICACIONES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[ZONASEDIFICACIONES.ID];
+
+    // Edificaciones
     if (map[ZONASEDIFICACIONES.EDIFICACION] != null) {
       if (this.edificacion == null) {
         this.edificacion = Edificacion();
@@ -93,6 +119,7 @@ class ZonaEdificacion {
     } else {
       this.edificacion = null;
     }
+
     this.denomZona = map[ZONASEDIFICACIONES.DENOMZONA];
     this.identZona = map[ZONASEDIFICACIONES.IDENTZONA];
     this.personaAdministradora = map[ZONASEDIFICACIONES.PERSONAADMINISTRADORA];
@@ -112,14 +139,13 @@ class ZonaEdificacion {
         personaAdministradora == typedOther.personaAdministradora;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
       edificacion.hashCode,
       denomZona.hashCode,
       identZona.hashCode,
-      personaAdministradora.hashCode 
+      personaAdministradora.hashCode,
   ]);
 
 }
@@ -133,6 +159,8 @@ class ZONASEDIFICACIONES {
   static const String ETIQUETA_REGISTRO = 'Zona en Edificación';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_EDIFICACION = 'Edificación';
   static const String ETIQUETA_DENOMZONA = 'Denominación de la Zona';
@@ -145,6 +173,7 @@ class ZONASEDIFICACIONES {
   static const String REGISTRO = 'ZonaEdificacion';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String EDIFICACION = 'edificacion';
   static const String DENOMZONA = 'denomZona';
@@ -157,7 +186,9 @@ class ZONASEDIFICACIONES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,EDIFICACION,DENOMZONA,];
-  static const List CAMPOS_DETALLE = [ID,EDIFICACION,DENOMZONA,IDENTZONA,PERSONAADMINISTRADORA,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, EDIFICACION, DENOMZONA,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, EDIFICACION, DENOMZONA, IDENTZONA, PERSONAADMINISTRADORA,];
 
 }

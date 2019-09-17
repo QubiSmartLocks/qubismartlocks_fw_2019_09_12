@@ -20,5 +20,7 @@ export '_controladores_clockpmsapireservaciones.dart';
 //  Sub-Proyecto: Mensajería (Chats)    =>  126
 export '_controladores_mensajeriachats.dart';
 
-export '_controladores_consultas_manuales.dart';
+//export '_controladores_consultas_manuales.dart';
+
+export '_controladores-fb.dart';
 

@@ -7,6 +7,7 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Mensaje {
@@ -21,19 +22,43 @@ class Mensaje {
     this.keyParticipante,
   });
 
-  int id;
-  Conversacion conversacion;
-  Participante participante;
-  DateTime momento;
-  String mensajeTexto;
-  String key;
-  String keyConversacion;
-  String keyParticipante;
+  int id;  // Id [Búsqueda: int]
+  Conversacion conversacion;  // Id [Búsqueda: int]
+  Participante participante;  // Id [Búsqueda: int]
+  DateTime momento;  // Momento [Momento: DateTime]
+  String mensajeTexto;  // Notas [Texto Variable: String]
+  String key;  // Id/Key [Texto Variable: String]
+  String keyConversacion;  // Id/Key [Texto Variable: String]
+  String keyParticipante;  // Id/Key [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
     this.id = value[MENSAJES.ID];
-    this.conversacion.fromKeyValue(key, value[MENSAJES.CONVERSACION]);
-    this.participante.fromKeyValue(key, value[MENSAJES.PARTICIPANTE]);
+
+    // Conversaciones
+    if (value[MENSAJES.CONVERSACION] != null) {
+      if (this.conversacion == null) {
+        this.conversacion = Conversacion();
+      }
+      this.conversacion.fromKeyValue(key, value[MENSAJES.CONVERSACION]);
+    } else {
+      this.conversacion = null;
+    }
+
+
+    // Participantes
+    if (value[MENSAJES.PARTICIPANTE] != null) {
+      if (this.participante == null) {
+        this.participante = Participante();
+      }
+      this.participante.fromKeyValue(key, value[MENSAJES.PARTICIPANTE]);
+    } else {
+      this.participante = null;
+    }
+
     this.momento = DateTime.parse(value[MENSAJES.MOMENTO]);
     this.mensajeTexto = value[MENSAJES.MENSAJETEXTO];
     this.key = value[MENSAJES.KEY];
@@ -44,10 +69,9 @@ class Mensaje {
   toJson() {
     return {
       MENSAJES.ID: this.id,
-      MENSAJES.CONVERSACION: this.conversacion.toJson(),
-      MENSAJES.PARTICIPANTE: this.participante.toJson(),
-      MENSAJES.MOMENTO: this.momento == null ? null : (this.momento.hour * 60 * 60 * 1000) +
-          (this.momento.minute * 60 * 1000) ,
+      MENSAJES.CONVERSACION: this.conversacion == null ? null : this.conversacion.toJson(),
+      MENSAJES.PARTICIPANTE: this.participante == null ? null : this.participante.toJson(),
+      MENSAJES.MOMENTO: this.momento == null ? null : GuardarFechaHora(this.momento),
       MENSAJES.MENSAJETEXTO: this.mensajeTexto,
       MENSAJES.KEY: this.key,
       MENSAJES.KEYCONVERSACION: this.keyConversacion,
@@ -59,8 +83,8 @@ class Mensaje {
 
     if (mensaje == null) {
       this.id = null; //0;
-      this.conversacion = null; //new Participante();
-      this.participante = null; //new Participante();
+      this.conversacion = null; //Participante();
+      this.participante = null; //Participante();
       this.momento = null; //new DateTime.now();
       this.mensajeTexto = null; //'';
       this.key = null; //'';
@@ -69,6 +93,7 @@ class Mensaje {
     } else {
       this.id = mensaje.id;
 
+      // Conversaciones
       if (mensaje.conversacion != null) {
         if (this.conversacion == null) {
           this.conversacion = Conversacion();
@@ -79,6 +104,7 @@ class Mensaje {
       }
 
 
+      // Participantes
       if (mensaje.participante != null) {
         if (this.participante == null) {
           this.participante = Participante();
@@ -101,8 +127,7 @@ class Mensaje {
       MENSAJES.ID: this.id,
       MENSAJES.CONVERSACION: this.conversacion == null ? null : this.conversacion.toMap(),
       MENSAJES.PARTICIPANTE: this.participante == null ? null : this.participante.toMap(),
-      MENSAJES.MOMENTO: this.momento == null ? null : (this.momento.hour * 60 * 60 * 1000) +
-          (this.momento.minute * 60 * 1000) ,
+      MENSAJES.MOMENTO: this.momento == null ? null : GuardarFecha(this.momento),
       MENSAJES.MENSAJETEXTO: this.mensajeTexto,
       MENSAJES.KEY: this.key,
       MENSAJES.KEYCONVERSACION: this.keyConversacion,
@@ -117,6 +142,8 @@ class Mensaje {
       return;
     }
     this.id = map[MENSAJES.ID];
+
+    // Conversaciones
     if (map[MENSAJES.CONVERSACION] != null) {
       if (this.conversacion == null) {
         this.conversacion = Conversacion();
@@ -125,6 +152,9 @@ class Mensaje {
     } else {
       this.conversacion = null;
     }
+
+
+    // Participantes
     if (map[MENSAJES.PARTICIPANTE] != null) {
       if (this.participante == null) {
         this.participante = Participante();
@@ -133,7 +163,8 @@ class Mensaje {
     } else {
       this.participante = null;
     }
-    this.momento = map[MENSAJES.MOMENTO];
+
+    this.momento = map[MENSAJES.MOMENTO] == null ? null : LeerFecha(map[MENSAJES.MOMENTO]);
     this.mensajeTexto = map[MENSAJES.MENSAJETEXTO];
     this.key = map[MENSAJES.KEY];
     this.keyConversacion = map[MENSAJES.KEYCONVERSACION];
@@ -157,7 +188,6 @@ class Mensaje {
         keyParticipante == typedOther.keyParticipante;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -167,7 +197,7 @@ class Mensaje {
       mensajeTexto.hashCode,
       key.hashCode,
       keyConversacion.hashCode,
-      keyParticipante.hashCode 
+      keyParticipante.hashCode,
   ]);
 
 }
@@ -181,6 +211,7 @@ class MENSAJES {
   static const String ETIQUETA_REGISTRO = 'Mensaje';
 
   // Etiquetas de los Atributos
+
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_CONVERSACION = 'Conversación';
   static const String ETIQUETA_PARTICIPANTE = 'Participante';
@@ -211,7 +242,7 @@ class MENSAJES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,PARTICIPANTE,MOMENTO,MENSAJETEXTO,KEY,KEYCONVERSACION,KEYPARTICIPANTE,];
-  static const List CAMPOS_DETALLE = [ID,CONVERSACION,PARTICIPANTE,MOMENTO,MENSAJETEXTO,KEY,KEYCONVERSACION,KEYPARTICIPANTE,];
+  static const List CAMPOS_LISTADO = [ ID, PARTICIPANTE, MOMENTO, MENSAJETEXTO, KEY, KEYCONVERSACION, KEYPARTICIPANTE,];
+  static const List CAMPOS_DETALLE = [ ID, CONVERSACION, PARTICIPANTE, MOMENTO, MENSAJETEXTO, KEY, KEYCONVERSACION, KEYPARTICIPANTE,];
 
 }

@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class ModeloCampo {
   ModeloCampo({
+    this.key = '',
     this.id,
     this.denomModelo,
     this.descModelo,
@@ -27,27 +29,33 @@ class ModeloCampo {
     this.modeloForaneo,
   });
 
-  int id;
-  String denomModelo;
-  String descModelo;
-  DateTime fecha;
-  TimeOfDay hora;
-  int entero;
-  int enteroGrande;
-  int enteroPequeyo;
-  double decimal;
-  double moneda;
-  bool logico;
-  String ubicacionGPS;
-  String imagen;
-  ModeloForaneo modeloForaneo;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String denomModelo;  // Denominación 200 No Nulo [Texto Variable: String]
+  String descModelo;  // Descripción 4096 [Texto Variable: String]
+  DateTime fecha;  // Fecha [Fecha: DateTime]
+  TimeOfDay hora;  // Hora [Hora: TimeOfDay]
+  int entero;  // Entero Grande [Entero Grande: int]
+  int enteroGrande;  // Entero Grande [Entero Grande: int]
+  int enteroPequeyo;  // Entero Pequeño [Entero Pequeño: int]
+  double decimal;  // Decimal 18,14 [Doble Presición: double]
+  double moneda;  // Moneda [Decimal: double]
+  bool logico;  // Lógico [Lógico: bool]
+  String ubicacionGPS;  // Ubicación GPS [Texto Variable: String]
+  String imagen;  // URI Imagen [Texto Variable: String]
+  ModeloForaneo modeloForaneo;  // Id [Búsqueda: int]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[MODELOSCAMPOS.ID];
     this.denomModelo = value[MODELOSCAMPOS.DENOMMODELO];
     this.descModelo = value[MODELOSCAMPOS.DESCMODELO];
-    this.fecha = new DateTime.fromMillisecondsSinceEpoch(value[MODELOSCAMPOS.FECHA]);
-    this.hora = new TimeOfDay.fromDateTime(new DateTime.fromMillisecondsSinceEpoch(value[MODELOSCAMPOS.HORA]));
+    this.fecha = LeerFecha(value[MODELOSCAMPOS.FECHA]);
+    this.hora = LeerHora(value[MODELOSCAMPOS.HORA]);
     this.entero = value[MODELOSCAMPOS.ENTERO];
     this.enteroGrande = value[MODELOSCAMPOS.ENTEROGRANDE];
     this.enteroPequeyo = value[MODELOSCAMPOS.ENTEROPEQUEYO];
@@ -56,17 +64,27 @@ class ModeloCampo {
     this.logico = value[MODELOSCAMPOS.LOGICO];
     this.ubicacionGPS = value[MODELOSCAMPOS.UBICACIONGPS];
     this.imagen = value[MODELOSCAMPOS.IMAGEN];
-    this.modeloForaneo.fromKeyValue(key, value[MODELOSCAMPOS.MODELOFORANEO]);
+
+    // Modelos Foráneos
+    if (value[MODELOSCAMPOS.MODELOFORANEO] != null) {
+      if (this.modeloForaneo == null) {
+        this.modeloForaneo = ModeloForaneo();
+      }
+      this.modeloForaneo.fromKeyValue(key, value[MODELOSCAMPOS.MODELOFORANEO]);
+    } else {
+      this.modeloForaneo = null;
+    }
+
   }
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       MODELOSCAMPOS.ID: this.id,
       MODELOSCAMPOS.DENOMMODELO: this.denomModelo,
       MODELOSCAMPOS.DESCMODELO: this.descModelo,
-      MODELOSCAMPOS.FECHA: this.fecha == null ? null : this.fecha.millisecondsSinceEpoch,
-      MODELOSCAMPOS.HORA: this.hora == null ? null : (this.hora.hour * 60 * 60 * 1000) +
-          (this.hora.minute * 60 * 1000) ,
+      MODELOSCAMPOS.FECHA: this.fecha == null ? null : GuardarFecha(this.fecha),
+      MODELOSCAMPOS.HORA: this.hora == null ? null : GuardarHora(this.hora),
       MODELOSCAMPOS.ENTERO: this.entero,
       MODELOSCAMPOS.ENTEROGRANDE: this.enteroGrande,
       MODELOSCAMPOS.ENTEROPEQUEYO: this.enteroPequeyo,
@@ -75,13 +93,14 @@ class ModeloCampo {
       MODELOSCAMPOS.LOGICO: this.logico,
       MODELOSCAMPOS.UBICACIONGPS: this.ubicacionGPS,
       MODELOSCAMPOS.IMAGEN: this.imagen,
-      MODELOSCAMPOS.MODELOFORANEO: this.modeloForaneo.toJson(),
+      MODELOSCAMPOS.MODELOFORANEO: this.modeloForaneo == null ? null : this.modeloForaneo.toJson(),
     };
   }
 
   assign(ModeloCampo modeloCampo) {
 
     if (modeloCampo == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.denomModelo = null; //'';
       this.descModelo = null; //'';
@@ -95,8 +114,9 @@ class ModeloCampo {
       this.logico = null; //false;
       this.ubicacionGPS = null; //'';
       this.imagen = null; //'';
-      this.modeloForaneo = null; //new ModeloForaneo();
+      this.modeloForaneo = null; //ModeloForaneo();
     } else {
+      this.key = modeloCampo.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = modeloCampo.id;
       this.denomModelo = modeloCampo.denomModelo;
       this.descModelo = modeloCampo.descModelo;
@@ -111,6 +131,7 @@ class ModeloCampo {
       this.ubicacionGPS = modeloCampo.ubicacionGPS;
       this.imagen = modeloCampo.imagen;
 
+      // Modelos Foráneos
       if (modeloCampo.modeloForaneo != null) {
         if (this.modeloForaneo == null) {
           this.modeloForaneo = ModeloForaneo();
@@ -125,12 +146,12 @@ class ModeloCampo {
 
   Map toMap() {
     Map map = {
+      MODELOSCAMPOS.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       MODELOSCAMPOS.ID: this.id,
       MODELOSCAMPOS.DENOMMODELO: this.denomModelo,
       MODELOSCAMPOS.DESCMODELO: this.descModelo,
-      MODELOSCAMPOS.FECHA: this.fecha == null ? null : this.fecha.millisecondsSinceEpoch,
-      MODELOSCAMPOS.HORA: this.hora == null ? null : (this.hora.hour * 60 * 60 * 1000) +
-          (this.hora.minute * 60 * 1000) ,
+      MODELOSCAMPOS.FECHA: this.fecha == null ? null : GuardarFecha(this.fecha),
+      MODELOSCAMPOS.HORA: this.hora == null ? null : GuardarHora(this.hora),
       MODELOSCAMPOS.ENTERO: this.entero,
       MODELOSCAMPOS.ENTEROGRANDE: this.enteroGrande,
       MODELOSCAMPOS.ENTEROPEQUEYO: this.enteroPequeyo,
@@ -149,11 +170,12 @@ class ModeloCampo {
       this.assign(null);
       return;
     }
+    this.key = map[MODELOSCAMPOS.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[MODELOSCAMPOS.ID];
     this.denomModelo = map[MODELOSCAMPOS.DENOMMODELO];
     this.descModelo = map[MODELOSCAMPOS.DESCMODELO];
-    this.fecha = map[MODELOSCAMPOS.FECHA];
-    this.hora = map[MODELOSCAMPOS.HORA];
+    this.fecha = map[MODELOSCAMPOS.FECHA] == null ? null : LeerFecha(map[MODELOSCAMPOS.FECHA]);
+    this.hora = map[MODELOSCAMPOS.HORA] == null ? null : LeerHora(map[MODELOSCAMPOS.HORA]);
     this.entero = map[MODELOSCAMPOS.ENTERO];
     this.enteroGrande = map[MODELOSCAMPOS.ENTEROGRANDE];
     this.enteroPequeyo = map[MODELOSCAMPOS.ENTEROPEQUEYO];
@@ -162,6 +184,8 @@ class ModeloCampo {
     this.logico = map[MODELOSCAMPOS.LOGICO];
     this.ubicacionGPS = map[MODELOSCAMPOS.UBICACIONGPS];
     this.imagen = map[MODELOSCAMPOS.IMAGEN];
+
+    // Modelos Foráneos
     if (map[MODELOSCAMPOS.MODELOFORANEO] != null) {
       if (this.modeloForaneo == null) {
         this.modeloForaneo = ModeloForaneo();
@@ -170,6 +194,7 @@ class ModeloCampo {
     } else {
       this.modeloForaneo = null;
     }
+
   }
 
   // Comparar si dos instancias de esta Clase son idénticas con el operador ==
@@ -195,7 +220,6 @@ class ModeloCampo {
         modeloForaneo == typedOther.modeloForaneo;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -211,7 +235,7 @@ class ModeloCampo {
       logico.hashCode,
       ubicacionGPS.hashCode,
       imagen.hashCode,
-      modeloForaneo.hashCode 
+      modeloForaneo.hashCode,
   ]);
 
 }
@@ -225,6 +249,8 @@ class MODELOSCAMPOS {
   static const String ETIQUETA_REGISTRO = 'Modelo Campo';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMMODELO = 'Denominación del Modelo';
   static const String ETIQUETA_DESCMODELO = 'Descripción del Modelo';
@@ -246,6 +272,7 @@ class MODELOSCAMPOS {
   static const String REGISTRO = 'ModeloCampo';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String DENOMMODELO = 'denomModelo';
   static const String DESCMODELO = 'descModelo';
@@ -267,7 +294,9 @@ class MODELOSCAMPOS {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMMODELO,FECHA,HORA,ENTERO,LOGICO,MODELOFORANEO,];
-  static const List CAMPOS_DETALLE = [ID,DENOMMODELO,DESCMODELO,FECHA,HORA,ENTERO,ENTEROGRANDE,ENTEROPEQUEYO,DECIMAL,MONEDA,LOGICO,UBICACIONGPS,IMAGEN,MODELOFORANEO,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, DENOMMODELO, FECHA, HORA, ENTERO, LOGICO, MODELOFORANEO,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, DENOMMODELO, DESCMODELO, FECHA, HORA, ENTERO, ENTEROGRANDE, ENTEROPEQUEYO, DECIMAL, MONEDA, LOGICO, UBICACIONGPS, IMAGEN, MODELOFORANEO,];
 
 }

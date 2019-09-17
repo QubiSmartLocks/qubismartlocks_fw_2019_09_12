@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Pasajero {
   Pasajero({
+    this.key = '',
     this.id,
     this.reservacion,
     this.nombres,
@@ -22,22 +24,38 @@ class Pasajero {
     this.llaveElectronica,
   });
 
-  int id;
-  int reservacion;
-  String nombres;
-  String apellidos;
-  TipoIdent tipoIdent;
-  String docIdent;
-  String telefono;
-  String correoElectronico;
-  bool llaveElectronica;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  int reservacion;  // Id [Búsqueda: int]
+  String nombres;  // Nombre [Texto Variable: String]
+  String apellidos;  // Nombre [Texto Variable: String]
+  TipoIdent tipoIdent;  // Id [Búsqueda: int]
+  String docIdent;  // Identificación Personal [Texto Variable: String]
+  String telefono;  // Teléfono [Texto Variable: String]
+  String correoElectronico;  // Correo Electrónico [Texto Variable: String]
+  bool llaveElectronica;  // Lógico [Lógico: bool]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[PASAJEROS.ID];
     this.reservacion = value[PASAJEROS.RESERVACION];
     this.nombres = value[PASAJEROS.NOMBRES];
     this.apellidos = value[PASAJEROS.APELLIDOS];
-    this.tipoIdent.fromKeyValue(key, value[PASAJEROS.TIPOIDENT]);
+
+    // Tipos de Identificación
+    if (value[PASAJEROS.TIPOIDENT] != null) {
+      if (this.tipoIdent == null) {
+        this.tipoIdent = TipoIdent();
+      }
+      this.tipoIdent.fromKeyValue(key, value[PASAJEROS.TIPOIDENT]);
+    } else {
+      this.tipoIdent = null;
+    }
+
     this.docIdent = value[PASAJEROS.DOCIDENT];
     this.telefono = value[PASAJEROS.TELEFONO];
     this.correoElectronico = value[PASAJEROS.CORREOELECTRONICO];
@@ -46,11 +64,12 @@ class Pasajero {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       PASAJEROS.ID: this.id,
       PASAJEROS.RESERVACION: this.reservacion,
       PASAJEROS.NOMBRES: this.nombres,
       PASAJEROS.APELLIDOS: this.apellidos,
-      PASAJEROS.TIPOIDENT: this.tipoIdent.toJson(),
+      PASAJEROS.TIPOIDENT: this.tipoIdent == null ? null : this.tipoIdent.toJson(),
       PASAJEROS.DOCIDENT: this.docIdent,
       PASAJEROS.TELEFONO: this.telefono,
       PASAJEROS.CORREOELECTRONICO: this.correoElectronico,
@@ -61,21 +80,24 @@ class Pasajero {
   assign(Pasajero pasajero) {
 
     if (pasajero == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.reservacion = null; //0;
       this.nombres = null; //'';
       this.apellidos = null; //'';
-      this.tipoIdent = null; //new TipoIdent();
+      this.tipoIdent = null; //TipoIdent();
       this.docIdent = null; //'';
       this.telefono = null; //'';
       this.correoElectronico = null; //'';
       this.llaveElectronica = null; //false;
     } else {
+      this.key = pasajero.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = pasajero.id;
       this.reservacion = pasajero.reservacion;
       this.nombres = pasajero.nombres;
       this.apellidos = pasajero.apellidos;
 
+      // Tipos de Identificación
       if (pasajero.tipoIdent != null) {
         if (this.tipoIdent == null) {
           this.tipoIdent = TipoIdent();
@@ -94,6 +116,7 @@ class Pasajero {
 
   Map toMap() {
     Map map = {
+      PASAJEROS.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       PASAJEROS.ID: this.id,
       PASAJEROS.RESERVACION: this.reservacion,
       PASAJEROS.NOMBRES: this.nombres,
@@ -112,10 +135,13 @@ class Pasajero {
       this.assign(null);
       return;
     }
+    this.key = map[PASAJEROS.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[PASAJEROS.ID];
     this.reservacion = map[PASAJEROS.RESERVACION];
     this.nombres = map[PASAJEROS.NOMBRES];
     this.apellidos = map[PASAJEROS.APELLIDOS];
+
+    // Tipos de Identificación
     if (map[PASAJEROS.TIPOIDENT] != null) {
       if (this.tipoIdent == null) {
         this.tipoIdent = TipoIdent();
@@ -124,6 +150,7 @@ class Pasajero {
     } else {
       this.tipoIdent = null;
     }
+
     this.docIdent = map[PASAJEROS.DOCIDENT];
     this.telefono = map[PASAJEROS.TELEFONO];
     this.correoElectronico = map[PASAJEROS.CORREOELECTRONICO];
@@ -148,7 +175,6 @@ class Pasajero {
         llaveElectronica == typedOther.llaveElectronica;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -159,7 +185,7 @@ class Pasajero {
       docIdent.hashCode,
       telefono.hashCode,
       correoElectronico.hashCode,
-      llaveElectronica.hashCode 
+      llaveElectronica.hashCode,
   ]);
 
 }
@@ -173,6 +199,8 @@ class PASAJEROS {
   static const String ETIQUETA_REGISTRO = 'Pasajero';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_RESERVACION = 'Reservación';
   static const String ETIQUETA_NOMBRES = 'Nombres';
@@ -189,6 +217,7 @@ class PASAJEROS {
   static const String REGISTRO = 'Pasajero';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String RESERVACION = 'reservacion';
   static const String NOMBRES = 'nombres';
@@ -205,7 +234,9 @@ class PASAJEROS {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,RESERVACION,NOMBRES,APELLIDOS,LLAVEELECTRONICA,];
-  static const List CAMPOS_DETALLE = [ID,RESERVACION,NOMBRES,APELLIDOS,TIPOIDENT,DOCIDENT,TELEFONO,CORREOELECTRONICO,LLAVEELECTRONICA,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, RESERVACION, NOMBRES, APELLIDOS, LLAVEELECTRONICA,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, RESERVACION, NOMBRES, APELLIDOS, TIPOIDENT, DOCIDENT, TELEFONO, CORREOELECTRONICO, LLAVEELECTRONICA,];
 
 }

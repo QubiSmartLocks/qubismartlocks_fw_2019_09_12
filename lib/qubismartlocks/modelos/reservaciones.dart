@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Reservacion {
   Reservacion({
+    this.key = '',
     this.id,
     this.idEdificacion,
     this.numeroReservacion,
@@ -32,43 +34,89 @@ class Reservacion {
     this.notasPersonal,
   });
 
-  int id;
-  Edificacion idEdificacion;
-  String numeroReservacion;
-  DateTime fechaLlegada;
-  TimeOfDay horaLlegada;
-  DateTime fechaSalida;
-  TimeOfDay horaSalida;
-  TipoUnidadFuncional tipoUnidadFuncional;
-  UnidadFuncional unidadFuncional;
-  int adultos;
-  int niyos;
-  String referenciaNumero;
-  DateTime fechaReferencia;
-  bool garantizada;
-  EstadoReservacion estadoReservacion;
-  String estadoactualizado;
-  String notasHuesped;
-  String notasReservacion;
-  String notasPersonal;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  Edificacion idEdificacion;  // Id [Búsqueda: int]
+  String numeroReservacion;  // Número de Reservación [Texto Variable: String]
+  DateTime fechaLlegada;  // Fecha [Fecha: DateTime]
+  TimeOfDay horaLlegada;  // Hora [Hora: TimeOfDay]
+  DateTime fechaSalida;  // Fecha [Fecha: DateTime]
+  TimeOfDay horaSalida;  // Hora [Hora: TimeOfDay]
+  TipoUnidadFuncional tipoUnidadFuncional;  // Id [Búsqueda: int]
+  UnidadFuncional unidadFuncional;  // Id [Búsqueda: int]
+  int adultos;  // Entero Pequeño [Entero Pequeño: int]
+  int niyos;  // Entero Pequeño [Entero Pequeño: int]
+  String referenciaNumero;  // Referencia Número [Texto Variable: String]
+  DateTime fechaReferencia;  // Fecha [Fecha: DateTime]
+  bool garantizada;  // Lógico [Lógico: bool]
+  EstadoReservacion estadoReservacion;  // Id [Búsqueda: int]
+  DateTime estadoactualizado;  // Fecha_Hora [Momento: DateTime]
+  String notasHuesped;  // Notas [Texto Variable: String]
+  String notasReservacion;  // Notas [Texto Variable: String]
+  String notasPersonal;  // Notas [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[RESERVACIONES.ID];
-    this.idEdificacion.fromKeyValue(key, value[RESERVACIONES.IDEDIFICACION]);
+
+    // Edificaciones
+    if (value[RESERVACIONES.IDEDIFICACION] != null) {
+      if (this.idEdificacion == null) {
+        this.idEdificacion = Edificacion();
+      }
+      this.idEdificacion.fromKeyValue(key, value[RESERVACIONES.IDEDIFICACION]);
+    } else {
+      this.idEdificacion = null;
+    }
+
     this.numeroReservacion = value[RESERVACIONES.NUMERORESERVACION];
-    this.fechaLlegada = new DateTime.fromMillisecondsSinceEpoch(value[RESERVACIONES.FECHALLEGADA]);
-    this.horaLlegada = new TimeOfDay.fromDateTime(new DateTime.fromMillisecondsSinceEpoch(value[RESERVACIONES.HORALLEGADA]));
-    this.fechaSalida = new DateTime.fromMillisecondsSinceEpoch(value[RESERVACIONES.FECHASALIDA]);
-    this.horaSalida = new TimeOfDay.fromDateTime(new DateTime.fromMillisecondsSinceEpoch(value[RESERVACIONES.HORASALIDA]));
-    this.tipoUnidadFuncional.fromKeyValue(key, value[RESERVACIONES.TIPOUNIDADFUNCIONAL]);
-    this.unidadFuncional.fromKeyValue(key, value[RESERVACIONES.UNIDADFUNCIONAL]);
+    this.fechaLlegada = LeerFecha(value[RESERVACIONES.FECHALLEGADA]);
+    this.horaLlegada = LeerHora(value[RESERVACIONES.HORALLEGADA]);
+    this.fechaSalida = LeerFecha(value[RESERVACIONES.FECHASALIDA]);
+    this.horaSalida = LeerHora(value[RESERVACIONES.HORASALIDA]);
+
+    // Tipos de Unidades Funcionales
+    if (value[RESERVACIONES.TIPOUNIDADFUNCIONAL] != null) {
+      if (this.tipoUnidadFuncional == null) {
+        this.tipoUnidadFuncional = TipoUnidadFuncional();
+      }
+      this.tipoUnidadFuncional.fromKeyValue(key, value[RESERVACIONES.TIPOUNIDADFUNCIONAL]);
+    } else {
+      this.tipoUnidadFuncional = null;
+    }
+
+
+    // Unidades Funcionales
+    if (value[RESERVACIONES.UNIDADFUNCIONAL] != null) {
+      if (this.unidadFuncional == null) {
+        this.unidadFuncional = UnidadFuncional();
+      }
+      this.unidadFuncional.fromKeyValue(key, value[RESERVACIONES.UNIDADFUNCIONAL]);
+    } else {
+      this.unidadFuncional = null;
+    }
+
     this.adultos = value[RESERVACIONES.ADULTOS];
     this.niyos = value[RESERVACIONES.NIYOS];
     this.referenciaNumero = value[RESERVACIONES.REFERENCIANUMERO];
-    this.fechaReferencia = new DateTime.fromMillisecondsSinceEpoch(value[RESERVACIONES.FECHAREFERENCIA]);
+    this.fechaReferencia = LeerFecha(value[RESERVACIONES.FECHAREFERENCIA]);
     this.garantizada = value[RESERVACIONES.GARANTIZADA];
-    this.estadoReservacion.fromKeyValue(key, value[RESERVACIONES.ESTADORESERVACION]);
-    this.estadoactualizado = value[RESERVACIONES.ESTADOACTUALIZADO];
+
+    // Estados de Reservaciones
+    if (value[RESERVACIONES.ESTADORESERVACION] != null) {
+      if (this.estadoReservacion == null) {
+        this.estadoReservacion = EstadoReservacion();
+      }
+      this.estadoReservacion.fromKeyValue(key, value[RESERVACIONES.ESTADORESERVACION]);
+    } else {
+      this.estadoReservacion = null;
+    }
+
+    this.estadoactualizado = DateTime.parse(value[RESERVACIONES.ESTADOACTUALIZADO]);
     this.notasHuesped = value[RESERVACIONES.NOTASHUESPED];
     this.notasReservacion = value[RESERVACIONES.NOTASRESERVACION];
     this.notasPersonal = value[RESERVACIONES.NOTASPERSONAL];
@@ -76,24 +124,23 @@ class Reservacion {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       RESERVACIONES.ID: this.id,
-      RESERVACIONES.IDEDIFICACION: this.idEdificacion.toJson(),
+      RESERVACIONES.IDEDIFICACION: this.idEdificacion == null ? null : this.idEdificacion.toJson(),
       RESERVACIONES.NUMERORESERVACION: this.numeroReservacion,
-      RESERVACIONES.FECHALLEGADA: this.fechaLlegada == null ? null : this.fechaLlegada.millisecondsSinceEpoch,
-      RESERVACIONES.HORALLEGADA: this.horaLlegada == null ? null : (this.horaLlegada.hour * 60 * 60 * 1000) +
-          (this.horaLlegada.minute * 60 * 1000) ,
-      RESERVACIONES.FECHASALIDA: this.fechaSalida == null ? null : this.fechaSalida.millisecondsSinceEpoch,
-      RESERVACIONES.HORASALIDA: this.horaSalida == null ? null : (this.horaSalida.hour * 60 * 60 * 1000) +
-          (this.horaSalida.minute * 60 * 1000) ,
-      RESERVACIONES.TIPOUNIDADFUNCIONAL: this.tipoUnidadFuncional.toJson(),
-      RESERVACIONES.UNIDADFUNCIONAL: this.unidadFuncional.toJson(),
+      RESERVACIONES.FECHALLEGADA: this.fechaLlegada == null ? null : GuardarFecha(this.fechaLlegada),
+      RESERVACIONES.HORALLEGADA: this.horaLlegada == null ? null : GuardarHora(this.horaLlegada),
+      RESERVACIONES.FECHASALIDA: this.fechaSalida == null ? null : GuardarFecha(this.fechaSalida),
+      RESERVACIONES.HORASALIDA: this.horaSalida == null ? null : GuardarHora(this.horaSalida),
+      RESERVACIONES.TIPOUNIDADFUNCIONAL: this.tipoUnidadFuncional == null ? null : this.tipoUnidadFuncional.toJson(),
+      RESERVACIONES.UNIDADFUNCIONAL: this.unidadFuncional == null ? null : this.unidadFuncional.toJson(),
       RESERVACIONES.ADULTOS: this.adultos,
       RESERVACIONES.NIYOS: this.niyos,
       RESERVACIONES.REFERENCIANUMERO: this.referenciaNumero,
-      RESERVACIONES.FECHAREFERENCIA: this.fechaReferencia == null ? null : this.fechaReferencia.millisecondsSinceEpoch,
+      RESERVACIONES.FECHAREFERENCIA: this.fechaReferencia == null ? null : GuardarFecha(this.fechaReferencia),
       RESERVACIONES.GARANTIZADA: this.garantizada,
-      RESERVACIONES.ESTADORESERVACION: this.estadoReservacion.toJson(),
-      RESERVACIONES.ESTADOACTUALIZADO: this.estadoactualizado,
+      RESERVACIONES.ESTADORESERVACION: this.estadoReservacion == null ? null : this.estadoReservacion.toJson(),
+      RESERVACIONES.ESTADOACTUALIZADO: this.estadoactualizado == null ? null : GuardarFechaHora(this.estadoactualizado),
       RESERVACIONES.NOTASHUESPED: this.notasHuesped,
       RESERVACIONES.NOTASRESERVACION: this.notasReservacion,
       RESERVACIONES.NOTASPERSONAL: this.notasPersonal,
@@ -103,28 +150,31 @@ class Reservacion {
   assign(Reservacion reservacion) {
 
     if (reservacion == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
-      this.idEdificacion = null; //new EstadoReservacion();
+      this.idEdificacion = null; //EstadoReservacion();
       this.numeroReservacion = null; //'';
       this.fechaLlegada = null; //DateTime.now();
       this.horaLlegada = null; //DateTime.now();
       this.fechaSalida = null; //DateTime.now();
       this.horaSalida = null; //DateTime.now();
-      this.tipoUnidadFuncional = null; //new EstadoReservacion();
-      this.unidadFuncional = null; //new EstadoReservacion();
+      this.tipoUnidadFuncional = null; //EstadoReservacion();
+      this.unidadFuncional = null; //EstadoReservacion();
       this.adultos = null; //0;
       this.niyos = null; //0;
       this.referenciaNumero = null; //'';
       this.fechaReferencia = null; //DateTime.now();
       this.garantizada = null; //false;
-      this.estadoReservacion = null; //new EstadoReservacion();
-      this.estadoactualizado = null; //'';
+      this.estadoReservacion = null; //EstadoReservacion();
+      this.estadoactualizado = null; //new DateTime.now();
       this.notasHuesped = null; //'';
       this.notasReservacion = null; //'';
       this.notasPersonal = null; //'';
     } else {
+      this.key = reservacion.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = reservacion.id;
 
+      // Edificaciones
       if (reservacion.idEdificacion != null) {
         if (this.idEdificacion == null) {
           this.idEdificacion = Edificacion();
@@ -140,6 +190,7 @@ class Reservacion {
       this.fechaSalida = reservacion.fechaSalida;
       this.horaSalida = reservacion.horaSalida;
 
+      // Tipos de Unidades Funcionales
       if (reservacion.tipoUnidadFuncional != null) {
         if (this.tipoUnidadFuncional == null) {
           this.tipoUnidadFuncional = TipoUnidadFuncional();
@@ -150,6 +201,7 @@ class Reservacion {
       }
 
 
+      // Unidades Funcionales
       if (reservacion.unidadFuncional != null) {
         if (this.unidadFuncional == null) {
           this.unidadFuncional = UnidadFuncional();
@@ -165,6 +217,7 @@ class Reservacion {
       this.fechaReferencia = reservacion.fechaReferencia;
       this.garantizada = reservacion.garantizada;
 
+      // Estados de Reservaciones
       if (reservacion.estadoReservacion != null) {
         if (this.estadoReservacion == null) {
           this.estadoReservacion = EstadoReservacion();
@@ -183,24 +236,23 @@ class Reservacion {
 
   Map toMap() {
     Map map = {
+      RESERVACIONES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       RESERVACIONES.ID: this.id,
       RESERVACIONES.IDEDIFICACION: this.idEdificacion == null ? null : this.idEdificacion.toMap(),
       RESERVACIONES.NUMERORESERVACION: this.numeroReservacion,
-      RESERVACIONES.FECHALLEGADA: this.fechaLlegada == null ? null : this.fechaLlegada.millisecondsSinceEpoch,
-      RESERVACIONES.HORALLEGADA: this.horaLlegada == null ? null : (this.horaLlegada.hour * 60 * 60 * 1000) +
-          (this.horaLlegada.minute * 60 * 1000) ,
-      RESERVACIONES.FECHASALIDA: this.fechaSalida == null ? null : this.fechaSalida.millisecondsSinceEpoch,
-      RESERVACIONES.HORASALIDA: this.horaSalida == null ? null : (this.horaSalida.hour * 60 * 60 * 1000) +
-          (this.horaSalida.minute * 60 * 1000) ,
+      RESERVACIONES.FECHALLEGADA: this.fechaLlegada == null ? null : GuardarFecha(this.fechaLlegada),
+      RESERVACIONES.HORALLEGADA: this.horaLlegada == null ? null : GuardarHora(this.horaLlegada),
+      RESERVACIONES.FECHASALIDA: this.fechaSalida == null ? null : GuardarFecha(this.fechaSalida),
+      RESERVACIONES.HORASALIDA: this.horaSalida == null ? null : GuardarHora(this.horaSalida),
       RESERVACIONES.TIPOUNIDADFUNCIONAL: this.tipoUnidadFuncional == null ? null : this.tipoUnidadFuncional.toMap(),
       RESERVACIONES.UNIDADFUNCIONAL: this.unidadFuncional == null ? null : this.unidadFuncional.toMap(),
       RESERVACIONES.ADULTOS: this.adultos,
       RESERVACIONES.NIYOS: this.niyos,
       RESERVACIONES.REFERENCIANUMERO: this.referenciaNumero,
-      RESERVACIONES.FECHAREFERENCIA: this.fechaReferencia == null ? null : this.fechaReferencia.millisecondsSinceEpoch,
+      RESERVACIONES.FECHAREFERENCIA: this.fechaReferencia == null ? null : GuardarFecha(this.fechaReferencia),
       RESERVACIONES.GARANTIZADA: this.garantizada,
       RESERVACIONES.ESTADORESERVACION: this.estadoReservacion == null ? null : this.estadoReservacion.toMap(),
-      RESERVACIONES.ESTADOACTUALIZADO: this.estadoactualizado,
+      RESERVACIONES.ESTADOACTUALIZADO: this.estadoactualizado == null ? null : GuardarFecha(this.estadoactualizado),
       RESERVACIONES.NOTASHUESPED: this.notasHuesped,
       RESERVACIONES.NOTASRESERVACION: this.notasReservacion,
       RESERVACIONES.NOTASPERSONAL: this.notasPersonal,
@@ -213,7 +265,10 @@ class Reservacion {
       this.assign(null);
       return;
     }
+    this.key = map[RESERVACIONES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[RESERVACIONES.ID];
+
+    // Edificaciones
     if (map[RESERVACIONES.IDEDIFICACION] != null) {
       if (this.idEdificacion == null) {
         this.idEdificacion = Edificacion();
@@ -222,11 +277,14 @@ class Reservacion {
     } else {
       this.idEdificacion = null;
     }
+
     this.numeroReservacion = map[RESERVACIONES.NUMERORESERVACION];
-    this.fechaLlegada = map[RESERVACIONES.FECHALLEGADA];
-    this.horaLlegada = map[RESERVACIONES.HORALLEGADA];
-    this.fechaSalida = map[RESERVACIONES.FECHASALIDA];
-    this.horaSalida = map[RESERVACIONES.HORASALIDA];
+    this.fechaLlegada = map[RESERVACIONES.FECHALLEGADA] == null ? null : LeerFecha(map[RESERVACIONES.FECHALLEGADA]);
+    this.horaLlegada = map[RESERVACIONES.HORALLEGADA] == null ? null : LeerHora(map[RESERVACIONES.HORALLEGADA]);
+    this.fechaSalida = map[RESERVACIONES.FECHASALIDA] == null ? null : LeerFecha(map[RESERVACIONES.FECHASALIDA]);
+    this.horaSalida = map[RESERVACIONES.HORASALIDA] == null ? null : LeerHora(map[RESERVACIONES.HORASALIDA]);
+
+    // Tipos de Unidades Funcionales
     if (map[RESERVACIONES.TIPOUNIDADFUNCIONAL] != null) {
       if (this.tipoUnidadFuncional == null) {
         this.tipoUnidadFuncional = TipoUnidadFuncional();
@@ -235,6 +293,9 @@ class Reservacion {
     } else {
       this.tipoUnidadFuncional = null;
     }
+
+
+    // Unidades Funcionales
     if (map[RESERVACIONES.UNIDADFUNCIONAL] != null) {
       if (this.unidadFuncional == null) {
         this.unidadFuncional = UnidadFuncional();
@@ -243,11 +304,14 @@ class Reservacion {
     } else {
       this.unidadFuncional = null;
     }
+
     this.adultos = map[RESERVACIONES.ADULTOS];
     this.niyos = map[RESERVACIONES.NIYOS];
     this.referenciaNumero = map[RESERVACIONES.REFERENCIANUMERO];
-    this.fechaReferencia = map[RESERVACIONES.FECHAREFERENCIA];
+    this.fechaReferencia = map[RESERVACIONES.FECHAREFERENCIA] == null ? null : LeerFecha(map[RESERVACIONES.FECHAREFERENCIA]);
     this.garantizada = map[RESERVACIONES.GARANTIZADA];
+
+    // Estados de Reservaciones
     if (map[RESERVACIONES.ESTADORESERVACION] != null) {
       if (this.estadoReservacion == null) {
         this.estadoReservacion = EstadoReservacion();
@@ -256,7 +320,8 @@ class Reservacion {
     } else {
       this.estadoReservacion = null;
     }
-    this.estadoactualizado = map[RESERVACIONES.ESTADOACTUALIZADO];
+
+    this.estadoactualizado = map[RESERVACIONES.ESTADOACTUALIZADO] == null ? null : LeerFecha(map[RESERVACIONES.ESTADOACTUALIZADO]);
     this.notasHuesped = map[RESERVACIONES.NOTASHUESPED];
     this.notasReservacion = map[RESERVACIONES.NOTASRESERVACION];
     this.notasPersonal = map[RESERVACIONES.NOTASPERSONAL];
@@ -290,7 +355,6 @@ class Reservacion {
         notasPersonal == typedOther.notasPersonal;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -311,7 +375,7 @@ class Reservacion {
       estadoactualizado.hashCode,
       notasHuesped.hashCode,
       notasReservacion.hashCode,
-      notasPersonal.hashCode 
+      notasPersonal.hashCode,
   ]);
 
 }
@@ -325,6 +389,8 @@ class RESERVACIONES {
   static const String ETIQUETA_REGISTRO = 'Reservación';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_IDEDIFICACION = 'Edificación';
   static const String ETIQUETA_NUMERORESERVACION = 'Número de Reservación';
@@ -351,6 +417,7 @@ class RESERVACIONES {
   static const String REGISTRO = 'Reservacion';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String IDEDIFICACION = 'idEdificacion';
   static const String NUMERORESERVACION = 'numeroReservacion';
@@ -377,7 +444,9 @@ class RESERVACIONES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,NUMERORESERVACION,FECHALLEGADA,FECHASALIDA,TIPOUNIDADFUNCIONAL,UNIDADFUNCIONAL,ADULTOS,NIYOS,REFERENCIANUMERO,FECHAREFERENCIA,ESTADORESERVACION,];
-  static const List CAMPOS_DETALLE = [ID,IDEDIFICACION,NUMERORESERVACION,FECHALLEGADA,HORALLEGADA,FECHASALIDA,HORASALIDA,TIPOUNIDADFUNCIONAL,UNIDADFUNCIONAL,ADULTOS,NIYOS,REFERENCIANUMERO,FECHAREFERENCIA,GARANTIZADA,ESTADORESERVACION,ESTADOACTUALIZADO,NOTASHUESPED,NOTASRESERVACION,NOTASPERSONAL,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, NUMERORESERVACION, FECHALLEGADA, FECHASALIDA, TIPOUNIDADFUNCIONAL, UNIDADFUNCIONAL, ADULTOS, NIYOS, REFERENCIANUMERO, FECHAREFERENCIA, ESTADORESERVACION,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, IDEDIFICACION, NUMERORESERVACION, FECHALLEGADA, HORALLEGADA, FECHASALIDA, HORASALIDA, TIPOUNIDADFUNCIONAL, UNIDADFUNCIONAL, ADULTOS, NIYOS, REFERENCIANUMERO, FECHAREFERENCIA, GARANTIZADA, ESTADORESERVACION, ESTADOACTUALIZADO, NOTASHUESPED, NOTASRESERVACION, NOTASPERSONAL,];
 
 }

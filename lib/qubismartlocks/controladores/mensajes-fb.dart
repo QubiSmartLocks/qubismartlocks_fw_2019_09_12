@@ -3,40 +3,32 @@
  Version: 2019.09.12
  Autor: Abner Hernández
  Unidad: Modelo (MVC) de Entidad Mensajes -> Mensaje
-         [Qubi Smart Locks/Mensajería (Chats)] para Firebase Realtime Database
-
+   [Qubi Smart Locks/Mensajería (Chats)]
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
-import 'package:firebase/firebase.dart' as firebase;
+import 'package:firebase/firebase.dart' as fb;
 
 
 class MensajesFB {
 
-  static firebase.DatabaseReference drMensajes = DEM.db.ref( CONVERSACIONES.ENTIDAD );
+  static fb.DatabaseReference drMensajes = DEM.db.ref( MENSAJES.ENTIDAD );
 
   static Future guardarMensaje({Mensaje mensaje}) async {
-//    final _analytics = FirebaseAnalytics();
 
-    if ((mensaje.key == null) || (mensaje.key == '')) {
-      mensaje.key = GuardarFechaHora(mensaje.momento).replaceAll('.', '-').replaceAll(':', '-');
+    if (mensaje.key == '') {
+      mensaje.key = drMensajes.push().key;
     }
-    final _json = mensaje.toJson();
-    _json.remove(MENSAJES.CONVERSACION);
-    _json.remove(MENSAJES.PARTICIPANTE);
-    await drMensajes.child(mensaje.conversacion.key).child( MENSAJES.ENTIDAD ).child(mensaje.key).update(_json);
-//    _analytics.logEvent(name:  MENSAJES.ENTIDAD , parameters: mensaje.toJson());
+    await drMensajes.child(mensaje.key).update(mensaje.toJson());
   }
 
   static Future borrarMensaje({Mensaje mensaje}) async {
-//    final _analytics = FirebaseAnalytics();
     await drMensajes.child(mensaje.key).remove();
-//    _analytics.logEvent(name:  MENSAJES.ENTIDAD + '_Borrado', parameters: mensaje.toJson());
   }
 
   static init() async {
     await drMensajes.remove();
-//    await InicializarMensajes.init();
+    await InicializarMensajes.init();
   }
 
   static todos(List<Mensaje> lista) async {
@@ -55,4 +47,3 @@ class MensajesFB {
     });
   }
 }
-

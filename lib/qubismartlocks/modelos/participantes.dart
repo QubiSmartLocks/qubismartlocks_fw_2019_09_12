@@ -7,6 +7,7 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Participante {
@@ -20,17 +21,31 @@ class Participante {
     this.keyConversacion,
   });
 
-  int id;
-  Conversacion conversacion;
-  int usuario;
-  String nombre;
-  String key;
-  String nota;
-  String keyConversacion;
+  int id;  // Id [Búsqueda: int]
+  Conversacion conversacion;  // Id [Búsqueda: int]
+  int usuario;  // Id [Búsqueda: int]
+  String nombre;  // Nombre [Texto Variable: String]
+  String key;  // Id/Key [Texto Variable: String]
+  String nota;  // Nota [Texto Variable: String]
+  String keyConversacion;  // Id/Key [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
     this.id = value[PARTICIPANTES.ID];
-    this.conversacion.fromKeyValue(key, value[PARTICIPANTES.CONVERSACION]);
+
+    // Conversaciones
+    if (value[PARTICIPANTES.CONVERSACION] != null) {
+      if (this.conversacion == null) {
+        this.conversacion = Conversacion();
+      }
+      this.conversacion.fromKeyValue(key, value[PARTICIPANTES.CONVERSACION]);
+    } else {
+      this.conversacion = null;
+    }
+
     this.usuario = value[PARTICIPANTES.USUARIO];
     this.nombre = value[PARTICIPANTES.NOMBRE];
     this.key = value[PARTICIPANTES.KEY];
@@ -41,7 +56,7 @@ class Participante {
   toJson() {
     return {
       PARTICIPANTES.ID: this.id,
-      PARTICIPANTES.CONVERSACION: this.conversacion.toJson(),
+      PARTICIPANTES.CONVERSACION: this.conversacion == null ? null : this.conversacion.toJson(),
       PARTICIPANTES.USUARIO: this.usuario,
       PARTICIPANTES.NOMBRE: this.nombre,
       PARTICIPANTES.KEY: this.key,
@@ -54,7 +69,7 @@ class Participante {
 
     if (participante == null) {
       this.id = null; //0;
-      this.conversacion = null; //new Conversacion();
+      this.conversacion = null; //Conversacion();
       this.usuario = null; //0;
       this.nombre = null; //'';
       this.key = null; //'';
@@ -63,6 +78,7 @@ class Participante {
     } else {
       this.id = participante.id;
 
+      // Conversaciones
       if (participante.conversacion != null) {
         if (this.conversacion == null) {
           this.conversacion = Conversacion();
@@ -99,6 +115,8 @@ class Participante {
       return;
     }
     this.id = map[PARTICIPANTES.ID];
+
+    // Conversaciones
     if (map[PARTICIPANTES.CONVERSACION] != null) {
       if (this.conversacion == null) {
         this.conversacion = Conversacion();
@@ -107,6 +125,7 @@ class Participante {
     } else {
       this.conversacion = null;
     }
+
     this.usuario = map[PARTICIPANTES.USUARIO];
     this.nombre = map[PARTICIPANTES.NOMBRE];
     this.key = map[PARTICIPANTES.KEY];
@@ -130,7 +149,6 @@ class Participante {
         keyConversacion == typedOther.keyConversacion;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -139,7 +157,7 @@ class Participante {
       nombre.hashCode,
       key.hashCode,
       nota.hashCode,
-      keyConversacion.hashCode 
+      keyConversacion.hashCode,
   ]);
 
 }
@@ -153,6 +171,7 @@ class PARTICIPANTES {
   static const String ETIQUETA_REGISTRO = 'Participante';
 
   // Etiquetas de los Atributos
+
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_CONVERSACION = 'Conversación';
   static const String ETIQUETA_USUARIO = 'Usuario';
@@ -181,7 +200,7 @@ class PARTICIPANTES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,USUARIO,NOMBRE,KEY,NOTA,KEYCONVERSACION,];
-  static const List CAMPOS_DETALLE = [ID,CONVERSACION,USUARIO,NOMBRE,KEY,NOTA,KEYCONVERSACION,];
+  static const List CAMPOS_LISTADO = [ ID, USUARIO, NOMBRE, KEY, NOTA, KEYCONVERSACION,];
+  static const List CAMPOS_DETALLE = [ ID, CONVERSACION, USUARIO, NOMBRE, KEY, NOTA, KEYCONVERSACION,];
 
 }

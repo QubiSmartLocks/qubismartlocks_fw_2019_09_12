@@ -57,10 +57,11 @@ class _EstadoPaqueteriaEdicion extends State<FPaqueteriaEdicion> {
     return null;
   }
 
-  String _validarFechaHoraEntregado(String value) {
+  String _validarFechaHoraEntregado(DateTime value) {
     _formaEditada = true;
-    if (value.isEmpty)
+    if (value == null) {
       return campoObligatorio(PAQUETERIA.ETIQUETA_FECHAHORAENTREGADO);
+    }
     widget.registro.fechaHoraEntregado = value;
     return null;
   }
@@ -203,8 +204,8 @@ class _EstadoPaqueteriaEdicion extends State<FPaqueteriaEdicion> {
               componente: 'BDEdicion',
               longitud: 20,
               decimales: 0,
-
-              validatorTexto: _validarFechaHoraEntregado,
+//              validatorFecha: ,
+//              validatorTexto: _validarFechaHoraEntregado,
 
             ),
 // Campo: Pasajero. Tipo de Componente: BDBusquedaCombo

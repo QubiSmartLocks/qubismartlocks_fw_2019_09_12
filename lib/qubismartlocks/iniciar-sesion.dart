@@ -15,19 +15,22 @@ class IniciarSesion extends StatefulWidget {
 class _IniciarSesionState extends State<IniciarSesion> {
 
   void sesionIniciada() async {
-//    print('Sesión iniciada como '+Sesion.usuarioFire.correoelectronico);
+    print('Sesión iniciada como '+Sesion.usuarioFire.correoelectronico);
+//   await DEM.usuarioPersona(Sesion.usuarioFire.key);
+    DEM.refrescarMain();
   }
 
   void usuarioNuevo() async {
-//    print('Usuario NUEVO '+Sesion.usuarioFire.correoelectronico);
+    print('Usuario NUEVO '+Sesion.usuarioFire.correoelectronico);
 
-// Inicializar Datos básicos para funcionamiento preliminar
+//// Inicializar Datos básicos para funcionamiento preliminar
 //    DEM.usuarioFire2Usuario(Sesion.usuarioFire);
 //    DEM.usuario.es = 'EsGestor'; // TODO: por defecto ??? Debería ser Socio???
 //    await Usuarios.guardarUsuario(usuario: DEM.usuario);
 
 //    DEM.gestor.key = DEM.usuario.key;
 //    await Personas.guardarPersona(persona: DEM.gestor);
+    DEM.refrescarMain();
 
   }
 
@@ -47,7 +50,7 @@ class _IniciarSesionState extends State<IniciarSesion> {
 //
         UIBackground(),
 //
-//        UIIniciarSesion(usuarioRegistrado: usuarioNuevo, sesionIniciada: sesionIniciada,),
+        UIIniciarSesion(usuarioRegistrado: usuarioNuevo, sesionIniciada: sesionIniciada,),
 //
       ],
     );

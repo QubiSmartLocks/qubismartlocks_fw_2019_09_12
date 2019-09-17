@@ -7,6 +7,7 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Conversacion {
@@ -20,20 +21,24 @@ class Conversacion {
     this.nota,
   });
 
-  int id;
-  String denomConversacion;
-  int ordenPrioridad;
-  DateTime fechaCreacion;
-  DateTime fechaUltimoMensaje;
-  String key;
-  String nota;
+  int id;  // Id [Búsqueda: int]
+  String denomConversacion;  // Denominación 200 No Nulo [Texto Variable: String]
+  int ordenPrioridad;  // Orden [Entero Pequeño: int]
+  DateTime fechaCreacion;  // Fecha [Fecha: DateTime]
+  DateTime fechaUltimoMensaje;  // Fecha [Fecha: DateTime]
+  String key;  // Id/Key [Texto Variable: String]
+  String nota;  // Nota [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
     this.id = value[CONVERSACIONES.ID];
     this.denomConversacion = value[CONVERSACIONES.DENOMCONVERSACION];
     this.ordenPrioridad = value[CONVERSACIONES.ORDENPRIORIDAD];
-    this.fechaCreacion = new DateTime.fromMillisecondsSinceEpoch(value[CONVERSACIONES.FECHACREACION]);
-    this.fechaUltimoMensaje = new DateTime.fromMillisecondsSinceEpoch(value[CONVERSACIONES.FECHAULTIMOMENSAJE]);
+    this.fechaCreacion = LeerFecha(value[CONVERSACIONES.FECHACREACION]);
+    this.fechaUltimoMensaje = LeerFecha(value[CONVERSACIONES.FECHAULTIMOMENSAJE]);
     this.key = value[CONVERSACIONES.KEY];
     this.nota = value[CONVERSACIONES.NOTA];
   }
@@ -43,8 +48,8 @@ class Conversacion {
       CONVERSACIONES.ID: this.id,
       CONVERSACIONES.DENOMCONVERSACION: this.denomConversacion,
       CONVERSACIONES.ORDENPRIORIDAD: this.ordenPrioridad,
-      CONVERSACIONES.FECHACREACION: this.fechaCreacion == null ? null : this.fechaCreacion.millisecondsSinceEpoch,
-      CONVERSACIONES.FECHAULTIMOMENSAJE: this.fechaUltimoMensaje == null ? null : this.fechaUltimoMensaje.millisecondsSinceEpoch,
+      CONVERSACIONES.FECHACREACION: this.fechaCreacion == null ? null : GuardarFecha(this.fechaCreacion),
+      CONVERSACIONES.FECHAULTIMOMENSAJE: this.fechaUltimoMensaje == null ? null : GuardarFecha(this.fechaUltimoMensaje),
       CONVERSACIONES.KEY: this.key,
       CONVERSACIONES.NOTA: this.nota,
     };
@@ -76,8 +81,8 @@ class Conversacion {
       CONVERSACIONES.ID: this.id,
       CONVERSACIONES.DENOMCONVERSACION: this.denomConversacion,
       CONVERSACIONES.ORDENPRIORIDAD: this.ordenPrioridad,
-      CONVERSACIONES.FECHACREACION: this.fechaCreacion == null ? null : this.fechaCreacion.millisecondsSinceEpoch,
-      CONVERSACIONES.FECHAULTIMOMENSAJE: this.fechaUltimoMensaje == null ? null : this.fechaUltimoMensaje.millisecondsSinceEpoch,
+      CONVERSACIONES.FECHACREACION: this.fechaCreacion == null ? null : GuardarFecha(this.fechaCreacion),
+      CONVERSACIONES.FECHAULTIMOMENSAJE: this.fechaUltimoMensaje == null ? null : GuardarFecha(this.fechaUltimoMensaje),
       CONVERSACIONES.KEY: this.key,
       CONVERSACIONES.NOTA: this.nota,
     };
@@ -92,8 +97,8 @@ class Conversacion {
     this.id = map[CONVERSACIONES.ID];
     this.denomConversacion = map[CONVERSACIONES.DENOMCONVERSACION];
     this.ordenPrioridad = map[CONVERSACIONES.ORDENPRIORIDAD];
-    this.fechaCreacion = map[CONVERSACIONES.FECHACREACION];
-    this.fechaUltimoMensaje = map[CONVERSACIONES.FECHAULTIMOMENSAJE];
+    this.fechaCreacion = map[CONVERSACIONES.FECHACREACION] == null ? null : LeerFecha(map[CONVERSACIONES.FECHACREACION]);
+    this.fechaUltimoMensaje = map[CONVERSACIONES.FECHAULTIMOMENSAJE] == null ? null : LeerFecha(map[CONVERSACIONES.FECHAULTIMOMENSAJE]);
     this.key = map[CONVERSACIONES.KEY];
     this.nota = map[CONVERSACIONES.NOTA];
   }
@@ -114,7 +119,6 @@ class Conversacion {
         nota == typedOther.nota;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -123,7 +127,7 @@ class Conversacion {
       fechaCreacion.hashCode,
       fechaUltimoMensaje.hashCode,
       key.hashCode,
-      nota.hashCode 
+      nota.hashCode,
   ]);
 
 }
@@ -137,6 +141,7 @@ class CONVERSACIONES {
   static const String ETIQUETA_REGISTRO = 'Conversación';
 
   // Etiquetas de los Atributos
+
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMCONVERSACION = 'Denominación de la Conversación';
   static const String ETIQUETA_ORDENPRIORIDAD = 'Orden de Prioridad';
@@ -165,7 +170,7 @@ class CONVERSACIONES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMCONVERSACION,ORDENPRIORIDAD,FECHAULTIMOMENSAJE,KEY,NOTA,];
-  static const List CAMPOS_DETALLE = [ID,DENOMCONVERSACION,ORDENPRIORIDAD,FECHACREACION,FECHAULTIMOMENSAJE,KEY,NOTA,];
+  static const List CAMPOS_LISTADO = [ ID, DENOMCONVERSACION, ORDENPRIORIDAD, FECHAULTIMOMENSAJE, KEY, NOTA,];
+  static const List CAMPOS_DETALLE = [ ID, DENOMCONVERSACION, ORDENPRIORIDAD, FECHACREACION, FECHAULTIMOMENSAJE, KEY, NOTA,];
 
 }

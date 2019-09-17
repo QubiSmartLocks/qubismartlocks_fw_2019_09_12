@@ -7,20 +7,28 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class MarcaCerradura {
   MarcaCerradura({
+    this.key = '',
     this.id,
     this.denomMarcaCerradura,
     this.descMarcaCerradura,
   });
 
-  int id;
-  String denomMarcaCerradura;
-  String descMarcaCerradura;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String denomMarcaCerradura;  // Denominación 200 No Nulo [Texto Variable: String]
+  String descMarcaCerradura;  // Descripción 4096 [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[MARCASCERRADURAS.ID];
     this.denomMarcaCerradura = value[MARCASCERRADURAS.DENOMMARCACERRADURA];
     this.descMarcaCerradura = value[MARCASCERRADURAS.DESCMARCACERRADURA];
@@ -28,6 +36,7 @@ class MarcaCerradura {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       MARCASCERRADURAS.ID: this.id,
       MARCASCERRADURAS.DENOMMARCACERRADURA: this.denomMarcaCerradura,
       MARCASCERRADURAS.DESCMARCACERRADURA: this.descMarcaCerradura,
@@ -37,10 +46,12 @@ class MarcaCerradura {
   assign(MarcaCerradura marcaCerradura) {
 
     if (marcaCerradura == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.denomMarcaCerradura = null; //'';
       this.descMarcaCerradura = null; //'';
     } else {
+      this.key = marcaCerradura.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = marcaCerradura.id;
       this.denomMarcaCerradura = marcaCerradura.denomMarcaCerradura;
       this.descMarcaCerradura = marcaCerradura.descMarcaCerradura;
@@ -49,6 +60,7 @@ class MarcaCerradura {
 
   Map toMap() {
     Map map = {
+      MARCASCERRADURAS.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       MARCASCERRADURAS.ID: this.id,
       MARCASCERRADURAS.DENOMMARCACERRADURA: this.denomMarcaCerradura,
       MARCASCERRADURAS.DESCMARCACERRADURA: this.descMarcaCerradura,
@@ -61,6 +73,7 @@ class MarcaCerradura {
       this.assign(null);
       return;
     }
+    this.key = map[MARCASCERRADURAS.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[MARCASCERRADURAS.ID];
     this.denomMarcaCerradura = map[MARCASCERRADURAS.DENOMMARCACERRADURA];
     this.descMarcaCerradura = map[MARCASCERRADURAS.DESCMARCACERRADURA];
@@ -78,12 +91,11 @@ class MarcaCerradura {
         descMarcaCerradura == typedOther.descMarcaCerradura;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
       denomMarcaCerradura.hashCode,
-      descMarcaCerradura.hashCode 
+      descMarcaCerradura.hashCode,
   ]);
 
 }
@@ -97,6 +109,8 @@ class MARCASCERRADURAS {
   static const String ETIQUETA_REGISTRO = 'Marca de Cerradura';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMMARCACERRADURA = 'Denominación del Marca de Cerradura';
   static const String ETIQUETA_DESCMARCACERRADURA = 'Descripción del Marca de Cerradura';
@@ -107,6 +121,7 @@ class MARCASCERRADURAS {
   static const String REGISTRO = 'MarcaCerradura';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String DENOMMARCACERRADURA = 'denomMarcaCerradura';
   static const String DESCMARCACERRADURA = 'descMarcaCerradura';
@@ -117,7 +132,9 @@ class MARCASCERRADURAS {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMMARCACERRADURA,];
-  static const List CAMPOS_DETALLE = [ID,DENOMMARCACERRADURA,DESCMARCACERRADURA,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, DENOMMARCACERRADURA,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, DENOMMARCACERRADURA, DESCMARCACERRADURA,];
 
 }

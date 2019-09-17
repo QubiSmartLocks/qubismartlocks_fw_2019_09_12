@@ -7,20 +7,28 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class TipoUnidadFuncional {
   TipoUnidadFuncional({
+    this.key = '',
     this.id,
     this.denomTipoUnidadFuncional,
     this.maximoCerradurasAsignadas,
   });
 
-  int id;
-  String denomTipoUnidadFuncional;
-  int maximoCerradurasAsignadas;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String denomTipoUnidadFuncional;  // Denominación 200 No Nulo [Texto Variable: String]
+  int maximoCerradurasAsignadas;  // Entero Pequeño [Entero Pequeño: int]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[TIPUNIDADESFUNCIONALES.ID];
     this.denomTipoUnidadFuncional = value[TIPUNIDADESFUNCIONALES.DENOMTIPOUNIDADFUNCIONAL];
     this.maximoCerradurasAsignadas = value[TIPUNIDADESFUNCIONALES.MAXIMOCERRADURASASIGNADAS];
@@ -28,6 +36,7 @@ class TipoUnidadFuncional {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       TIPUNIDADESFUNCIONALES.ID: this.id,
       TIPUNIDADESFUNCIONALES.DENOMTIPOUNIDADFUNCIONAL: this.denomTipoUnidadFuncional,
       TIPUNIDADESFUNCIONALES.MAXIMOCERRADURASASIGNADAS: this.maximoCerradurasAsignadas,
@@ -37,10 +46,12 @@ class TipoUnidadFuncional {
   assign(TipoUnidadFuncional tipoUnidadFuncional) {
 
     if (tipoUnidadFuncional == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.denomTipoUnidadFuncional = null; //'';
       this.maximoCerradurasAsignadas = null; //0;
     } else {
+      this.key = tipoUnidadFuncional.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = tipoUnidadFuncional.id;
       this.denomTipoUnidadFuncional = tipoUnidadFuncional.denomTipoUnidadFuncional;
       this.maximoCerradurasAsignadas = tipoUnidadFuncional.maximoCerradurasAsignadas;
@@ -49,6 +60,7 @@ class TipoUnidadFuncional {
 
   Map toMap() {
     Map map = {
+      TIPUNIDADESFUNCIONALES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       TIPUNIDADESFUNCIONALES.ID: this.id,
       TIPUNIDADESFUNCIONALES.DENOMTIPOUNIDADFUNCIONAL: this.denomTipoUnidadFuncional,
       TIPUNIDADESFUNCIONALES.MAXIMOCERRADURASASIGNADAS: this.maximoCerradurasAsignadas,
@@ -61,6 +73,7 @@ class TipoUnidadFuncional {
       this.assign(null);
       return;
     }
+    this.key = map[TIPUNIDADESFUNCIONALES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[TIPUNIDADESFUNCIONALES.ID];
     this.denomTipoUnidadFuncional = map[TIPUNIDADESFUNCIONALES.DENOMTIPOUNIDADFUNCIONAL];
     this.maximoCerradurasAsignadas = map[TIPUNIDADESFUNCIONALES.MAXIMOCERRADURASASIGNADAS];
@@ -78,12 +91,11 @@ class TipoUnidadFuncional {
         maximoCerradurasAsignadas == typedOther.maximoCerradurasAsignadas;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
       denomTipoUnidadFuncional.hashCode,
-      maximoCerradurasAsignadas.hashCode 
+      maximoCerradurasAsignadas.hashCode,
   ]);
 
 }
@@ -97,6 +109,8 @@ class TIPUNIDADESFUNCIONALES {
   static const String ETIQUETA_REGISTRO = 'Tipo de Unidad Funcional';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMTIPOUNIDADFUNCIONAL = 'Denominación del Tipo de Unidad Funcional';
   static const String ETIQUETA_MAXIMOCERRADURASASIGNADAS = 'Máximo Cerraduras Asignadas';
@@ -107,6 +121,7 @@ class TIPUNIDADESFUNCIONALES {
   static const String REGISTRO = 'TipoUnidadFuncional';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String DENOMTIPOUNIDADFUNCIONAL = 'denomTipoUnidadFuncional';
   static const String MAXIMOCERRADURASASIGNADAS = 'maximoCerradurasAsignadas';
@@ -117,7 +132,9 @@ class TIPUNIDADESFUNCIONALES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMTIPOUNIDADFUNCIONAL,MAXIMOCERRADURASASIGNADAS,];
-  static const List CAMPOS_DETALLE = [ID,DENOMTIPOUNIDADFUNCIONAL,MAXIMOCERRADURASASIGNADAS,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, DENOMTIPOUNIDADFUNCIONAL, MAXIMOCERRADURASASIGNADAS,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, DENOMTIPOUNIDADFUNCIONAL, MAXIMOCERRADURASASIGNADAS,];
 
 }

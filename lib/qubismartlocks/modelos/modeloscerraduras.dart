@@ -7,32 +7,51 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class ModeloCerradura {
   ModeloCerradura({
+    this.key = '',
     this.id,
     this.marca,
     this.denomModelo,
     this.descModelo,
   });
 
-  int id;
-  MarcaCerradura marca;
-  String denomModelo;
-  String descModelo;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  MarcaCerradura marca;  // Id [Búsqueda: int]
+  String denomModelo;  // Denominación 200 No Nulo [Texto Variable: String]
+  String descModelo;  // Descripción Blob [Memo: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[MODELOSCERRADURAS.ID];
-    this.marca.fromKeyValue(key, value[MODELOSCERRADURAS.MARCA]);
+
+    // Marcas de Cerraduras
+    if (value[MODELOSCERRADURAS.MARCA] != null) {
+      if (this.marca == null) {
+        this.marca = MarcaCerradura();
+      }
+      this.marca.fromKeyValue(key, value[MODELOSCERRADURAS.MARCA]);
+    } else {
+      this.marca = null;
+    }
+
     this.denomModelo = value[MODELOSCERRADURAS.DENOMMODELO];
     this.descModelo = value[MODELOSCERRADURAS.DESCMODELO];
   }
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       MODELOSCERRADURAS.ID: this.id,
-      MODELOSCERRADURAS.MARCA: this.marca.toJson(),
+      MODELOSCERRADURAS.MARCA: this.marca == null ? null : this.marca.toJson(),
       MODELOSCERRADURAS.DENOMMODELO: this.denomModelo,
       MODELOSCERRADURAS.DESCMODELO: this.descModelo,
     };
@@ -41,13 +60,16 @@ class ModeloCerradura {
   assign(ModeloCerradura modeloCerradura) {
 
     if (modeloCerradura == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
-      this.marca = null; //new MarcaCerradura();
+      this.marca = null; //MarcaCerradura();
       this.denomModelo = null; //'';
       this.descModelo = null; //'';
     } else {
+      this.key = modeloCerradura.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = modeloCerradura.id;
 
+      // Marcas de Cerraduras
       if (modeloCerradura.marca != null) {
         if (this.marca == null) {
           this.marca = MarcaCerradura();
@@ -64,6 +86,7 @@ class ModeloCerradura {
 
   Map toMap() {
     Map map = {
+      MODELOSCERRADURAS.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       MODELOSCERRADURAS.ID: this.id,
       MODELOSCERRADURAS.MARCA: this.marca == null ? null : this.marca.toMap(),
       MODELOSCERRADURAS.DENOMMODELO: this.denomModelo,
@@ -77,7 +100,10 @@ class ModeloCerradura {
       this.assign(null);
       return;
     }
+    this.key = map[MODELOSCERRADURAS.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[MODELOSCERRADURAS.ID];
+
+    // Marcas de Cerraduras
     if (map[MODELOSCERRADURAS.MARCA] != null) {
       if (this.marca == null) {
         this.marca = MarcaCerradura();
@@ -86,6 +112,7 @@ class ModeloCerradura {
     } else {
       this.marca = null;
     }
+
     this.denomModelo = map[MODELOSCERRADURAS.DENOMMODELO];
     this.descModelo = map[MODELOSCERRADURAS.DESCMODELO];
   }
@@ -103,13 +130,12 @@ class ModeloCerradura {
         descModelo == typedOther.descModelo;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
       marca.hashCode,
       denomModelo.hashCode,
-      descModelo.hashCode 
+      descModelo.hashCode,
   ]);
 
 }
@@ -123,6 +149,8 @@ class MODELOSCERRADURAS {
   static const String ETIQUETA_REGISTRO = 'Modelo de Cerradura';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_MARCA = 'Marca';
   static const String ETIQUETA_DENOMMODELO = 'Denominación del Modelo';
@@ -134,6 +162,7 @@ class MODELOSCERRADURAS {
   static const String REGISTRO = 'ModeloCerradura';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String MARCA = 'marca';
   static const String DENOMMODELO = 'denomModelo';
@@ -145,7 +174,9 @@ class MODELOSCERRADURAS {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,MARCA,DENOMMODELO,];
-  static const List CAMPOS_DETALLE = [ID,MARCA,DENOMMODELO,DESCMODELO,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, MARCA, DENOMMODELO,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, MARCA, DENOMMODELO, DESCMODELO,];
 
 }

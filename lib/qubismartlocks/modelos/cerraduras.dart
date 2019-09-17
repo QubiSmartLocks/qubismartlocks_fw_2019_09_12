@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Cerradura {
   Cerradura({
+    this.key = '',
     this.id,
     this.marca,
     this.modelo,
@@ -20,49 +22,99 @@ class Cerradura {
     this.estadoCerradura,
   });
 
-  int id;
-  MarcaCerradura marca;
-  ModeloCerradura modelo;
-  String denomCerradura;
-  String serial;
-  UnidadFuncional unidadFuncional;
-  EstadoCerradura estadoCerradura;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  MarcaCerradura marca;  // Id [Búsqueda: int]
+  ModeloCerradura modelo;  // Id [Búsqueda: int]
+  String denomCerradura;  // Denominación 200 No Nulo [Texto Variable: String]
+  String serial;  // Serial [Texto Variable: String]
+  UnidadFuncional unidadFuncional;  // Id [Búsqueda: int]
+  EstadoCerradura estadoCerradura;  // Id [Búsqueda: int]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[CERRADURAS.ID];
-    this.marca.fromKeyValue(key, value[CERRADURAS.MARCA]);
-    this.modelo.fromKeyValue(key, value[CERRADURAS.MODELO]);
+
+    // Marcas de Cerraduras
+    if (value[CERRADURAS.MARCA] != null) {
+      if (this.marca == null) {
+        this.marca = MarcaCerradura();
+      }
+      this.marca.fromKeyValue(key, value[CERRADURAS.MARCA]);
+    } else {
+      this.marca = null;
+    }
+
+
+    // Modelos de Cerraduras
+    if (value[CERRADURAS.MODELO] != null) {
+      if (this.modelo == null) {
+        this.modelo = ModeloCerradura();
+      }
+      this.modelo.fromKeyValue(key, value[CERRADURAS.MODELO]);
+    } else {
+      this.modelo = null;
+    }
+
     this.denomCerradura = value[CERRADURAS.DENOMCERRADURA];
     this.serial = value[CERRADURAS.SERIAL];
-    this.unidadFuncional.fromKeyValue(key, value[CERRADURAS.UNIDADFUNCIONAL]);
-    this.estadoCerradura.fromKeyValue(key, value[CERRADURAS.ESTADOCERRADURA]);
+
+    // Unidades Funcionales
+    if (value[CERRADURAS.UNIDADFUNCIONAL] != null) {
+      if (this.unidadFuncional == null) {
+        this.unidadFuncional = UnidadFuncional();
+      }
+      this.unidadFuncional.fromKeyValue(key, value[CERRADURAS.UNIDADFUNCIONAL]);
+    } else {
+      this.unidadFuncional = null;
+    }
+
+
+    // Estados de Cerraduras
+    if (value[CERRADURAS.ESTADOCERRADURA] != null) {
+      if (this.estadoCerradura == null) {
+        this.estadoCerradura = EstadoCerradura();
+      }
+      this.estadoCerradura.fromKeyValue(key, value[CERRADURAS.ESTADOCERRADURA]);
+    } else {
+      this.estadoCerradura = null;
+    }
+
   }
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       CERRADURAS.ID: this.id,
-      CERRADURAS.MARCA: this.marca.toJson(),
-      CERRADURAS.MODELO: this.modelo.toJson(),
+      CERRADURAS.MARCA: this.marca == null ? null : this.marca.toJson(),
+      CERRADURAS.MODELO: this.modelo == null ? null : this.modelo.toJson(),
       CERRADURAS.DENOMCERRADURA: this.denomCerradura,
       CERRADURAS.SERIAL: this.serial,
-      CERRADURAS.UNIDADFUNCIONAL: this.unidadFuncional.toJson(),
-      CERRADURAS.ESTADOCERRADURA: this.estadoCerradura.toJson(),
+      CERRADURAS.UNIDADFUNCIONAL: this.unidadFuncional == null ? null : this.unidadFuncional.toJson(),
+      CERRADURAS.ESTADOCERRADURA: this.estadoCerradura == null ? null : this.estadoCerradura.toJson(),
     };
   }
 
   assign(Cerradura cerradura) {
 
     if (cerradura == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
-      this.marca = null; //new EstadoCerradura();
-      this.modelo = null; //new EstadoCerradura();
+      this.marca = null; //EstadoCerradura();
+      this.modelo = null; //EstadoCerradura();
       this.denomCerradura = null; //'';
       this.serial = null; //'';
-      this.unidadFuncional = null; //new EstadoCerradura();
-      this.estadoCerradura = null; //new EstadoCerradura();
+      this.unidadFuncional = null; //EstadoCerradura();
+      this.estadoCerradura = null; //EstadoCerradura();
     } else {
+      this.key = cerradura.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = cerradura.id;
 
+      // Marcas de Cerraduras
       if (cerradura.marca != null) {
         if (this.marca == null) {
           this.marca = MarcaCerradura();
@@ -73,6 +125,7 @@ class Cerradura {
       }
 
 
+      // Modelos de Cerraduras
       if (cerradura.modelo != null) {
         if (this.modelo == null) {
           this.modelo = ModeloCerradura();
@@ -85,6 +138,7 @@ class Cerradura {
       this.denomCerradura = cerradura.denomCerradura;
       this.serial = cerradura.serial;
 
+      // Unidades Funcionales
       if (cerradura.unidadFuncional != null) {
         if (this.unidadFuncional == null) {
           this.unidadFuncional = UnidadFuncional();
@@ -95,6 +149,7 @@ class Cerradura {
       }
 
 
+      // Estados de Cerraduras
       if (cerradura.estadoCerradura != null) {
         if (this.estadoCerradura == null) {
           this.estadoCerradura = EstadoCerradura();
@@ -109,6 +164,7 @@ class Cerradura {
 
   Map toMap() {
     Map map = {
+      CERRADURAS.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       CERRADURAS.ID: this.id,
       CERRADURAS.MARCA: this.marca == null ? null : this.marca.toMap(),
       CERRADURAS.MODELO: this.modelo == null ? null : this.modelo.toMap(),
@@ -125,7 +181,10 @@ class Cerradura {
       this.assign(null);
       return;
     }
+    this.key = map[CERRADURAS.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[CERRADURAS.ID];
+
+    // Marcas de Cerraduras
     if (map[CERRADURAS.MARCA] != null) {
       if (this.marca == null) {
         this.marca = MarcaCerradura();
@@ -134,6 +193,9 @@ class Cerradura {
     } else {
       this.marca = null;
     }
+
+
+    // Modelos de Cerraduras
     if (map[CERRADURAS.MODELO] != null) {
       if (this.modelo == null) {
         this.modelo = ModeloCerradura();
@@ -142,8 +204,11 @@ class Cerradura {
     } else {
       this.modelo = null;
     }
+
     this.denomCerradura = map[CERRADURAS.DENOMCERRADURA];
     this.serial = map[CERRADURAS.SERIAL];
+
+    // Unidades Funcionales
     if (map[CERRADURAS.UNIDADFUNCIONAL] != null) {
       if (this.unidadFuncional == null) {
         this.unidadFuncional = UnidadFuncional();
@@ -152,6 +217,9 @@ class Cerradura {
     } else {
       this.unidadFuncional = null;
     }
+
+
+    // Estados de Cerraduras
     if (map[CERRADURAS.ESTADOCERRADURA] != null) {
       if (this.estadoCerradura == null) {
         this.estadoCerradura = EstadoCerradura();
@@ -160,6 +228,7 @@ class Cerradura {
     } else {
       this.estadoCerradura = null;
     }
+
   }
 
   // Comparar si dos instancias de esta Clase son idénticas con el operador ==
@@ -178,7 +247,6 @@ class Cerradura {
         estadoCerradura == typedOther.estadoCerradura;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -187,7 +255,7 @@ class Cerradura {
       denomCerradura.hashCode,
       serial.hashCode,
       unidadFuncional.hashCode,
-      estadoCerradura.hashCode 
+      estadoCerradura.hashCode,
   ]);
 
 }
@@ -201,6 +269,8 @@ class CERRADURAS {
   static const String ETIQUETA_REGISTRO = 'Cerradura';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_MARCA = 'Marca';
   static const String ETIQUETA_MODELO = 'Modelo';
@@ -215,6 +285,7 @@ class CERRADURAS {
   static const String REGISTRO = 'Cerradura';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String MARCA = 'marca';
   static const String MODELO = 'modelo';
@@ -229,7 +300,9 @@ class CERRADURAS {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,MODELO,DENOMCERRADURA,UNIDADFUNCIONAL,ESTADOCERRADURA,];
-  static const List CAMPOS_DETALLE = [ID,MARCA,MODELO,DENOMCERRADURA,SERIAL,UNIDADFUNCIONAL,ESTADOCERRADURA,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, MODELO, DENOMCERRADURA, UNIDADFUNCIONAL, ESTADOCERRADURA,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, MARCA, MODELO, DENOMCERRADURA, SERIAL, UNIDADFUNCIONAL, ESTADOCERRADURA,];
 
 }

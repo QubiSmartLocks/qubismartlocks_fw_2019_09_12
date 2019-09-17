@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Paquete {
   Paquete({
+    this.key = '',
     this.id,
     this.origenPaquete,
     this.numeroRastreo,
@@ -25,46 +27,73 @@ class Paquete {
     this.mensajeenviado,
   });
 
-  int id;
-  OrigenPaquete origenPaquete;
-  String numeroRastreo;
-  String destinatario;
-  String fechaHoraRecepcion;
-  String notaRecepcion;
-  String notaDestinatario;
-  String fechaHoraEntregado;
-  Pasajero pasajero;
-  String recibidoPasajero;
-  int recepcionista;
-  bool mensajeenviado;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  OrigenPaquete origenPaquete;  // Id [Búsqueda: int]
+  String numeroRastreo;  // Número de Rastreo [Texto Variable: String]
+  String destinatario;  // Destinatario [Texto Variable: String]
+  DateTime fechaHoraRecepcion;  // Fecha_Hora [Momento: DateTime]
+  String notaRecepcion;  // Nota [Texto Variable: String]
+  String notaDestinatario;  // Nota [Texto Variable: String]
+  DateTime fechaHoraEntregado;  // Fecha_Hora [Momento: DateTime]
+  Pasajero pasajero;  // Id [Búsqueda: int]
+  DateTime recibidoPasajero;  // Fecha_Hora [Momento: DateTime]
+  int recepcionista;  // Id [Búsqueda: int]
+  bool mensajeenviado;  // Lógico [Lógico: bool]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[PAQUETERIA.ID];
-    this.origenPaquete.fromKeyValue(key, value[PAQUETERIA.ORIGENPAQUETE]);
+
+    // Orígenes de Paquetes
+    if (value[PAQUETERIA.ORIGENPAQUETE] != null) {
+      if (this.origenPaquete == null) {
+        this.origenPaquete = OrigenPaquete();
+      }
+      this.origenPaquete.fromKeyValue(key, value[PAQUETERIA.ORIGENPAQUETE]);
+    } else {
+      this.origenPaquete = null;
+    }
+
     this.numeroRastreo = value[PAQUETERIA.NUMERORASTREO];
     this.destinatario = value[PAQUETERIA.DESTINATARIO];
-    this.fechaHoraRecepcion = value[PAQUETERIA.FECHAHORARECEPCION];
+    this.fechaHoraRecepcion = DateTime.parse(value[PAQUETERIA.FECHAHORARECEPCION]);
     this.notaRecepcion = value[PAQUETERIA.NOTARECEPCION];
     this.notaDestinatario = value[PAQUETERIA.NOTADESTINATARIO];
-    this.fechaHoraEntregado = value[PAQUETERIA.FECHAHORAENTREGADO];
-    this.pasajero.fromKeyValue(key, value[PAQUETERIA.PASAJERO]);
-    this.recibidoPasajero = value[PAQUETERIA.RECIBIDOPASAJERO];
+    this.fechaHoraEntregado = DateTime.parse(value[PAQUETERIA.FECHAHORAENTREGADO]);
+
+    // Pasajeros
+    if (value[PAQUETERIA.PASAJERO] != null) {
+      if (this.pasajero == null) {
+        this.pasajero = Pasajero();
+      }
+      this.pasajero.fromKeyValue(key, value[PAQUETERIA.PASAJERO]);
+    } else {
+      this.pasajero = null;
+    }
+
+    this.recibidoPasajero = DateTime.parse(value[PAQUETERIA.RECIBIDOPASAJERO]);
     this.recepcionista = value[PAQUETERIA.RECEPCIONISTA];
     this.mensajeenviado = value[PAQUETERIA.MENSAJEENVIADO];
   }
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       PAQUETERIA.ID: this.id,
-      PAQUETERIA.ORIGENPAQUETE: this.origenPaquete.toJson(),
+      PAQUETERIA.ORIGENPAQUETE: this.origenPaquete == null ? null : this.origenPaquete.toJson(),
       PAQUETERIA.NUMERORASTREO: this.numeroRastreo,
       PAQUETERIA.DESTINATARIO: this.destinatario,
-      PAQUETERIA.FECHAHORARECEPCION: this.fechaHoraRecepcion,
+      PAQUETERIA.FECHAHORARECEPCION: this.fechaHoraRecepcion == null ? null : GuardarFechaHora(this.fechaHoraRecepcion),
       PAQUETERIA.NOTARECEPCION: this.notaRecepcion,
       PAQUETERIA.NOTADESTINATARIO: this.notaDestinatario,
-      PAQUETERIA.FECHAHORAENTREGADO: this.fechaHoraEntregado,
-      PAQUETERIA.PASAJERO: this.pasajero.toJson(),
-      PAQUETERIA.RECIBIDOPASAJERO: this.recibidoPasajero,
+      PAQUETERIA.FECHAHORAENTREGADO: this.fechaHoraEntregado == null ? null : GuardarFechaHora(this.fechaHoraEntregado),
+      PAQUETERIA.PASAJERO: this.pasajero == null ? null : this.pasajero.toJson(),
+      PAQUETERIA.RECIBIDOPASAJERO: this.recibidoPasajero == null ? null : GuardarFechaHora(this.recibidoPasajero),
       PAQUETERIA.RECEPCIONISTA: this.recepcionista,
       PAQUETERIA.MENSAJEENVIADO: this.mensajeenviado,
     };
@@ -73,21 +102,24 @@ class Paquete {
   assign(Paquete paquete) {
 
     if (paquete == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
-      this.origenPaquete = null; //new Pasajero();
+      this.origenPaquete = null; //Pasajero();
       this.numeroRastreo = null; //'';
       this.destinatario = null; //'';
-      this.fechaHoraRecepcion = null; //'';
+      this.fechaHoraRecepcion = null; //new DateTime.now();
       this.notaRecepcion = null; //'';
       this.notaDestinatario = null; //'';
-      this.fechaHoraEntregado = null; //'';
-      this.pasajero = null; //new Pasajero();
-      this.recibidoPasajero = null; //'';
+      this.fechaHoraEntregado = null; //new DateTime.now();
+      this.pasajero = null; //Pasajero();
+      this.recibidoPasajero = null; //new DateTime.now();
       this.recepcionista = null; //0;
       this.mensajeenviado = null; //false;
     } else {
+      this.key = paquete.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = paquete.id;
 
+      // Orígenes de Paquetes
       if (paquete.origenPaquete != null) {
         if (this.origenPaquete == null) {
           this.origenPaquete = OrigenPaquete();
@@ -104,6 +136,7 @@ class Paquete {
       this.notaDestinatario = paquete.notaDestinatario;
       this.fechaHoraEntregado = paquete.fechaHoraEntregado;
 
+      // Pasajeros
       if (paquete.pasajero != null) {
         if (this.pasajero == null) {
           this.pasajero = Pasajero();
@@ -121,16 +154,17 @@ class Paquete {
 
   Map toMap() {
     Map map = {
+      PAQUETERIA.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       PAQUETERIA.ID: this.id,
       PAQUETERIA.ORIGENPAQUETE: this.origenPaquete == null ? null : this.origenPaquete.toMap(),
       PAQUETERIA.NUMERORASTREO: this.numeroRastreo,
       PAQUETERIA.DESTINATARIO: this.destinatario,
-      PAQUETERIA.FECHAHORARECEPCION: this.fechaHoraRecepcion,
+      PAQUETERIA.FECHAHORARECEPCION: this.fechaHoraRecepcion == null ? null : GuardarFecha(this.fechaHoraRecepcion),
       PAQUETERIA.NOTARECEPCION: this.notaRecepcion,
       PAQUETERIA.NOTADESTINATARIO: this.notaDestinatario,
-      PAQUETERIA.FECHAHORAENTREGADO: this.fechaHoraEntregado,
+      PAQUETERIA.FECHAHORAENTREGADO: this.fechaHoraEntregado == null ? null : GuardarFecha(this.fechaHoraEntregado),
       PAQUETERIA.PASAJERO: this.pasajero == null ? null : this.pasajero.toMap(),
-      PAQUETERIA.RECIBIDOPASAJERO: this.recibidoPasajero,
+      PAQUETERIA.RECIBIDOPASAJERO: this.recibidoPasajero == null ? null : GuardarFecha(this.recibidoPasajero),
       PAQUETERIA.RECEPCIONISTA: this.recepcionista,
       PAQUETERIA.MENSAJEENVIADO: this.mensajeenviado,
     };
@@ -142,7 +176,10 @@ class Paquete {
       this.assign(null);
       return;
     }
+    this.key = map[PAQUETERIA.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[PAQUETERIA.ID];
+
+    // Orígenes de Paquetes
     if (map[PAQUETERIA.ORIGENPAQUETE] != null) {
       if (this.origenPaquete == null) {
         this.origenPaquete = OrigenPaquete();
@@ -151,12 +188,15 @@ class Paquete {
     } else {
       this.origenPaquete = null;
     }
+
     this.numeroRastreo = map[PAQUETERIA.NUMERORASTREO];
     this.destinatario = map[PAQUETERIA.DESTINATARIO];
-    this.fechaHoraRecepcion = map[PAQUETERIA.FECHAHORARECEPCION];
+    this.fechaHoraRecepcion = map[PAQUETERIA.FECHAHORARECEPCION] == null ? null : LeerFecha(map[PAQUETERIA.FECHAHORARECEPCION]);
     this.notaRecepcion = map[PAQUETERIA.NOTARECEPCION];
     this.notaDestinatario = map[PAQUETERIA.NOTADESTINATARIO];
-    this.fechaHoraEntregado = map[PAQUETERIA.FECHAHORAENTREGADO];
+    this.fechaHoraEntregado = map[PAQUETERIA.FECHAHORAENTREGADO] == null ? null : LeerFecha(map[PAQUETERIA.FECHAHORAENTREGADO]);
+
+    // Pasajeros
     if (map[PAQUETERIA.PASAJERO] != null) {
       if (this.pasajero == null) {
         this.pasajero = Pasajero();
@@ -165,7 +205,8 @@ class Paquete {
     } else {
       this.pasajero = null;
     }
-    this.recibidoPasajero = map[PAQUETERIA.RECIBIDOPASAJERO];
+
+    this.recibidoPasajero = map[PAQUETERIA.RECIBIDOPASAJERO] == null ? null : LeerFecha(map[PAQUETERIA.RECIBIDOPASAJERO]);
     this.recepcionista = map[PAQUETERIA.RECEPCIONISTA];
     this.mensajeenviado = map[PAQUETERIA.MENSAJEENVIADO];
   }
@@ -191,7 +232,6 @@ class Paquete {
         mensajeenviado == typedOther.mensajeenviado;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -205,7 +245,7 @@ class Paquete {
       pasajero.hashCode,
       recibidoPasajero.hashCode,
       recepcionista.hashCode,
-      mensajeenviado.hashCode 
+      mensajeenviado.hashCode,
   ]);
 
 }
@@ -219,6 +259,8 @@ class PAQUETERIA {
   static const String ETIQUETA_REGISTRO = 'Paquete';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_ORIGENPAQUETE = 'Origen del Paquete';
   static const String ETIQUETA_NUMERORASTREO = 'Número de Rastreo';
@@ -238,6 +280,7 @@ class PAQUETERIA {
   static const String REGISTRO = 'Paquete';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String ORIGENPAQUETE = 'origenPaquete';
   static const String NUMERORASTREO = 'numeroRastreo';
@@ -257,7 +300,9 @@ class PAQUETERIA {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,ORIGENPAQUETE,NUMERORASTREO,DESTINATARIO,FECHAHORARECEPCION,FECHAHORAENTREGADO,PASAJERO,RECIBIDOPASAJERO,MENSAJEENVIADO,];
-  static const List CAMPOS_DETALLE = [ID,ORIGENPAQUETE,NUMERORASTREO,DESTINATARIO,FECHAHORARECEPCION,NOTARECEPCION,NOTADESTINATARIO,FECHAHORAENTREGADO,PASAJERO,RECIBIDOPASAJERO,RECEPCIONISTA,MENSAJEENVIADO,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, ORIGENPAQUETE, NUMERORASTREO, DESTINATARIO, FECHAHORARECEPCION, FECHAHORAENTREGADO, PASAJERO, RECIBIDOPASAJERO, MENSAJEENVIADO,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, ORIGENPAQUETE, NUMERORASTREO, DESTINATARIO, FECHAHORARECEPCION, NOTARECEPCION, NOTADESTINATARIO, FECHAHORAENTREGADO, PASAJERO, RECIBIDOPASAJERO, RECEPCIONISTA, MENSAJEENVIADO,];
 
 }

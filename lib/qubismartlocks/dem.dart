@@ -25,6 +25,7 @@ class DEM {
   static bool lInicializado = false;
 
   static firebase.Database db;
+  static firebase.App app;
 
   static iniciar() async {
     if (lInicializado)
@@ -44,7 +45,8 @@ class DEM {
     tipoUsrActivo = _tipo;
   }
 
-  static VoidCallback refrescar;
+  static VoidCallback refrescarMain = () {};
+  static VoidCallback refrescar = () {};
 
   static Map mapaBusquedaReservas = {
     "buscar": "13025"
@@ -369,40 +371,13 @@ class DEM {
     // Participantes
     mapaParticipante = participante.toMap();
 
-    api = ApiDart(
-      scheme: ApiConst.SCHEMES[0],
-      host: '192.168.1.52',
-      port: 8888,
-      username: 'eh',
-      password: 'password',
-      clientID: 'com.qubiapp.smartlocks',
-      client_secret: 'Sm4rtL0cksQub1',
-      scopeRequired: 'ADMIN',
-//      apiBeginPoint: '/nopass/api_qubismartlocks/',
-      apiBeginPoint: '/api_qubismartlocks/',
-    );
-    await api.getToken();
-    print('api Creado de ApiDart');
-    print('Token: ${api.tokenData.access_token}');
-
+    await initFirebaseDatabase();
   }
 
   static Future<void> cerrarSesion() async {
   }
 
   static initFirebaseDatabase() async {
-    // Initialize Firebase
-    firebase.App app = firebase.initializeApp(
-      name: 'prueba',
-      apiKey: "AIzaSyBUaOzLJ7gusvGzkIo8UXoTCq5gaVGYSDs",
-      authDomain: "qubilocks-f36b6.firebaseapp.com",
-      databaseURL: "https://qubilocks-f36b6.firebaseio.com",
-      projectId: "qubilocks-f36b6",
-      storageBucket: "qubilocks-f36b6.appspot.com",
-      messagingSenderId: "716278979135",
-//        appId: "1:716278979135:web:74a43796b01ed47f1c768a"
-
-    );
     db = firebase.database(app);
     print('*** BASE DE DATOS FIREBASE ***');
     print(db);

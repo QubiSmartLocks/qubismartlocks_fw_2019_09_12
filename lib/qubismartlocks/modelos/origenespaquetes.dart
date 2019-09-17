@@ -7,24 +7,33 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class OrigenPaquete {
   OrigenPaquete({
+    this.key = '',
     this.id,
     this.denomOrigenPaquete,
   });
 
-  int id;
-  String denomOrigenPaquete;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String denomOrigenPaquete;  // Denominación 200 No Nulo [Texto Variable: String]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[ORIGENESPAQUETES.ID];
     this.denomOrigenPaquete = value[ORIGENESPAQUETES.DENOMORIGENPAQUETE];
   }
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       ORIGENESPAQUETES.ID: this.id,
       ORIGENESPAQUETES.DENOMORIGENPAQUETE: this.denomOrigenPaquete,
     };
@@ -33,9 +42,11 @@ class OrigenPaquete {
   assign(OrigenPaquete origenPaquete) {
 
     if (origenPaquete == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.denomOrigenPaquete = null; //'';
     } else {
+      this.key = origenPaquete.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = origenPaquete.id;
       this.denomOrigenPaquete = origenPaquete.denomOrigenPaquete;
     }
@@ -43,6 +54,7 @@ class OrigenPaquete {
 
   Map toMap() {
     Map map = {
+      ORIGENESPAQUETES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       ORIGENESPAQUETES.ID: this.id,
       ORIGENESPAQUETES.DENOMORIGENPAQUETE: this.denomOrigenPaquete,
     };
@@ -54,6 +66,7 @@ class OrigenPaquete {
       this.assign(null);
       return;
     }
+    this.key = map[ORIGENESPAQUETES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[ORIGENESPAQUETES.ID];
     this.denomOrigenPaquete = map[ORIGENESPAQUETES.DENOMORIGENPAQUETE];
   }
@@ -69,11 +82,10 @@ class OrigenPaquete {
         denomOrigenPaquete == typedOther.denomOrigenPaquete;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
-      denomOrigenPaquete.hashCode 
+      denomOrigenPaquete.hashCode,
   ]);
 
 }
@@ -87,6 +99,8 @@ class ORIGENESPAQUETES {
   static const String ETIQUETA_REGISTRO = 'Orígen de Paquete';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMORIGENPAQUETE = 'Denominación del Orígen de Paquete';
 
@@ -96,6 +110,7 @@ class ORIGENESPAQUETES {
   static const String REGISTRO = 'OrigenPaquete';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String DENOMORIGENPAQUETE = 'denomOrigenPaquete';
 
@@ -105,7 +120,9 @@ class ORIGENESPAQUETES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMORIGENPAQUETE,];
-  static const List CAMPOS_DETALLE = [ID,DENOMORIGENPAQUETE,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, DENOMORIGENPAQUETE,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, DENOMORIGENPAQUETE,];
 
 }

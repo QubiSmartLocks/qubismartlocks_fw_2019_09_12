@@ -7,22 +7,30 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class EstadoReservacion {
   EstadoReservacion({
+    this.key = '',
     this.id,
     this.denomEstadoReservacion,
     this.descEstadoReservacion,
     this.visible,
   });
 
-  int id;
-  String denomEstadoReservacion;
-  String descEstadoReservacion;
-  bool visible;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String denomEstadoReservacion;  // Denominación 200 No Nulo [Texto Variable: String]
+  String descEstadoReservacion;  // Descripción Blob [Memo: String]
+  bool visible;  // Lógico [Lógico: bool]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[ESTADOSRESERVACIONES.ID];
     this.denomEstadoReservacion = value[ESTADOSRESERVACIONES.DENOMESTADORESERVACION];
     this.descEstadoReservacion = value[ESTADOSRESERVACIONES.DESCESTADORESERVACION];
@@ -31,6 +39,7 @@ class EstadoReservacion {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       ESTADOSRESERVACIONES.ID: this.id,
       ESTADOSRESERVACIONES.DENOMESTADORESERVACION: this.denomEstadoReservacion,
       ESTADOSRESERVACIONES.DESCESTADORESERVACION: this.descEstadoReservacion,
@@ -41,11 +50,13 @@ class EstadoReservacion {
   assign(EstadoReservacion estadoReservacion) {
 
     if (estadoReservacion == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.denomEstadoReservacion = null; //'';
       this.descEstadoReservacion = null; //'';
       this.visible = null; //false;
     } else {
+      this.key = estadoReservacion.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = estadoReservacion.id;
       this.denomEstadoReservacion = estadoReservacion.denomEstadoReservacion;
       this.descEstadoReservacion = estadoReservacion.descEstadoReservacion;
@@ -55,6 +66,7 @@ class EstadoReservacion {
 
   Map toMap() {
     Map map = {
+      ESTADOSRESERVACIONES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       ESTADOSRESERVACIONES.ID: this.id,
       ESTADOSRESERVACIONES.DENOMESTADORESERVACION: this.denomEstadoReservacion,
       ESTADOSRESERVACIONES.DESCESTADORESERVACION: this.descEstadoReservacion,
@@ -68,6 +80,7 @@ class EstadoReservacion {
       this.assign(null);
       return;
     }
+    this.key = map[ESTADOSRESERVACIONES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[ESTADOSRESERVACIONES.ID];
     this.denomEstadoReservacion = map[ESTADOSRESERVACIONES.DENOMESTADORESERVACION];
     this.descEstadoReservacion = map[ESTADOSRESERVACIONES.DESCESTADORESERVACION];
@@ -87,13 +100,12 @@ class EstadoReservacion {
         visible == typedOther.visible;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
       denomEstadoReservacion.hashCode,
       descEstadoReservacion.hashCode,
-      visible.hashCode 
+      visible.hashCode,
   ]);
 
 }
@@ -107,6 +119,8 @@ class ESTADOSRESERVACIONES {
   static const String ETIQUETA_REGISTRO = 'Estado de Reservación';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMESTADORESERVACION = 'Denominación del Estado de Reservación';
   static const String ETIQUETA_DESCESTADORESERVACION = 'Descripción del Estado de Reservación';
@@ -118,6 +132,7 @@ class ESTADOSRESERVACIONES {
   static const String REGISTRO = 'EstadoReservacion';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String DENOMESTADORESERVACION = 'denomEstadoReservacion';
   static const String DESCESTADORESERVACION = 'descEstadoReservacion';
@@ -129,7 +144,9 @@ class ESTADOSRESERVACIONES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMESTADORESERVACION,VISIBLE,];
-  static const List CAMPOS_DETALLE = [ID,DENOMESTADORESERVACION,DESCESTADORESERVACION,VISIBLE,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, DENOMESTADORESERVACION, VISIBLE,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, DENOMESTADORESERVACION, DESCESTADORESERVACION, VISIBLE,];
 
 }

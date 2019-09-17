@@ -7,20 +7,28 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class EstadoCerradura {
   EstadoCerradura({
+    this.key = '',
     this.id,
     this.denomEstadoCerradura,
     this.activa,
   });
 
-  int id;
-  String denomEstadoCerradura;
-  bool activa;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String denomEstadoCerradura;  // Denominación 200 No Nulo [Texto Variable: String]
+  bool activa;  // Lógico [Lógico: bool]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[ESTADOSCERRADURAS.ID];
     this.denomEstadoCerradura = value[ESTADOSCERRADURAS.DENOMESTADOCERRADURA];
     this.activa = value[ESTADOSCERRADURAS.ACTIVA];
@@ -28,6 +36,7 @@ class EstadoCerradura {
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       ESTADOSCERRADURAS.ID: this.id,
       ESTADOSCERRADURAS.DENOMESTADOCERRADURA: this.denomEstadoCerradura,
       ESTADOSCERRADURAS.ACTIVA: this.activa,
@@ -37,10 +46,12 @@ class EstadoCerradura {
   assign(EstadoCerradura estadoCerradura) {
 
     if (estadoCerradura == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.denomEstadoCerradura = null; //'';
       this.activa = null; //false;
     } else {
+      this.key = estadoCerradura.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = estadoCerradura.id;
       this.denomEstadoCerradura = estadoCerradura.denomEstadoCerradura;
       this.activa = estadoCerradura.activa;
@@ -49,6 +60,7 @@ class EstadoCerradura {
 
   Map toMap() {
     Map map = {
+      ESTADOSCERRADURAS.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       ESTADOSCERRADURAS.ID: this.id,
       ESTADOSCERRADURAS.DENOMESTADOCERRADURA: this.denomEstadoCerradura,
       ESTADOSCERRADURAS.ACTIVA: this.activa,
@@ -61,6 +73,7 @@ class EstadoCerradura {
       this.assign(null);
       return;
     }
+    this.key = map[ESTADOSCERRADURAS.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[ESTADOSCERRADURAS.ID];
     this.denomEstadoCerradura = map[ESTADOSCERRADURAS.DENOMESTADOCERRADURA];
     this.activa = map[ESTADOSCERRADURAS.ACTIVA];
@@ -78,12 +91,11 @@ class EstadoCerradura {
         activa == typedOther.activa;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
       denomEstadoCerradura.hashCode,
-      activa.hashCode 
+      activa.hashCode,
   ]);
 
 }
@@ -97,6 +109,8 @@ class ESTADOSCERRADURAS {
   static const String ETIQUETA_REGISTRO = 'Estado de Cerradura';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMESTADOCERRADURA = 'Denominación del Estado de Cerradura';
   static const String ETIQUETA_ACTIVA = 'Activa';
@@ -107,6 +121,7 @@ class ESTADOSCERRADURAS {
   static const String REGISTRO = 'EstadoCerradura';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String DENOMESTADOCERRADURA = 'denomEstadoCerradura';
   static const String ACTIVA = 'activa';
@@ -117,7 +132,9 @@ class ESTADOSCERRADURAS {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMESTADOCERRADURA,ACTIVA,];
-  static const List CAMPOS_DETALLE = [ID,DENOMESTADOCERRADURA,ACTIVA,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, DENOMESTADOCERRADURA, ACTIVA,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, DENOMESTADOCERRADURA, ACTIVA,];
 
 }

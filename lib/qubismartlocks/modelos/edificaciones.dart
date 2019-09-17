@@ -7,10 +7,12 @@
 */
 
 import 'package:qubismartlocks_fw/qubismartlocks.dart';
+import 'package:firebase/firebase.dart' as fb;
 
 
 class Edificacion {
   Edificacion({
+    this.key = '',
     this.id,
     this.denomEdificacion,
     this.tipoEdificacion,
@@ -20,50 +22,80 @@ class Edificacion {
     this.propietario,
   });
 
-  int id;
-  String denomEdificacion;
-  TipoEdificacion tipoEdificacion;
-  String direccion;
-  String ubicacionGPS;
-  int personaAdministradora;
-  Propietario propietario;
+  String key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
+  int id;  // Id [Búsqueda: int]
+  String denomEdificacion;  // Denominación 200 No Nulo [Texto Variable: String]
+  TipoEdificacion tipoEdificacion;  // Id [Búsqueda: int]
+  String direccion;  // Dirección [Texto Variable: String]
+  String ubicacionGPS;  // Ubicación GPS [Texto Variable: String]
+  int personaAdministradora;  // Id [Búsqueda: int]
+  Propietario propietario;  // Id [Búsqueda: int]
+
+  fromSnapshot(fb.DataSnapshot data) {
+    this.fromKeyValue(data.key, data.val());
+  }
 
   fromKeyValue(String key, Map value) {
+    this.key = key; // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = value[EDIFICACIONES.ID];
     this.denomEdificacion = value[EDIFICACIONES.DENOMEDIFICACION];
-    this.tipoEdificacion.fromKeyValue(key, value[EDIFICACIONES.TIPOEDIFICACION]);
+
+    // Tipos de Edificaciones
+    if (value[EDIFICACIONES.TIPOEDIFICACION] != null) {
+      if (this.tipoEdificacion == null) {
+        this.tipoEdificacion = TipoEdificacion();
+      }
+      this.tipoEdificacion.fromKeyValue(key, value[EDIFICACIONES.TIPOEDIFICACION]);
+    } else {
+      this.tipoEdificacion = null;
+    }
+
     this.direccion = value[EDIFICACIONES.DIRECCION];
     this.ubicacionGPS = value[EDIFICACIONES.UBICACIONGPS];
     this.personaAdministradora = value[EDIFICACIONES.PERSONAADMINISTRADORA];
-    this.propietario.fromKeyValue(key, value[EDIFICACIONES.PROPIETARIO]);
+
+    // Propietarios
+    if (value[EDIFICACIONES.PROPIETARIO] != null) {
+      if (this.propietario == null) {
+        this.propietario = Propietario();
+      }
+      this.propietario.fromKeyValue(key, value[EDIFICACIONES.PROPIETARIO]);
+    } else {
+      this.propietario = null;
+    }
+
   }
 
   toJson() {
     return {
+      'key': this.key, // Incluido por usar Firebase Database, pero no en Dendrita
       EDIFICACIONES.ID: this.id,
       EDIFICACIONES.DENOMEDIFICACION: this.denomEdificacion,
-      EDIFICACIONES.TIPOEDIFICACION: this.tipoEdificacion.toJson(),
+      EDIFICACIONES.TIPOEDIFICACION: this.tipoEdificacion == null ? null : this.tipoEdificacion.toJson(),
       EDIFICACIONES.DIRECCION: this.direccion,
       EDIFICACIONES.UBICACIONGPS: this.ubicacionGPS,
       EDIFICACIONES.PERSONAADMINISTRADORA: this.personaAdministradora,
-      EDIFICACIONES.PROPIETARIO: this.propietario.toJson(),
+      EDIFICACIONES.PROPIETARIO: this.propietario == null ? null : this.propietario.toJson(),
     };
   }
 
   assign(Edificacion edificacion) {
 
     if (edificacion == null) {
+      this.key = '';  // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = null; //0;
       this.denomEdificacion = null; //'';
-      this.tipoEdificacion = null; //new Propietario();
+      this.tipoEdificacion = null; //Propietario();
       this.direccion = null; //'';
       this.ubicacionGPS = null; //'';
       this.personaAdministradora = null; //0;
-      this.propietario = null; //new Propietario();
+      this.propietario = null; //Propietario();
     } else {
+      this.key = edificacion.key; // Incluido por usar Firebase Database, pero no en Dendrita
       this.id = edificacion.id;
       this.denomEdificacion = edificacion.denomEdificacion;
 
+      // Tipos de Edificaciones
       if (edificacion.tipoEdificacion != null) {
         if (this.tipoEdificacion == null) {
           this.tipoEdificacion = TipoEdificacion();
@@ -77,6 +109,7 @@ class Edificacion {
       this.ubicacionGPS = edificacion.ubicacionGPS;
       this.personaAdministradora = edificacion.personaAdministradora;
 
+      // Propietarios
       if (edificacion.propietario != null) {
         if (this.propietario == null) {
           this.propietario = Propietario();
@@ -91,6 +124,7 @@ class Edificacion {
 
   Map toMap() {
     Map map = {
+      EDIFICACIONES.KEY: this.key,  // Incluido por usar Firebase Database, pero no en Dendrita
       EDIFICACIONES.ID: this.id,
       EDIFICACIONES.DENOMEDIFICACION: this.denomEdificacion,
       EDIFICACIONES.TIPOEDIFICACION: this.tipoEdificacion == null ? null : this.tipoEdificacion.toMap(),
@@ -107,8 +141,11 @@ class Edificacion {
       this.assign(null);
       return;
     }
+    this.key = map[EDIFICACIONES.KEY];  // Incluido por usar Firebase Database, pero no en Dendrita
     this.id = map[EDIFICACIONES.ID];
     this.denomEdificacion = map[EDIFICACIONES.DENOMEDIFICACION];
+
+    // Tipos de Edificaciones
     if (map[EDIFICACIONES.TIPOEDIFICACION] != null) {
       if (this.tipoEdificacion == null) {
         this.tipoEdificacion = TipoEdificacion();
@@ -117,9 +154,12 @@ class Edificacion {
     } else {
       this.tipoEdificacion = null;
     }
+
     this.direccion = map[EDIFICACIONES.DIRECCION];
     this.ubicacionGPS = map[EDIFICACIONES.UBICACIONGPS];
     this.personaAdministradora = map[EDIFICACIONES.PERSONAADMINISTRADORA];
+
+    // Propietarios
     if (map[EDIFICACIONES.PROPIETARIO] != null) {
       if (this.propietario == null) {
         this.propietario = Propietario();
@@ -128,6 +168,7 @@ class Edificacion {
     } else {
       this.propietario = null;
     }
+
   }
 
   // Comparar si dos instancias de esta Clase son idénticas con el operador ==
@@ -146,7 +187,6 @@ class Edificacion {
         propietario == typedOther.propietario;
   }
 
-
   @override
   int get hashCode => hashObjects([
       id.hashCode,
@@ -155,7 +195,7 @@ class Edificacion {
       direccion.hashCode,
       ubicacionGPS.hashCode,
       personaAdministradora.hashCode,
-      propietario.hashCode 
+      propietario.hashCode,
   ]);
 
 }
@@ -169,6 +209,8 @@ class EDIFICACIONES {
   static const String ETIQUETA_REGISTRO = 'Edificación';
 
   // Etiquetas de los Atributos
+
+  static const String ETIQUETA_KEY = 'Key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ETIQUETA_ID = 'Id';
   static const String ETIQUETA_DENOMEDIFICACION = 'Denominación de la Edificación';
   static const String ETIQUETA_TIPOEDIFICACION = 'Tipo de Edificación';
@@ -183,6 +225,7 @@ class EDIFICACIONES {
   static const String REGISTRO = 'Edificacion';
 
   // Nombre de los Atributos (Campos) reales en la Base de Datos
+  static const String KEY = 'key'; // Incluido por usar Firebase Database, pero no en Dendrita
   static const String ID = 'id';
   static const String DENOMEDIFICACION = 'denomEdificacion';
   static const String TIPOEDIFICACION = 'tipoEdificacion';
@@ -197,7 +240,9 @@ class EDIFICACIONES {
   static const String ENDPOINTDET = 'det_'+ENTIDAD+'/';
   static const String RUTA = '/'+ENTIDAD;
 
-  static const List CAMPOS_LISTADO = [ID,DENOMEDIFICACION,TIPOEDIFICACION,];
-  static const List CAMPOS_DETALLE = [ID,DENOMEDIFICACION,TIPOEDIFICACION,DIRECCION,UBICACIONGPS,PERSONAADMINISTRADORA,PROPIETARIO,];
+  static const List CAMPOS_LISTADO = [
+ KEY, ID, DENOMEDIFICACION, TIPOEDIFICACION,];
+  static const List CAMPOS_DETALLE = [
+ KEY, ID, DENOMEDIFICACION, TIPOEDIFICACION, DIRECCION, UBICACIONGPS, PERSONAADMINISTRADORA, PROPIETARIO,];
 
 }
