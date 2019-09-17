@@ -43,15 +43,15 @@ class AppVariables {
 
     // TODO: Que se pudiera configurar todo desde base de datos
 
-    AppRes.appResMap['AppName'] = 'QubiSmartLocks';
-    AppRes.appResMap['AppDenom'] = 'Qubi Smart Locks';
-    AppRes.appResMap[Co.LOGO_P] = 'assets/images/icono1.png';
-    AppRes.appResMap[Co.LOGO_M] = 'assets/images/icono1.png';
-    AppRes.appResMap[Co.LOGO_G] = 'assets/images/icono1.png'; // 1024x1024
+    AppRes.appResMap[Co.APP_NAME] = 'QubiSmartLocks';
+    AppRes.appResMap[Co.APP_DENOM] = 'Qubi Smart Locks';
+    AppRes.appResMap[Co.LOGO_P] = 'images/logo/logo-qubi-220x220.png';
+    AppRes.appResMap[Co.LOGO_M] = 'images/logo/logo-qubi-220x220.png';
+    AppRes.appResMap[Co.LOGO_G] = 'images/logo/logo-qubi-220x220.png';
 
-    AppRes.appResMap[Co.BACKGROUND_1] = 'assets/images/background1.jpg';
-    AppRes.appResMap[Co.BACKGROUND_2] = 'assets/images/background1.jpg';
-    AppRes.appResMap[Co.BACKGROUND_3] = 'assets/images/background1.jpg';
+    AppRes.appResMap[Co.BACKGROUND_1] = 'images/fondos/background-buildings.png';
+    AppRes.appResMap[Co.BACKGROUND_2] = 'images/fondos/background-buildings.png';
+    AppRes.appResMap[Co.BACKGROUND_3] = 'images/fondos/background-buildings.png';
 
     AppRes.appResMap[Co.BACKGROUND_ADMIN] = 'images/landscape-404072__340.jpg';
     AppRes.appResMap[Co.BACKGROUND_LOGIN] = 'imagenes/BACKGROUND_LOGIN.png';
